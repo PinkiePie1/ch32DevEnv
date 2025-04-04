@@ -1,27 +1,23 @@
-##### GD32V RISC-V MCU Makefile ######
-######################################
-# Target
-######################################
-TARGET = Blinker
-#SELF_DIR?=$(dir $(lastword $(MAKEFILE_LIST)))
-#$(SLEF_DIR)
-
+SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+BUILD_DIR = build
+$(info self at: $(SELF_DIR))
+$(info build dir at : $(BUILD_DIR))
 
 ######################################
 # Source
 ######################################
 # C sources
 C_SOURCES =	\
-$(wildcard SRC/Core/*.c) \
-$(wildcard SRC/Debug/*.c) \
-$(wildcard SRC/Peripheral/src/*.c) \
+$(wildcard $(SELF_DIR)SRC/Core/*.c) \
+$(wildcard $(SELF_DIR)SRC/Debug/*.c) \
+$(wildcard $(SELF_DIR)SRC/Peripheral/src/*.c) \
 
 # add your c sources here
 C_SOURCES += \
-$(wildcard ./usr/*.c) \
+$(wildcard ./*.c) \
 
 # ASM sources
-ASM_SOURCES = SRC/Startup/startup_ch32v20x_D6.S
+ASM_SOURCES = $(SELF_DIR)SRC/Startup/startup_ch32v20x_D6.S
 
 
 ######################################
@@ -29,30 +25,27 @@ ASM_SOURCES = SRC/Startup/startup_ch32v20x_D6.S
 ######################################
 # C includes
 C_INCLUDES =	\
--I SRC/Core \
--I SRC/Debug \
--I SRC/Peripheral/inc \
+-I $(SELF_DIR)SRC/Core \
+-I $(SELF_DIR)SRC/Debug \
+-I $(SELF_DIR)SRC/Peripheral/inc \
 
 $(info C_INCLUDES: $(C_INCLUDES))
 
 # add your includes here
 C_INCLUDES += \
+-I .\
 -I usr \
 
 # AS includes
 AS_INCLUDES = 
 
 
-######################################
-# Building variables
-######################################
-# debug build?
-DEBUG = 1
+
 # optimization
-OPT = -Og
+OPT = -Os
 
 # Build path
-BUILD_DIR = build
+
 
 
 ######################################
@@ -69,7 +62,7 @@ AS_DEFS =
 # Linker
 #######################################
 # link script
-LDSCRIPT = SRC/Ld/Link.ld
+LDSCRIPT = $(SELF_DIR)SRC/Ld/Link.ld
 
 
 PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/'RISC-V Embedded GCC12'/bin/
@@ -159,7 +152,7 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir $@
+	mkdir -p $@
 
 #######################################
 # Clean up
