@@ -1,0 +1,39 @@
+GAS LISTING /tmp/ccwhd5B2.s 			page 1
+
+
+   1              		.file	"ch32v20x_it.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.NMI_Handler,"ax",@progbits
+   8              		.align	1
+   9              		.globl	NMI_Handler
+  11              	NMI_Handler:
+  12              	.L2:
+  13 0000 01A0     		j	.L2
+  15              		.section	.text.HardFault_Handler,"ax",@progbits
+  16              		.align	1
+  17              		.globl	HardFault_Handler
+  19              	HardFault_Handler:
+  20 0000 B707EFBE 		li	a5,-1091633152
+  21 0004 37E700E0 		li	a4,-536813568
+  22 0008 93870708 		addi	a5,a5,128
+  23 000c 3CC7     		sw	a5,72(a4)
+  24              	.L4:
+  25 000e 01A0     		j	.L4
+  27              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccwhd5B2.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_it.c
+     /tmp/ccwhd5B2.s:11     .text.NMI_Handler:0000000000000000 NMI_Handler
+     /tmp/ccwhd5B2.s:13     .text.NMI_Handler:0000000000000000 $x
+     /tmp/ccwhd5B2.s:19     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+     /tmp/ccwhd5B2.s:20     .text.HardFault_Handler:0000000000000000 $x
+     /tmp/ccwhd5B2.s:12     .text.NMI_Handler:0000000000000000 .L2
+     /tmp/ccwhd5B2.s:24     .text.HardFault_Handler:000000000000000e .L4
+
+NO UNDEFINED SYMBOLS

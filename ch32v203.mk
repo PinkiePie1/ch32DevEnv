@@ -15,6 +15,7 @@ $(wildcard $(SELF_DIR)SRC/Peripheral/src/*.c) \
 # add your c sources here
 C_SOURCES += \
 $(wildcard ./*.c) \
+$(wildcard ./User/*.c) \
 
 # ASM sources
 ASM_SOURCES = $(SELF_DIR)SRC/Startup/startup_ch32v20x_D6.S
@@ -25,19 +26,18 @@ ASM_SOURCES = $(SELF_DIR)SRC/Startup/startup_ch32v20x_D6.S
 ######################################
 # C includes
 C_INCLUDES =	\
--I $(SELF_DIR)SRC/Core \
--I $(SELF_DIR)SRC/Debug \
--I $(SELF_DIR)SRC/Peripheral/inc \
+-I "$(SELF_DIR)SRC/Peripheral/inc" \
+-I "$(SELF_DIR)SRC/Core" \
+-I "$(SELF_DIR)SRC/Debug" \
 
 $(info C_INCLUDES: $(C_INCLUDES))
 
 # add your includes here
 C_INCLUDES += \
--I .\
--I usr \
+-I "./User"\
 
 # AS includes
-AS_INCLUDES = 
+AS_INCLUDES = -I "$(SELF_DIR)SRC/Startup" 
 
 
 
@@ -52,7 +52,7 @@ OPT = -Os
 # Defines
 ######################################
 # macros for gcc
-C_DEFS =	\
+C_DEFS =
 
 # AS defines
 AS_DEFS = 
@@ -71,10 +71,10 @@ PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/'RISC-V Embedded GCC12'/bin/
 #######################################
 PREFIX = $(PATH_TO_TOOLCHAIN)riscv-wch-elf-
 CC = $(PREFIX)gcc
-AS = $(PREFIX)gcc -x assembler-with-cpp
+AS = $(PREFIX)gcc
 CP = $(PREFIX)objcopy
 AR = $(PREFIX)ar
-SZ = $(PREFIX)size
+SZ = $(PREFIX)size --format=berkeley
 OD = $(PREFIX)objdump
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
@@ -87,32 +87,36 @@ BIN = $(CP) -O binary -S
 ARCH = -march=rv32imacxw -mabi=ilp32
 
 # compile gcc flags
-CFLAGS = $(ARCH) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wl,-Bstatic #, -ffreestanding -nostdlib
-CFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20 -Os\
+CFLAGS = $(ARCH)
+CFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
 -fno-common -Wunused -Wuninitialized
+CFLAGS += -g
+CFLAGS += $(C_INCLUDES)
+CFLAGS += -std=gnu17 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
+ASFLAGS = $(ARCH)
+ASFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
+-fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
+-fno-common -Wunused -Wuninitialized
+ASFLAGS += -g -x assembler-with-cpp 
+ASFLAGS += $(AS_INCLUDES)
+ASFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
-ASFLAGS = $(ARCH) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wl,-Bstatic #, -ffreestanding -nostdlib
-
-ifeq ($(DEBUG), 1)
-CFLAGS += -g -gdwarf-2
-endif
-
-CFLAGS += -std=gnu17 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"
 
 
 # libraries
-LIBS = -lc_nano -lm
+LIBS = -lprintf
 LIBDIR = 
-LDFLAGS = $(ARCH) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) $(PERIFLIB_SOURCES)
+LDFLAGS = $(ARCH)  $(LIBDIR) $(PERIFLIB_SOURCES)
 
 LDFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20\
 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
 -fno-common -Wunused -Wuninitialized -g\
+-T $(LDSCRIPT)\
 -nostartfiles -Xlinker --gc-sections\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\
---specs=nano.specs --specs=nosys.specs
+--specs=nano.specs --specs=nosys.specs\
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
@@ -131,20 +135,20 @@ vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	@echo "CC $<"
-	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	$(CC) $(CFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	@echo "AS $<"
-	@$(AS) -c $(CFLAGS) $< -o $@
+	$(AS) $(ASFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@echo "LD $@"
-	@$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
 	@echo "OD $@"
-	@$(OD) $(BUILD_DIR)/$(TARGET).elf -xS > $(BUILD_DIR)/$(TARGET).S $@
+	$(OD) --all-headers --demangle --disassemble -M xw $(BUILD_DIR)/$(TARGET).elf > $(BUILD_DIR)/$(TARGET).lst 
 	@echo "SZ $@"
-	@$(SZ) $@
-
+	$(SZ) $@
+#$@
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	

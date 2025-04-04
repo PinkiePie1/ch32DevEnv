@@ -1,0 +1,741 @@
+GAS LISTING /tmp/ccpKfpAG.s 			page 1
+
+
+   1              		.file	"ch32v20x_pwr.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.PWR_DeInit,"ax",@progbits
+   8              		.align	1
+   9              		.globl	PWR_DeInit
+  11              	PWR_DeInit:
+  12 0000 17030000 		call	t0,__riscv_save_0
+  12      E7020300 
+  13 0008 8545     		li	a1,1
+  14 000a 37050010 		li	a0,268435456
+  15 000e 97000000 		call	RCC_APB1PeriphResetCmd
+  15      E7800000 
+  16 0016 8145     		li	a1,0
+  17 0018 37050010 		li	a0,268435456
+  18 001c 97000000 		call	RCC_APB1PeriphResetCmd
+  18      E7800000 
+  19 0024 17030000 		tail	__riscv_restore_0
+  19      67000300 
+  21              		.section	.text.PWR_BackupAccessCmd,"ax",@progbits
+  22              		.align	1
+  23              		.globl	PWR_BackupAccessCmd
+  25              	PWR_BackupAccessCmd:
+  26 0000 37770040 		li	a4,1073770496
+  27 0004 1C43     		lw	a5,0(a4)
+  28 0006 09C5     		beq	a0,zero,.L4
+  29 0008 93E70710 		ori	a5,a5,256
+  30              	.L6:
+  31 000c 1CC3     		sw	a5,0(a4)
+  32 000e 8280     		ret
+  33              	.L4:
+  34 0010 93F7F7EF 		andi	a5,a5,-257
+  35 0014 E5BF     		j	.L6
+  37              		.section	.text.PWR_PVDCmd,"ax",@progbits
+  38              		.align	1
+  39              		.globl	PWR_PVDCmd
+  41              	PWR_PVDCmd:
+  42 0000 37770040 		li	a4,1073770496
+  43 0004 1C43     		lw	a5,0(a4)
+  44 0006 09C5     		beq	a0,zero,.L8
+  45 0008 93E70701 		ori	a5,a5,16
+  46              	.L10:
+  47 000c 1CC3     		sw	a5,0(a4)
+  48 000e 8280     		ret
+  49              	.L8:
+  50 0010 BD9B     		andi	a5,a5,-17
+  51 0012 EDBF     		j	.L10
+  53              		.section	.text.PWR_PVDLevelConfig,"ax",@progbits
+  54              		.align	1
+  55              		.globl	PWR_PVDLevelConfig
+  57              	PWR_PVDLevelConfig:
+  58 0000 37770040 		li	a4,1073770496
+  59 0004 1C43     		lw	a5,0(a4)
+  60 0006 93F7F7F1 		andi	a5,a5,-225
+GAS LISTING /tmp/ccpKfpAG.s 			page 2
+
+
+  61 000a C98F     		or	a5,a5,a0
+  62 000c 1CC3     		sw	a5,0(a4)
+  63 000e 8280     		ret
+  65              		.section	.text.PWR_WakeUpPinCmd,"ax",@progbits
+  66              		.align	1
+  67              		.globl	PWR_WakeUpPinCmd
+  69              	PWR_WakeUpPinCmd:
+  70 0000 37770040 		li	a4,1073770496
+  71 0004 5C43     		lw	a5,4(a4)
+  72 0006 09C5     		beq	a0,zero,.L13
+  73 0008 93E70710 		ori	a5,a5,256
+  74              	.L15:
+  75 000c 5CC3     		sw	a5,4(a4)
+  76 000e 8280     		ret
+  77              	.L13:
+  78 0010 93F7F7EF 		andi	a5,a5,-257
+  79 0014 E5BF     		j	.L15
+  81              		.section	.text.PWR_EnterSTOPMode,"ax",@progbits
+  82              		.align	1
+  83              		.globl	PWR_EnterSTOPMode
+  85              	PWR_EnterSTOPMode:
+  86 0000 37770040 		li	a4,1073770496
+  87 0004 1C43     		lw	a5,0(a4)
+  88 0006 F19B     		andi	a5,a5,-4
+  89 0008 C98F     		or	a5,a5,a0
+  90 000a 1CC3     		sw	a5,0(a4)
+  91 000c B7F700E0 		li	a5,-536809472
+  92 0010 03A707D1 		lw	a4,-752(a5)
+  93 0014 13674700 		ori	a4,a4,4
+  94 0018 23A8E7D0 		sw	a4,-752(a5)
+  95 001c 0547     		li	a4,1
+  96 001e 6391E502 		bne	a1,a4,.L17
+  97 0022 03A707D1 		lw	a4,-752(a5)
+  98 0026 5D9B     		andi	a4,a4,-9
+  99 0028 23A8E7D0 		sw	a4,-752(a5)
+ 100              	 #APP
+ 101              	# 291 "../../SRC/Core/core_riscv.h" 1
+   1              	/********************************** (C) COPYRIGHT  *******************************
+   2              	 * File Name          : core_riscv.h
+   3              	 * Author             : WCH
+   4              	 * Version            : V1.0.1
+   5              	 * Date               : 2023/11/11
+   6              	 * Description        : RISC-V V4 Core Peripheral Access Layer Header File for CH32V20x
+   7              	*********************************************************************************
+   8              	* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+   9              	* Attention: This software (modified or not) and binary are used for 
+  10              	* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+  11              	*******************************************************************************/
+  12              	#ifndef __CORE_RISCV_H__
+  13              	#define __CORE_RISCV_H__
+  14              	
+  15              	#ifdef __cplusplus
+  16              	extern "C" {
+  17              	#endif
+  18              	
+  19              	/* IO definitions */
+  20              	#ifdef __cplusplus
+GAS LISTING /tmp/ccpKfpAG.s 			page 3
+
+
+  21              	  #define     __I     volatile                /*  defines 'read only' permissions      */
+  22              	#else
+  23              	  #define     __I     volatile const          /*  defines 'read only' permissions     */
+  24              	#endif
+  25              	#define       __O     volatile                /*  defines 'write only' permissions     */
+  26              	#define       __IO    volatile                /*  defines 'read / write' permissions   */
+  27              	
+  28              	/* Standard Peripheral Library old types (maintained for legacy purpose) */
+  29              	typedef __I uint64_t vuc64;   /* Read Only */
+  30              	typedef __I uint32_t vuc32;   /* Read Only */
+  31              	typedef __I uint16_t vuc16;   /* Read Only */
+  32              	typedef __I uint8_t  vuc8;    /* Read Only */
+  33              	
+  34              	typedef const uint64_t uc64;  /* Read Only */
+  35              	typedef const uint32_t uc32;  /* Read Only */
+  36              	typedef const uint16_t uc16;  /* Read Only */
+  37              	typedef const uint8_t  uc8;   /* Read Only */
+  38              	
+  39              	typedef __I int64_t vsc64;    /* Read Only */
+  40              	typedef __I int32_t vsc32;    /* Read Only */
+  41              	typedef __I int16_t vsc16;    /* Read Only */
+  42              	typedef __I int8_t  vsc8;     /* Read Only */
+  43              	
+  44              	typedef const int64_t sc64;   /* Read Only */
+  45              	typedef const int32_t sc32;   /* Read Only */
+  46              	typedef const int16_t sc16;   /* Read Only */
+  47              	typedef const int8_t  sc8;    /* Read Only */
+  48              	
+  49              	typedef __IO uint64_t  vu64;
+  50              	typedef __IO uint32_t  vu32;
+  51              	typedef __IO uint16_t  vu16;
+  52              	typedef __IO uint8_t   vu8;
+  53              	
+  54              	typedef uint64_t  u64;
+  55              	typedef uint32_t  u32;
+  56              	typedef uint16_t  u16;
+  57              	typedef uint8_t   u8;
+  58              	
+  59              	typedef __IO int64_t  vs64;
+  60              	typedef __IO int32_t  vs32;
+  61              	typedef __IO int16_t  vs16;
+  62              	typedef __IO int8_t   vs8;
+  63              	
+  64              	typedef int64_t  s64;
+  65              	typedef int32_t  s32;
+  66              	typedef int16_t  s16;
+  67              	typedef int8_t   s8;
+  68              	
+  69              	typedef enum {NoREADY = 0, READY = !NoREADY} ErrorStatus;
+  70              	
+  71              	typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
+  72              	
+  73              	typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
+  74              	
+  75              	#define   RV_STATIC_INLINE  static  inline
+  76              	
+  77              	/* memory mapped structure for Program Fast Interrupt Controller (PFIC) */
+GAS LISTING /tmp/ccpKfpAG.s 			page 4
+
+
+  78              	typedef struct{
+  79              	  __I  uint32_t ISR[8];
+  80              	  __I  uint32_t IPR[8];
+  81              	  __IO uint32_t ITHRESDR;
+  82              	  __IO uint32_t RESERVED;
+  83              	  __IO uint32_t CFGR;
+  84              	  __I  uint32_t GISR;
+  85              	  __IO uint8_t VTFIDR[4];
+  86              	  uint8_t RESERVED0[12];
+  87              	  __IO uint32_t VTFADDR[4];
+  88              	  uint8_t RESERVED1[0x90];
+  89              	  __O  uint32_t IENR[8];
+  90              	  uint8_t RESERVED2[0x60];
+  91              	  __O  uint32_t IRER[8];
+  92              	  uint8_t RESERVED3[0x60];
+  93              	  __O  uint32_t IPSR[8];
+  94              	  uint8_t RESERVED4[0x60];
+  95              	  __O  uint32_t IPRR[8];
+  96              	  uint8_t RESERVED5[0x60];
+  97              	  __IO uint32_t IACTR[8];
+  98              	  uint8_t RESERVED6[0xE0];
+  99              	  __IO uint8_t IPRIOR[256];
+ 100              	  uint8_t RESERVED7[0x810];
+ 101              	  __IO uint32_t SCTLR;
+ 102              	}PFIC_Type;
+ 103              	
+ 104              	/* memory mapped structure for SysTick */
+ 105              	typedef struct
+ 106              	{
+ 107              	    __IO uint32_t CTLR;
+ 108              	    __IO uint32_t SR;
+ 109              	    __IO uint64_t CNT;
+ 110              	    __IO uint64_t CMP;
+ 111              	}SysTick_Type;
+ 112              	
+ 113              	
+ 114              	#define PFIC            ((PFIC_Type *) 0xE000E000 )
+ 115              	#define NVIC            PFIC
+ 116              	#define NVIC_KEY1       ((uint32_t)0xFA050000)
+ 117              	#define	NVIC_KEY2		((uint32_t)0xBCAF0000)
+ 118              	#define	NVIC_KEY3		((uint32_t)0xBEEF0000)
+ 119              	
+ 120              	#define SysTick         ((SysTick_Type *) 0xE000F000)
+ 121              	
+ 122              	
+ 123              	/*********************************************************************
+ 124              	 * @fn      __enable_irq
+ 125              	 *
+ 126              	 * @brief   Enable Global Interrupt
+ 127              	 *
+ 128              	 * @return  none
+ 129              	 */
+ 130              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void __enable_irq()
+ 131              	{
+ 132              	  __asm volatile ("csrs 0x800, %0" : : "r" (0x88) );
+ 133              	}
+ 134              	
+GAS LISTING /tmp/ccpKfpAG.s 			page 5
+
+
+ 135              	/*********************************************************************
+ 136              	 * @fn      __disable_irq
+ 137              	 *
+ 138              	 * @brief   Disable Global Interrupt
+ 139              	 *
+ 140              	 * @return  none
+ 141              	 */
+ 142              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void __disable_irq()
+ 143              	{
+ 144              	  __asm volatile ("csrc 0x800, %0" : : "r" (0x88) );
+ 145              	}
+ 146              	
+ 147              	/*********************************************************************
+ 148              	 * @fn      __NOP
+ 149              	 *
+ 150              	 * @brief   nop
+ 151              	 *
+ 152              	 * @return  none
+ 153              	 */
+ 154              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void __NOP()
+ 155              	{
+ 156              	  __asm volatile ("nop");
+ 157              	}
+ 158              	
+ 159              	/*********************************************************************
+ 160              	 * @fn      NVIC_EnableIRQ
+ 161              	 *
+ 162              	 * @brief   Enable Interrupt
+ 163              	 *
+ 164              	 * @param   IRQn - Interrupt Numbers
+ 165              	 *
+ 166              	 * @return  none
+ 167              	 */
+ 168              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+ 169              	{
+ 170              	  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 171              	}
+ 172              	
+ 173              	/*********************************************************************
+ 174              	 * @fn      NVIC_DisableIRQ
+ 175              	 *
+ 176              	 * @brief   Disable Interrupt
+ 177              	 *
+ 178              	 * @param   IRQn - Interrupt Numbers
+ 179              	 *
+ 180              	 * @return  none
+ 181              	 */
+ 182              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
+ 183              	{
+ 184              	  NVIC->IRER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 185              	}
+ 186              	
+ 187              	/*********************************************************************
+ 188              	 * @fn      NVIC_GetStatusIRQ
+ 189              	 *
+ 190              	 * @brief   Get Interrupt Enable State
+ 191              	 *
+GAS LISTING /tmp/ccpKfpAG.s 			page 6
+
+
+ 192              	 * @param   IRQn - Interrupt Numbers
+ 193              	 *
+ 194              	 * @return  1 - Interrupt Pending Enable
+ 195              	 *          0 - Interrupt Pending Disable
+ 196              	 */
+ 197              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE uint32_t NVIC_GetStatusIRQ(IRQn_Type IRQn)
+ 198              	{
+ 199              	  return((uint32_t) ((NVIC->ISR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0));
+ 200              	}
+ 201              	
+ 202              	/*********************************************************************
+ 203              	 * @fn      NVIC_GetPendingIRQ
+ 204              	 *
+ 205              	 * @brief   Get Interrupt Pending State
+ 206              	 *
+ 207              	 * @param   IRQn - Interrupt Numbers
+ 208              	 *
+ 209              	 * @return  1 - Interrupt Pending Enable
+ 210              	 *          0 - Interrupt Pending Disable
+ 211              	 */
+ 212              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
+ 213              	{
+ 214              	  return((uint32_t) ((NVIC->IPR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0));
+ 215              	}
+ 216              	
+ 217              	/*********************************************************************
+ 218              	 * @fn      NVIC_SetPendingIRQ
+ 219              	 *
+ 220              	 * @brief   Set Interrupt Pending
+ 221              	 *
+ 222              	 * @param   IRQn - Interrupt Numbers
+ 223              	 *
+ 224              	 * @return  none
+ 225              	 */
+ 226              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
+ 227              	{
+ 228              	  NVIC->IPSR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 229              	}
+ 230              	
+ 231              	/*********************************************************************
+ 232              	 * @fn      NVIC_ClearPendingIRQ
+ 233              	 *
+ 234              	 * @brief   Clear Interrupt Pending
+ 235              	 *
+ 236              	 * @param   IRQn - Interrupt Numbers
+ 237              	 *
+ 238              	 * @return  none
+ 239              	 */
+ 240              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+ 241              	{
+ 242              	  NVIC->IPRR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 243              	}
+ 244              	
+ 245              	/*********************************************************************
+ 246              	 * @fn      NVIC_GetActive
+ 247              	 *
+ 248              	 * @brief   Get Interrupt Active State
+GAS LISTING /tmp/ccpKfpAG.s 			page 7
+
+
+ 249              	 *
+ 250              	 * @param   IRQn - Interrupt Numbers
+ 251              	 *
+ 252              	 * @return  1 - Interrupt Active
+ 253              	 *          0 - Interrupt No Active
+ 254              	 */
+ 255              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE uint32_t NVIC_GetActive(IRQn_Type IRQn)
+ 256              	{
+ 257              	  return((uint32_t)((NVIC->IACTR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0));
+ 258              	}
+ 259              	
+ 260              	/*********************************************************************
+ 261              	 * @fn      NVIC_SetPriority
+ 262              	 *
+ 263              	 * @brief   Set Interrupt Priority
+ 264              	 *
+ 265              	 * @param   IRQn - Interrupt Numbers
+ 266              	 *          interrupt nesting enable(CSR-0x804 bit1 = 1)
+ 267              	 *            priority - bit[7] - Preemption Priority
+ 268              	 *                       bit[6:5] - Sub priority
+ 269              	 *                       bit[4:0] - Reserve
+ 270              	 *          interrupt nesting disable(CSR-0x804 bit1 = 0)
+ 271              	 *            priority - bit[7:5] - Sub priority
+ 272              	 *                       bit[4:0] - Reserve
+ 273              	 *
+ 274              	 * @return  none
+ 275              	 */
+ 276              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint8_t p
+ 277              	{
+ 278              	  NVIC->IPRIOR[(uint32_t)(IRQn)] = priority;
+ 279              	}
+ 280              	
+ 281              	/*********************************************************************
+ 282              	 * @fn      __WFI
+ 283              	 *
+ 284              	 * @brief   Wait for Interrupt
+ 285              	 *
+ 286              	 * @return  none
+ 287              	 */
+ 288              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void __WFI(void)
+ 289              	{
+ 290              	  NVIC->SCTLR &= ~(1<<3);	// wfi
+ 291 002c 73005010 	  asm volatile ("wfi");
+ 292              	}
+ 102              		wfi
+ 103              	# 0 "" 2
+ 104              	 #NO_APP
+ 105              	.L18:
+ 106 0030 37F700E0 		li	a4,-536809472
+ 107 0034 832707D1 		lw	a5,-752(a4)
+ 108 0038 ED9B     		andi	a5,a5,-5
+ 109 003a 2328F7D0 		sw	a5,-752(a4)
+ 110 003e 8280     		ret
+ 111              	.L17:
+ 112 0040 138707D0 		addi	a4,a5,-768
+ 113 0044 144B     		lw	a3,16(a4)
+ 114 0046 93E60602 		ori	a3,a3,32
+GAS LISTING /tmp/ccpKfpAG.s 			page 8
+
+
+ 115 004a 14CB     		sw	a3,16(a4)
+ 116 004c 144B     		lw	a3,16(a4)
+ 117 004e 93F6F6FD 		andi	a3,a3,-33
+ 118 0052 93E68600 		ori	a3,a3,8
+ 119 0056 14CB     		sw	a3,16(a4)
+ 120              	 #APP
+ 121              	# 319 "../../SRC/Core/core_riscv.h" 1
+ 293              	
+ 294              	/*********************************************************************
+ 295              	 * @fn      _SEV
+ 296              	 *
+ 297              	 * @brief   Set Event
+ 298              	 *
+ 299              	 * @return  none
+ 300              	 */
+ 301              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void _SEV(void)
+ 302              	{
+ 303              	  NVIC->SCTLR |= (1<<5);
+ 304              	}
+ 305              	
+ 306              	/*********************************************************************
+ 307              	 * @fn      _WFE
+ 308              	 *
+ 309              	 * @brief   Wait for Events
+ 310              	 *
+ 311              	 * @return  none
+ 312              	 */
+ 313              	__attribute__( ( always_inline ) ) RV_STATIC_INLINE void _WFE(void)
+ 314              	{
+ 315              	    uint32_t tmp= NVIC->SCTLR;
+ 316              	    tmp &= ~(1<<5);
+ 317              	    tmp |= (1<<3);
+ 318              	    NVIC->SCTLR = tmp;
+ 319 0058 73005010 	    asm volatile ("wfi");
+ 320              	}
+ 122              		wfi
+ 123              	# 0 "" 2
+ 124              	 #NO_APP
+ 125 005c 144B     		lw	a3,16(a4)
+ 126 005e 93F6F6FD 		andi	a3,a3,-33
+ 127 0062 93E68600 		ori	a3,a3,8
+ 128 0066 14CB     		sw	a3,16(a4)
+ 129              	 #APP
+ 130              	# 319 "../../SRC/Core/core_riscv.h" 1
+ 131              		wfi
+ 132              	# 0 "" 2
+ 133              	 #NO_APP
+ 134 006c 37470240 		li	a4,1073889280
+ 135 0070 03270780 		lw	a4,-2048(a4)
+ 136 0074 13770704 		andi	a4,a4,64
+ 137 0078 45DF     		beq	a4,zero,.L18
+ 138 007a 03A707D1 		lw	a4,-752(a5)
+ 139 007e 13670702 		ori	a4,a4,32
+ 140 0082 23A8E7D0 		sw	a4,-752(a5)
+ 141 0086 6DB7     		j	.L18
+ 143              		.section	.text.PWR_EnterSTANDBYMode,"ax",@progbits
+ 144              		.align	1
+GAS LISTING /tmp/ccpKfpAG.s 			page 9
+
+
+ 145              		.globl	PWR_EnterSTANDBYMode
+ 147              	PWR_EnterSTANDBYMode:
+ 148 0000 B7770040 		li	a5,1073770496
+ 149 0004 9843     		lw	a4,0(a5)
+ 150 0006 13674700 		ori	a4,a4,4
+ 151 000a 98C3     		sw	a4,0(a5)
+ 152 000c 9843     		lw	a4,0(a5)
+ 153 000e 13672700 		ori	a4,a4,2
+ 154 0012 98C3     		sw	a4,0(a5)
+ 155 0014 B7F700E0 		li	a5,-536809472
+ 156 0018 938707D0 		addi	a5,a5,-768
+ 157 001c 984B     		lw	a4,16(a5)
+ 158 001e 13674700 		ori	a4,a4,4
+ 159 0022 98CB     		sw	a4,16(a5)
+ 160 0024 984B     		lw	a4,16(a5)
+ 161 0026 5D9B     		andi	a4,a4,-9
+ 162 0028 98CB     		sw	a4,16(a5)
+ 163              	 #APP
+ 164              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 165              		wfi
+ 166              	# 0 "" 2
+ 167              	 #NO_APP
+ 168 002e 8280     		ret
+ 170              		.section	.text.PWR_GetFlagStatus,"ax",@progbits
+ 171              		.align	1
+ 172              		.globl	PWR_GetFlagStatus
+ 174              	PWR_GetFlagStatus:
+ 175 0000 B7770040 		li	a5,1073770496
+ 176 0004 DC43     		lw	a5,4(a5)
+ 177 0006 7D8D     		and	a0,a5,a0
+ 178 0008 3335A000 		snez	a0,a0
+ 179 000c 8280     		ret
+ 181              		.section	.text.PWR_ClearFlag,"ax",@progbits
+ 182              		.align	1
+ 183              		.globl	PWR_ClearFlag
+ 185              	PWR_ClearFlag:
+ 186 0000 B7770040 		li	a5,1073770496
+ 187 0004 9843     		lw	a4,0(a5)
+ 188 0006 0A05     		slli	a0,a0,2
+ 189 0008 598D     		or	a0,a0,a4
+ 190 000a 88C3     		sw	a0,0(a5)
+ 191 000c 8280     		ret
+ 193              		.section	.text.PWR_EnterSTANDBYMode_RAM,"ax",@progbits
+ 194              		.align	1
+ 195              		.globl	PWR_EnterSTANDBYMode_RAM
+ 197              	PWR_EnterSTANDBYMode_RAM:
+ 198 0000 B7760040 		li	a3,1073770496
+ 199 0004 9C42     		lw	a5,0(a3)
+ 200 0006 4167     		li	a4,65536
+ 201 0008 1907     		addi	a4,a4,6
+ 202 000a D98F     		or	a5,a5,a4
+ 203 000c 9CC2     		sw	a5,0(a3)
+ 204 000e B7F700E0 		li	a5,-536809472
+ 205 0012 938707D0 		addi	a5,a5,-768
+ 206 0016 984B     		lw	a4,16(a5)
+ 207 0018 13674700 		ori	a4,a4,4
+ 208 001c 98CB     		sw	a4,16(a5)
+GAS LISTING /tmp/ccpKfpAG.s 			page 10
+
+
+ 209 001e 984B     		lw	a4,16(a5)
+ 210 0020 5D9B     		andi	a4,a4,-9
+ 211 0022 98CB     		sw	a4,16(a5)
+ 212              	 #APP
+ 213              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 214              		wfi
+ 215              	# 0 "" 2
+ 216              	 #NO_APP
+ 217 0028 8280     		ret
+ 219              		.section	.text.PWR_EnterSTANDBYMode_RAM_LV,"ax",@progbits
+ 220              		.align	1
+ 221              		.globl	PWR_EnterSTANDBYMode_RAM_LV
+ 223              	PWR_EnterSTANDBYMode_RAM_LV:
+ 224 0000 B7760040 		li	a3,1073770496
+ 225 0004 9C42     		lw	a5,0(a3)
+ 226 0006 37071100 		li	a4,1114112
+ 227 000a 1907     		addi	a4,a4,6
+ 228 000c D98F     		or	a5,a5,a4
+ 229 000e 9CC2     		sw	a5,0(a3)
+ 230 0010 B7F700E0 		li	a5,-536809472
+ 231 0014 938707D0 		addi	a5,a5,-768
+ 232 0018 984B     		lw	a4,16(a5)
+ 233 001a 13674700 		ori	a4,a4,4
+ 234 001e 98CB     		sw	a4,16(a5)
+ 235 0020 984B     		lw	a4,16(a5)
+ 236 0022 5D9B     		andi	a4,a4,-9
+ 237 0024 98CB     		sw	a4,16(a5)
+ 238              	 #APP
+ 239              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 240              		wfi
+ 241              	# 0 "" 2
+ 242              	 #NO_APP
+ 243 002a 8280     		ret
+ 245              		.section	.text.PWR_EnterSTANDBYMode_RAM_VBAT_EN,"ax",@progbits
+ 246              		.align	1
+ 247              		.globl	PWR_EnterSTANDBYMode_RAM_VBAT_EN
+ 249              	PWR_EnterSTANDBYMode_RAM_VBAT_EN:
+ 250 0000 B7760040 		li	a3,1073770496
+ 251 0004 9C42     		lw	a5,0(a3)
+ 252 0006 37070400 		li	a4,262144
+ 253 000a 1907     		addi	a4,a4,6
+ 254 000c D98F     		or	a5,a5,a4
+ 255 000e 9CC2     		sw	a5,0(a3)
+ 256 0010 B7F700E0 		li	a5,-536809472
+ 257 0014 938707D0 		addi	a5,a5,-768
+ 258 0018 984B     		lw	a4,16(a5)
+ 259 001a 13674700 		ori	a4,a4,4
+ 260 001e 98CB     		sw	a4,16(a5)
+ 261 0020 984B     		lw	a4,16(a5)
+ 262 0022 5D9B     		andi	a4,a4,-9
+ 263 0024 98CB     		sw	a4,16(a5)
+ 264              	 #APP
+ 265              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 266              		wfi
+ 267              	# 0 "" 2
+ 268              	 #NO_APP
+ 269 002a 8280     		ret
+GAS LISTING /tmp/ccpKfpAG.s 			page 11
+
+
+ 271              		.section	.text.PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN,"ax",@progbits
+ 272              		.align	1
+ 273              		.globl	PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN
+ 275              	PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN:
+ 276 0000 B7760040 		li	a3,1073770496
+ 277 0004 9C42     		lw	a5,0(a3)
+ 278 0006 37071400 		li	a4,1310720
+ 279 000a 1907     		addi	a4,a4,6
+ 280 000c D98F     		or	a5,a5,a4
+ 281 000e 9CC2     		sw	a5,0(a3)
+ 282 0010 B7F700E0 		li	a5,-536809472
+ 283 0014 938707D0 		addi	a5,a5,-768
+ 284 0018 984B     		lw	a4,16(a5)
+ 285 001a 13674700 		ori	a4,a4,4
+ 286 001e 98CB     		sw	a4,16(a5)
+ 287 0020 984B     		lw	a4,16(a5)
+ 288 0022 5D9B     		andi	a4,a4,-9
+ 289 0024 98CB     		sw	a4,16(a5)
+ 290              	 #APP
+ 291              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 292              		wfi
+ 293              	# 0 "" 2
+ 294              	 #NO_APP
+ 295 002a 8280     		ret
+ 297              		.section	.text.PWR_EnterSTOPMode_RAM_LV,"ax",@progbits
+ 298              		.align	1
+ 299              		.globl	PWR_EnterSTOPMode_RAM_LV
+ 301              	PWR_EnterSTOPMode_RAM_LV:
+ 302 0000 37770040 		li	a4,1073770496
+ 303 0004 1C43     		lw	a5,0(a4)
+ 304 0006 B7061000 		li	a3,1048576
+ 305 000a F19B     		andi	a5,a5,-4
+ 306 000c C98F     		or	a5,a5,a0
+ 307 000e D58F     		or	a5,a5,a3
+ 308 0010 1CC3     		sw	a5,0(a4)
+ 309 0012 B7F700E0 		li	a5,-536809472
+ 310 0016 03A707D1 		lw	a4,-752(a5)
+ 311 001a 13674700 		ori	a4,a4,4
+ 312 001e 23A8E7D0 		sw	a4,-752(a5)
+ 313 0022 0547     		li	a4,1
+ 314 0024 6391E502 		bne	a1,a4,.L30
+ 315 0028 03A707D1 		lw	a4,-752(a5)
+ 316 002c 5D9B     		andi	a4,a4,-9
+ 317 002e 23A8E7D0 		sw	a4,-752(a5)
+ 318              	 #APP
+ 319              	# 291 "../../SRC/Core/core_riscv.h" 1
+ 320              		wfi
+ 321              	# 0 "" 2
+ 322              	 #NO_APP
+ 323              	.L31:
+ 324 0036 37F700E0 		li	a4,-536809472
+ 325 003a 832707D1 		lw	a5,-752(a4)
+ 326 003e ED9B     		andi	a5,a5,-5
+ 327 0040 2328F7D0 		sw	a5,-752(a4)
+ 328 0044 8280     		ret
+ 329              	.L30:
+ 330 0046 138707D0 		addi	a4,a5,-768
+GAS LISTING /tmp/ccpKfpAG.s 			page 12
+
+
+ 331 004a 144B     		lw	a3,16(a4)
+ 332 004c 93E60602 		ori	a3,a3,32
+ 333 0050 14CB     		sw	a3,16(a4)
+ 334 0052 144B     		lw	a3,16(a4)
+ 335 0054 93F6F6FD 		andi	a3,a3,-33
+ 336 0058 93E68600 		ori	a3,a3,8
+ 337 005c 14CB     		sw	a3,16(a4)
+ 338              	 #APP
+ 339              	# 319 "../../SRC/Core/core_riscv.h" 1
+ 340              		wfi
+ 341              	# 0 "" 2
+ 342              	 #NO_APP
+ 343 0062 144B     		lw	a3,16(a4)
+ 344 0064 93F6F6FD 		andi	a3,a3,-33
+ 345 0068 93E68600 		ori	a3,a3,8
+ 346 006c 14CB     		sw	a3,16(a4)
+ 347              	 #APP
+ 348              	# 319 "../../SRC/Core/core_riscv.h" 1
+ 349              		wfi
+ 350              	# 0 "" 2
+ 351              	 #NO_APP
+ 352 0072 37470240 		li	a4,1073889280
+ 353 0076 03270780 		lw	a4,-2048(a4)
+ 354 007a 13770704 		andi	a4,a4,64
+ 355 007e 45DF     		beq	a4,zero,.L31
+ 356 0080 03A707D1 		lw	a4,-752(a5)
+ 357 0084 13670702 		ori	a4,a4,32
+ 358 0088 23A8E7D0 		sw	a4,-752(a5)
+ 359 008c 6DB7     		j	.L31
+ 361              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccpKfpAG.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_pwr.c
+     /tmp/ccpKfpAG.s:11     .text.PWR_DeInit:0000000000000000 PWR_DeInit
+     /tmp/ccpKfpAG.s:12     .text.PWR_DeInit:0000000000000000 $x
+     /tmp/ccpKfpAG.s:25     .text.PWR_BackupAccessCmd:0000000000000000 PWR_BackupAccessCmd
+     /tmp/ccpKfpAG.s:26     .text.PWR_BackupAccessCmd:0000000000000000 $x
+     /tmp/ccpKfpAG.s:41     .text.PWR_PVDCmd:0000000000000000 PWR_PVDCmd
+     /tmp/ccpKfpAG.s:42     .text.PWR_PVDCmd:0000000000000000 $x
+     /tmp/ccpKfpAG.s:57     .text.PWR_PVDLevelConfig:0000000000000000 PWR_PVDLevelConfig
+     /tmp/ccpKfpAG.s:58     .text.PWR_PVDLevelConfig:0000000000000000 $x
+     /tmp/ccpKfpAG.s:69     .text.PWR_WakeUpPinCmd:0000000000000000 PWR_WakeUpPinCmd
+     /tmp/ccpKfpAG.s:70     .text.PWR_WakeUpPinCmd:0000000000000000 $x
+     /tmp/ccpKfpAG.s:85     .text.PWR_EnterSTOPMode:0000000000000000 PWR_EnterSTOPMode
+     /tmp/ccpKfpAG.s:86     .text.PWR_EnterSTOPMode:0000000000000000 $x
+     /tmp/ccpKfpAG.s:147    .text.PWR_EnterSTANDBYMode:0000000000000000 PWR_EnterSTANDBYMode
+     /tmp/ccpKfpAG.s:148    .text.PWR_EnterSTANDBYMode:0000000000000000 $x
+     /tmp/ccpKfpAG.s:174    .text.PWR_GetFlagStatus:0000000000000000 PWR_GetFlagStatus
+     /tmp/ccpKfpAG.s:175    .text.PWR_GetFlagStatus:0000000000000000 $x
+     /tmp/ccpKfpAG.s:185    .text.PWR_ClearFlag:0000000000000000 PWR_ClearFlag
+     /tmp/ccpKfpAG.s:186    .text.PWR_ClearFlag:0000000000000000 $x
+     /tmp/ccpKfpAG.s:197    .text.PWR_EnterSTANDBYMode_RAM:0000000000000000 PWR_EnterSTANDBYMode_RAM
+     /tmp/ccpKfpAG.s:198    .text.PWR_EnterSTANDBYMode_RAM:0000000000000000 $x
+     /tmp/ccpKfpAG.s:223    .text.PWR_EnterSTANDBYMode_RAM_LV:0000000000000000 PWR_EnterSTANDBYMode_RAM_LV
+     /tmp/ccpKfpAG.s:224    .text.PWR_EnterSTANDBYMode_RAM_LV:0000000000000000 $x
+     /tmp/ccpKfpAG.s:249    .text.PWR_EnterSTANDBYMode_RAM_VBAT_EN:0000000000000000 PWR_EnterSTANDBYMode_RAM_VBAT_EN
+     /tmp/ccpKfpAG.s:250    .text.PWR_EnterSTANDBYMode_RAM_VBAT_EN:0000000000000000 $x
+     /tmp/ccpKfpAG.s:275    .text.PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN:0000000000000000 PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN
+     /tmp/ccpKfpAG.s:276    .text.PWR_EnterSTANDBYMode_RAM_LV_VBAT_EN:0000000000000000 $x
+     /tmp/ccpKfpAG.s:301    .text.PWR_EnterSTOPMode_RAM_LV:0000000000000000 PWR_EnterSTOPMode_RAM_LV
+     /tmp/ccpKfpAG.s:302    .text.PWR_EnterSTOPMode_RAM_LV:0000000000000000 $x
+     /tmp/ccpKfpAG.s:33     .text.PWR_BackupAccessCmd:0000000000000010 .L4
+     /tmp/ccpKfpAG.s:30     .text.PWR_BackupAccessCmd:000000000000000c .L6
+     /tmp/ccpKfpAG.s:49     .text.PWR_PVDCmd:0000000000000010 .L8
+     /tmp/ccpKfpAG.s:46     .text.PWR_PVDCmd:000000000000000c .L10
+     /tmp/ccpKfpAG.s:77     .text.PWR_WakeUpPinCmd:0000000000000010 .L13
+     /tmp/ccpKfpAG.s:74     .text.PWR_WakeUpPinCmd:000000000000000c .L15
+     /tmp/ccpKfpAG.s:111    .text.PWR_EnterSTOPMode:0000000000000040 .L17
+     /tmp/ccpKfpAG.s:105    .text.PWR_EnterSTOPMode:0000000000000030 .L18
+     /tmp/ccpKfpAG.s:329    .text.PWR_EnterSTOPMode_RAM_LV:0000000000000046 .L30
+     /tmp/ccpKfpAG.s:323    .text.PWR_EnterSTOPMode_RAM_LV:0000000000000036 .L31
+
+UNDEFINED SYMBOLS
+__riscv_save_0
+RCC_APB1PeriphResetCmd
+__riscv_restore_0

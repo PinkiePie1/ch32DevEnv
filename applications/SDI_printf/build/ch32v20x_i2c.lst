@@ -1,0 +1,760 @@
+GAS LISTING /tmp/ccHWnHGh.s 			page 1
+
+
+   1              		.file	"ch32v20x_i2c.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.I2C_DeInit,"ax",@progbits
+   8              		.align	1
+   9              		.globl	I2C_DeInit
+  11              	I2C_DeInit:
+  12 0000 17030000 		call	t0,__riscv_save_0
+  12      E7020300 
+  13 0008 B7570040 		li	a5,1073762304
+  14 000c 93870740 		addi	a5,a5,1024
+  15 0010 8545     		li	a1,1
+  16 0012 6313F502 		bne	a0,a5,.L2
+  17 0016 37052000 		li	a0,2097152
+  18 001a 97000000 		call	RCC_APB1PeriphResetCmd
+  18      E7800000 
+  19 0022 8145     		li	a1,0
+  20 0024 37052000 		li	a0,2097152
+  21              	.L5:
+  22 0028 97000000 		call	RCC_APB1PeriphResetCmd
+  22      E7800000 
+  23 0030 17030000 		tail	__riscv_restore_0
+  23      67000300 
+  24              	.L2:
+  25 0038 37054000 		li	a0,4194304
+  26 003c 97000000 		call	RCC_APB1PeriphResetCmd
+  26      E7800000 
+  27 0044 8145     		li	a1,0
+  28 0046 37054000 		li	a0,4194304
+  29 004a F9BF     		j	.L5
+  31              		.section	.text.I2C_Init,"ax",@progbits
+  32              		.align	1
+  33              		.globl	I2C_Init
+  35              	I2C_Init:
+  36 0000 17030000 		call	t0,__riscv_save_3
+  36      E7020300 
+  37 0008 0111     		addi	sp,sp,-32
+  38 000a 4621     		lhu	s1,4(a0)
+  39 000c 2A84     		mv	s0,a0
+  40 000e 6800     		addi	a0,sp,12
+  41 0010 2E89     		mv	s2,a1
+  42 0012 97000000 		call	RCC_GetClocksFreq
+  42      E7800000 
+  43 001a D247     		lw	a5,20(sp)
+  44 001c 37470F00 		li	a4,999424
+  45 0020 13070724 		addi	a4,a4,576
+  46 0024 33D7E702 		divu	a4,a5,a4
+  47 0028 C204     		slli	s1,s1,16
+  48 002a C180     		srli	s1,s1,16
+  49 002c 93F404FC 		andi	s1,s1,-64
+  50 0030 C204     		slli	s1,s1,16
+  51 0032 B7869303 		li	a3,59998208
+  52 0036 C180     		srli	s1,s1,16
+  53 0038 9386F66F 		addi	a3,a3,1791
+GAS LISTING /tmp/ccHWnHGh.s 			page 2
+
+
+  54 003c 4207     		slli	a4,a4,16
+  55 003e 4183     		srli	a4,a4,16
+  56 0040 D98C     		or	s1,s1,a4
+  57 0042 63F4F600 		bleu	a5,a3,.L7
+  58 0046 1307C003 		li	a4,60
+  59              	.L7:
+  60 004a 46A0     		sh	s1,4(s0)
+  61 004c 1620     		lhu	a3,0(s0)
+  62 004e 6166     		li	a2,98304
+  63 0050 1306066A 		addi	a2,a2,1696
+  64 0054 C206     		slli	a3,a3,16
+  65 0056 C182     		srli	a3,a3,16
+  66 0058 F99A     		andi	a3,a3,-2
+  67 005a C206     		slli	a3,a3,16
+  68 005c C182     		srli	a3,a3,16
+  69 005e 16A0     		sh	a3,0(s0)
+  70 0060 83260900 		lw	a3,0(s2)
+  71 0064 636ED604 		bgtu	a3,a2,.L8
+  72 0068 8606     		slli	a3,a3,1
+  73 006a B3D6D702 		divu	a3,a5,a3
+  74 006e 1146     		li	a2,4
+  75 0070 B687     		mv	a5,a3
+  76 0072 C206     		slli	a3,a3,16
+  77 0074 C182     		srli	a3,a3,16
+  78 0076 63F3C600 		bgeu	a3,a2,.L9
+  79 007a 9147     		li	a5,4
+  80              	.L9:
+  81 007c C207     		slli	a5,a5,16
+  82 007e C183     		srli	a5,a5,16
+  83              	.L15:
+  84 0080 0507     		addi	a4,a4,1
+  85 0082 4207     		slli	a4,a4,16
+  86 0084 4183     		srli	a4,a4,16
+  87 0086 1AB0     		sh	a4,32(s0)
+  88 0088 5EAC     		sh	a5,28(s0)
+  89 008a 1E20     		lhu	a5,0(s0)
+  90 008c 03574900 		lhu	a4,4(s2)
+  91 0090 8356A900 		lhu	a3,10(s2)
+  92 0094 93E71700 		ori	a5,a5,1
+  93 0098 1EA0     		sh	a5,0(s0)
+  94 009a 1E20     		lhu	a5,0(s0)
+  95 009c 558F     		or	a4,a4,a3
+  96 009e C207     		slli	a5,a5,16
+  97 00a0 C183     		srli	a5,a5,16
+  98 00a2 93F757BF 		andi	a5,a5,-1035
+  99 00a6 D98F     		or	a5,a5,a4
+ 100 00a8 1EA0     		sh	a5,0(s0)
+ 101 00aa 03578900 		lhu	a4,8(s2)
+ 102 00ae 8357C900 		lhu	a5,12(s2)
+ 103 00b2 D98F     		or	a5,a5,a4
+ 104 00b4 1EA4     		sh	a5,8(s0)
+ 105 00b6 0561     		addi	sp,sp,32
+ 106 00b8 17030000 		tail	__riscv_restore_3
+ 106      67000300 
+ 107              	.L8:
+ 108 00c0 83556900 		lhu	a1,6(s2)
+ 109 00c4 3166     		li	a2,49152
+GAS LISTING /tmp/ccHWnHGh.s 			page 3
+
+
+ 110 00c6 7D16     		addi	a2,a2,-1
+ 111 00c8 6399C502 		bne	a1,a2,.L11
+ 112 00cc 0D46     		li	a2,3
+ 113 00ce B386C602 		mul	a3,a3,a2
+ 114 00d2 B3D7D702 		divu	a5,a5,a3
+ 115 00d6 C207     		slli	a5,a5,16
+ 116 00d8 C183     		srli	a5,a5,16
+ 117              	.L12:
+ 118 00da 93964701 		slli	a3,a5,20
+ 119 00de 99E2     		bne	a3,zero,.L13
+ 120 00e0 93E71700 		ori	a5,a5,1
+ 121              	.L13:
+ 122 00e4 A166     		li	a3,32768
+ 123 00e6 D58F     		or	a5,a5,a3
+ 124 00e8 9306C012 		li	a3,300
+ 125 00ec 3307D702 		mul	a4,a4,a3
+ 126 00f0 9306803E 		li	a3,1000
+ 127 00f4 3347D702 		div	a4,a4,a3
+ 128 00f8 61B7     		j	.L15
+ 129              	.L11:
+ 130 00fa 6546     		li	a2,25
+ 131 00fc B386C602 		mul	a3,a3,a2
+ 132 0100 B3D7D702 		divu	a5,a5,a3
+ 133 0104 9166     		li	a3,16384
+ 134 0106 C207     		slli	a5,a5,16
+ 135 0108 C183     		srli	a5,a5,16
+ 136 010a D58F     		or	a5,a5,a3
+ 137 010c F9B7     		j	.L12
+ 139              		.section	.text.I2C_StructInit,"ax",@progbits
+ 140              		.align	1
+ 141              		.globl	I2C_StructInit
+ 143              	I2C_StructInit:
+ 144 0000 8567     		li	a5,4096
+ 145 0002 93878738 		addi	a5,a5,904
+ 146 0006 1CC1     		sw	a5,0(a0)
+ 147 0008 B707FFBF 		li	a5,-1073807360
+ 148 000c 5CC1     		sw	a5,4(a0)
+ 149 000e 9167     		li	a5,16384
+ 150 0010 23240500 		sw	zero,8(a0)
+ 151 0014 5EA5     		sh	a5,12(a0)
+ 152 0016 8280     		ret
+ 154              		.section	.text.I2C_Cmd,"ax",@progbits
+ 155              		.align	1
+ 156              		.globl	I2C_Cmd
+ 158              	I2C_Cmd:
+ 159 0000 1E21     		lhu	a5,0(a0)
+ 160 0002 89C5     		beq	a1,zero,.L18
+ 161 0004 93E71700 		ori	a5,a5,1
+ 162              	.L20:
+ 163 0008 1EA1     		sh	a5,0(a0)
+ 164 000a 8280     		ret
+ 165              	.L18:
+ 166 000c C207     		slli	a5,a5,16
+ 167 000e C183     		srli	a5,a5,16
+ 168 0010 F99B     		andi	a5,a5,-2
+ 169 0012 C207     		slli	a5,a5,16
+ 170 0014 C183     		srli	a5,a5,16
+GAS LISTING /tmp/ccHWnHGh.s 			page 4
+
+
+ 171 0016 CDBF     		j	.L20
+ 173              		.section	.text.I2C_DMACmd,"ax",@progbits
+ 174              		.align	1
+ 175              		.globl	I2C_DMACmd
+ 177              	I2C_DMACmd:
+ 178 0000 5E21     		lhu	a5,4(a0)
+ 179 0002 89C9     		beq	a1,zero,.L22
+ 180 0004 0567     		li	a4,4096
+ 181 0006 13070780 		addi	a4,a4,-2048
+ 182 000a D98F     		or	a5,a5,a4
+ 183 000c C207     		slli	a5,a5,16
+ 184 000e C183     		srli	a5,a5,16
+ 185              	.L24:
+ 186 0010 5EA1     		sh	a5,4(a0)
+ 187 0012 8280     		ret
+ 188              	.L22:
+ 189 0014 7D77     		li	a4,-4096
+ 190 0016 1307F77F 		addi	a4,a4,2047
+ 191 001a F98F     		and	a5,a5,a4
+ 192 001c D5BF     		j	.L24
+ 194              		.section	.text.I2C_DMALastTransferCmd,"ax",@progbits
+ 195              		.align	1
+ 196              		.globl	I2C_DMALastTransferCmd
+ 198              	I2C_DMALastTransferCmd:
+ 199 0000 5E21     		lhu	a5,4(a0)
+ 200 0002 89C5     		beq	a1,zero,.L26
+ 201 0004 0567     		li	a4,4096
+ 202 0006 D98F     		or	a5,a5,a4
+ 203              	.L28:
+ 204 0008 5EA1     		sh	a5,4(a0)
+ 205 000a 8280     		ret
+ 206              	.L26:
+ 207 000c 7D77     		li	a4,-4096
+ 208 000e 7D17     		addi	a4,a4,-1
+ 209 0010 F98F     		and	a5,a5,a4
+ 210 0012 DDBF     		j	.L28
+ 212              		.section	.text.I2C_GenerateSTART,"ax",@progbits
+ 213              		.align	1
+ 214              		.globl	I2C_GenerateSTART
+ 216              	I2C_GenerateSTART:
+ 217 0000 1E21     		lhu	a5,0(a0)
+ 218 0002 89C5     		beq	a1,zero,.L30
+ 219 0004 93E70710 		ori	a5,a5,256
+ 220              	.L32:
+ 221 0008 1EA1     		sh	a5,0(a0)
+ 222 000a 8280     		ret
+ 223              	.L30:
+ 224 000c C207     		slli	a5,a5,16
+ 225 000e C183     		srli	a5,a5,16
+ 226 0010 93F7F7EF 		andi	a5,a5,-257
+ 227 0014 C207     		slli	a5,a5,16
+ 228 0016 C183     		srli	a5,a5,16
+ 229 0018 C5BF     		j	.L32
+ 231              		.section	.text.I2C_GenerateSTOP,"ax",@progbits
+ 232              		.align	1
+ 233              		.globl	I2C_GenerateSTOP
+ 235              	I2C_GenerateSTOP:
+GAS LISTING /tmp/ccHWnHGh.s 			page 5
+
+
+ 236 0000 1E21     		lhu	a5,0(a0)
+ 237 0002 89C5     		beq	a1,zero,.L34
+ 238 0004 93E70720 		ori	a5,a5,512
+ 239              	.L36:
+ 240 0008 1EA1     		sh	a5,0(a0)
+ 241 000a 8280     		ret
+ 242              	.L34:
+ 243 000c C207     		slli	a5,a5,16
+ 244 000e C183     		srli	a5,a5,16
+ 245 0010 93F7F7DF 		andi	a5,a5,-513
+ 246 0014 C207     		slli	a5,a5,16
+ 247 0016 C183     		srli	a5,a5,16
+ 248 0018 C5BF     		j	.L36
+ 250              		.section	.text.I2C_AcknowledgeConfig,"ax",@progbits
+ 251              		.align	1
+ 252              		.globl	I2C_AcknowledgeConfig
+ 254              	I2C_AcknowledgeConfig:
+ 255 0000 1E21     		lhu	a5,0(a0)
+ 256 0002 89C5     		beq	a1,zero,.L38
+ 257 0004 93E70740 		ori	a5,a5,1024
+ 258              	.L40:
+ 259 0008 1EA1     		sh	a5,0(a0)
+ 260 000a 8280     		ret
+ 261              	.L38:
+ 262 000c C207     		slli	a5,a5,16
+ 263 000e C183     		srli	a5,a5,16
+ 264 0010 93F7F7BF 		andi	a5,a5,-1025
+ 265 0014 C207     		slli	a5,a5,16
+ 266 0016 C183     		srli	a5,a5,16
+ 267 0018 C5BF     		j	.L40
+ 269              		.section	.text.I2C_OwnAddress2Config,"ax",@progbits
+ 270              		.align	1
+ 271              		.globl	I2C_OwnAddress2Config
+ 273              	I2C_OwnAddress2Config:
+ 274 0000 5E25     		lhu	a5,12(a0)
+ 275 0002 93F5E50F 		andi	a1,a1,254
+ 276 0006 C207     		slli	a5,a5,16
+ 277 0008 C183     		srli	a5,a5,16
+ 278 000a 93F717F0 		andi	a5,a5,-255
+ 279 000e CD8F     		or	a5,a5,a1
+ 280 0010 5EA5     		sh	a5,12(a0)
+ 281 0012 8280     		ret
+ 283              		.section	.text.I2C_DualAddressCmd,"ax",@progbits
+ 284              		.align	1
+ 285              		.globl	I2C_DualAddressCmd
+ 287              	I2C_DualAddressCmd:
+ 288 0000 5E25     		lhu	a5,12(a0)
+ 289 0002 89C5     		beq	a1,zero,.L43
+ 290 0004 93E71700 		ori	a5,a5,1
+ 291              	.L45:
+ 292 0008 5EA5     		sh	a5,12(a0)
+ 293 000a 8280     		ret
+ 294              	.L43:
+ 295 000c C207     		slli	a5,a5,16
+ 296 000e C183     		srli	a5,a5,16
+ 297 0010 F99B     		andi	a5,a5,-2
+ 298 0012 C207     		slli	a5,a5,16
+GAS LISTING /tmp/ccHWnHGh.s 			page 6
+
+
+ 299 0014 C183     		srli	a5,a5,16
+ 300 0016 CDBF     		j	.L45
+ 302              		.section	.text.I2C_GeneralCallCmd,"ax",@progbits
+ 303              		.align	1
+ 304              		.globl	I2C_GeneralCallCmd
+ 306              	I2C_GeneralCallCmd:
+ 307 0000 1E21     		lhu	a5,0(a0)
+ 308 0002 89C5     		beq	a1,zero,.L47
+ 309 0004 93E70704 		ori	a5,a5,64
+ 310              	.L49:
+ 311 0008 1EA1     		sh	a5,0(a0)
+ 312 000a 8280     		ret
+ 313              	.L47:
+ 314 000c C207     		slli	a5,a5,16
+ 315 000e C183     		srli	a5,a5,16
+ 316 0010 93F7F7FB 		andi	a5,a5,-65
+ 317 0014 C207     		slli	a5,a5,16
+ 318 0016 C183     		srli	a5,a5,16
+ 319 0018 C5BF     		j	.L49
+ 321              		.section	.text.I2C_ITConfig,"ax",@progbits
+ 322              		.align	1
+ 323              		.globl	I2C_ITConfig
+ 325              	I2C_ITConfig:
+ 326 0000 5E21     		lhu	a5,4(a0)
+ 327 0002 01C6     		beq	a2,zero,.L51
+ 328 0004 CD8F     		or	a5,a5,a1
+ 329              	.L53:
+ 330 0006 5EA1     		sh	a5,4(a0)
+ 331 0008 8280     		ret
+ 332              	.L51:
+ 333 000a 93C5F5FF 		not	a1,a1
+ 334 000e ED8F     		and	a5,a5,a1
+ 335 0010 DDBF     		j	.L53
+ 337              		.section	.text.I2C_SendData,"ax",@progbits
+ 338              		.align	1
+ 339              		.globl	I2C_SendData
+ 341              	I2C_SendData:
+ 342 0000 0EA9     		sh	a1,16(a0)
+ 343 0002 8280     		ret
+ 345              		.section	.text.I2C_ReceiveData,"ax",@progbits
+ 346              		.align	1
+ 347              		.globl	I2C_ReceiveData
+ 349              	I2C_ReceiveData:
+ 350 0000 0A29     		lhu	a0,16(a0)
+ 351 0002 1375F50F 		andi	a0,a0,0xff
+ 352 0006 8280     		ret
+ 354              		.section	.text.I2C_Send7bitAddress,"ax",@progbits
+ 355              		.align	1
+ 356              		.globl	I2C_Send7bitAddress
+ 358              	I2C_Send7bitAddress:
+ 359 0000 93F7E50F 		andi	a5,a1,254
+ 360 0004 19C2     		beq	a2,zero,.L58
+ 361 0006 93E71500 		ori	a5,a1,1
+ 362              	.L58:
+ 363 000a 1EA9     		sh	a5,16(a0)
+ 364 000c 8280     		ret
+ 366              		.section	.text.I2C_ReadRegister,"ax",@progbits
+GAS LISTING /tmp/ccHWnHGh.s 			page 7
+
+
+ 367              		.align	1
+ 368              		.globl	I2C_ReadRegister
+ 370              	I2C_ReadRegister:
+ 371 0000 4111     		addi	sp,sp,-16
+ 372 0002 02C6     		sw	zero,12(sp)
+ 373 0004 2AC6     		sw	a0,12(sp)
+ 374 0006 B247     		lw	a5,12(sp)
+ 375 0008 BE95     		add	a1,a1,a5
+ 376 000a 2EC6     		sw	a1,12(sp)
+ 377 000c B247     		lw	a5,12(sp)
+ 378 000e 8A23     		lhu	a0,0(a5)
+ 379 0010 4101     		addi	sp,sp,16
+ 380 0012 8280     		jr	ra
+ 382              		.section	.text.I2C_SoftwareResetCmd,"ax",@progbits
+ 383              		.align	1
+ 384              		.globl	I2C_SoftwareResetCmd
+ 386              	I2C_SoftwareResetCmd:
+ 387 0000 1E21     		lhu	a5,0(a0)
+ 388 0002 89C5     		beq	a1,zero,.L62
+ 389 0004 2167     		li	a4,32768
+ 390 0006 D98F     		or	a5,a5,a4
+ 391              	.L64:
+ 392 0008 1EA1     		sh	a5,0(a0)
+ 393 000a 8280     		ret
+ 394              	.L62:
+ 395 000c C607     		slli	a5,a5,17
+ 396 000e C583     		srli	a5,a5,17
+ 397 0010 E5BF     		j	.L64
+ 399              		.section	.text.I2C_NACKPositionConfig,"ax",@progbits
+ 400              		.align	1
+ 401              		.globl	I2C_NACKPositionConfig
+ 403              	I2C_NACKPositionConfig:
+ 404 0000 1E21     		lhu	a5,0(a0)
+ 405 0002 93850580 		addi	a1,a1,-2048
+ 406 0006 89E9     		bne	a1,zero,.L66
+ 407 0008 0567     		li	a4,4096
+ 408 000a 13070780 		addi	a4,a4,-2048
+ 409 000e D98F     		or	a5,a5,a4
+ 410 0010 C207     		slli	a5,a5,16
+ 411 0012 C183     		srli	a5,a5,16
+ 412              	.L68:
+ 413 0014 1EA1     		sh	a5,0(a0)
+ 414 0016 8280     		ret
+ 415              	.L66:
+ 416 0018 7D77     		li	a4,-4096
+ 417 001a 1307F77F 		addi	a4,a4,2047
+ 418 001e F98F     		and	a5,a5,a4
+ 419 0020 D5BF     		j	.L68
+ 421              		.section	.text.I2C_SMBusAlertConfig,"ax",@progbits
+ 422              		.align	1
+ 423              		.globl	I2C_SMBusAlertConfig
+ 425              	I2C_SMBusAlertConfig:
+ 426 0000 8967     		li	a5,8192
+ 427 0002 6397F500 		bne	a1,a5,.L70
+ 428 0006 1E21     		lhu	a5,0(a0)
+ 429 0008 0967     		li	a4,8192
+ 430 000a D98F     		or	a5,a5,a4
+GAS LISTING /tmp/ccHWnHGh.s 			page 8
+
+
+ 431              	.L72:
+ 432 000c 1EA1     		sh	a5,0(a0)
+ 433 000e 8280     		ret
+ 434              	.L70:
+ 435 0010 1E21     		lhu	a5,0(a0)
+ 436 0012 7977     		li	a4,-8192
+ 437 0014 7D17     		addi	a4,a4,-1
+ 438 0016 F98F     		and	a5,a5,a4
+ 439 0018 D5BF     		j	.L72
+ 441              		.section	.text.I2C_TransmitPEC,"ax",@progbits
+ 442              		.align	1
+ 443              		.globl	I2C_TransmitPEC
+ 445              	I2C_TransmitPEC:
+ 446 0000 1E21     		lhu	a5,0(a0)
+ 447 0002 89C5     		beq	a1,zero,.L74
+ 448 0004 0567     		li	a4,4096
+ 449 0006 D98F     		or	a5,a5,a4
+ 450              	.L76:
+ 451 0008 1EA1     		sh	a5,0(a0)
+ 452 000a 8280     		ret
+ 453              	.L74:
+ 454 000c 7D77     		li	a4,-4096
+ 455 000e 7D17     		addi	a4,a4,-1
+ 456 0010 F98F     		and	a5,a5,a4
+ 457 0012 DDBF     		j	.L76
+ 459              		.section	.text.I2C_PECPositionConfig,"ax",@progbits
+ 460              		.align	1
+ 461              		.globl	I2C_PECPositionConfig
+ 463              	I2C_PECPositionConfig:
+ 464 0000 17030000 		tail	I2C_NACKPositionConfig
+ 464      67000300 
+ 466              		.section	.text.I2C_CalculatePEC,"ax",@progbits
+ 467              		.align	1
+ 468              		.globl	I2C_CalculatePEC
+ 470              	I2C_CalculatePEC:
+ 471 0000 1E21     		lhu	a5,0(a0)
+ 472 0002 89C5     		beq	a1,zero,.L80
+ 473 0004 93E70702 		ori	a5,a5,32
+ 474              	.L82:
+ 475 0008 1EA1     		sh	a5,0(a0)
+ 476 000a 8280     		ret
+ 477              	.L80:
+ 478 000c C207     		slli	a5,a5,16
+ 479 000e C183     		srli	a5,a5,16
+ 480 0010 93F7F7FD 		andi	a5,a5,-33
+ 481 0014 C207     		slli	a5,a5,16
+ 482 0016 C183     		srli	a5,a5,16
+ 483 0018 C5BF     		j	.L82
+ 485              		.section	.text.I2C_GetPEC,"ax",@progbits
+ 486              		.align	1
+ 487              		.globl	I2C_GetPEC
+ 489              	I2C_GetPEC:
+ 490 0000 0A2D     		lhu	a0,24(a0)
+ 491 0002 2181     		srli	a0,a0,8
+ 492 0004 8280     		ret
+ 494              		.section	.text.I2C_ARPCmd,"ax",@progbits
+ 495              		.align	1
+GAS LISTING /tmp/ccHWnHGh.s 			page 9
+
+
+ 496              		.globl	I2C_ARPCmd
+ 498              	I2C_ARPCmd:
+ 499 0000 1E21     		lhu	a5,0(a0)
+ 500 0002 89C5     		beq	a1,zero,.L85
+ 501 0004 93E70701 		ori	a5,a5,16
+ 502              	.L87:
+ 503 0008 1EA1     		sh	a5,0(a0)
+ 504 000a 8280     		ret
+ 505              	.L85:
+ 506 000c C207     		slli	a5,a5,16
+ 507 000e C183     		srli	a5,a5,16
+ 508 0010 BD9B     		andi	a5,a5,-17
+ 509 0012 C207     		slli	a5,a5,16
+ 510 0014 C183     		srli	a5,a5,16
+ 511 0016 CDBF     		j	.L87
+ 513              		.section	.text.I2C_StretchClockCmd,"ax",@progbits
+ 514              		.align	1
+ 515              		.globl	I2C_StretchClockCmd
+ 517              	I2C_StretchClockCmd:
+ 518 0000 1E21     		lhu	a5,0(a0)
+ 519 0002 89E5     		bne	a1,zero,.L89
+ 520 0004 93E70708 		ori	a5,a5,128
+ 521              	.L91:
+ 522 0008 1EA1     		sh	a5,0(a0)
+ 523 000a 8280     		ret
+ 524              	.L89:
+ 525 000c C207     		slli	a5,a5,16
+ 526 000e C183     		srli	a5,a5,16
+ 527 0010 93F7F7F7 		andi	a5,a5,-129
+ 528 0014 C207     		slli	a5,a5,16
+ 529 0016 C183     		srli	a5,a5,16
+ 530 0018 C5BF     		j	.L91
+ 532              		.section	.text.I2C_FastModeDutyCycleConfig,"ax",@progbits
+ 533              		.align	1
+ 534              		.globl	I2C_FastModeDutyCycleConfig
+ 536              	I2C_FastModeDutyCycleConfig:
+ 537 0000 9167     		li	a5,16384
+ 538 0002 6388F500 		beq	a1,a5,.L93
+ 539 0006 5E2D     		lhu	a5,28(a0)
+ 540 0008 7177     		li	a4,-16384
+ 541 000a 7D17     		addi	a4,a4,-1
+ 542 000c F98F     		and	a5,a5,a4
+ 543              	.L95:
+ 544 000e 5EAD     		sh	a5,28(a0)
+ 545 0010 8280     		ret
+ 546              	.L93:
+ 547 0012 5E2D     		lhu	a5,28(a0)
+ 548 0014 1167     		li	a4,16384
+ 549 0016 D98F     		or	a5,a5,a4
+ 550 0018 DDBF     		j	.L95
+ 552              		.section	.text.I2C_CheckEvent,"ax",@progbits
+ 553              		.align	1
+ 554              		.globl	I2C_CheckEvent
+ 556              	I2C_CheckEvent:
+ 557 0000 5E29     		lhu	a5,20(a0)
+ 558 0002 0A2D     		lhu	a0,24(a0)
+ 559 0004 4205     		slli	a0,a0,16
+GAS LISTING /tmp/ccHWnHGh.s 			page 10
+
+
+ 560 0006 5D8D     		or	a0,a0,a5
+ 561 0008 6D8D     		and	a0,a0,a1
+ 562 000a 2205     		slli	a0,a0,8
+ 563 000c 2181     		srli	a0,a0,8
+ 564 000e 0D8D     		sub	a0,a0,a1
+ 565 0010 13351500 		seqz	a0,a0
+ 566 0014 8280     		ret
+ 568              		.section	.text.I2C_GetLastEvent,"ax",@progbits
+ 569              		.align	1
+ 570              		.globl	I2C_GetLastEvent
+ 572              	I2C_GetLastEvent:
+ 573 0000 5E29     		lhu	a5,20(a0)
+ 574 0002 0A2D     		lhu	a0,24(a0)
+ 575 0004 4205     		slli	a0,a0,16
+ 576 0006 5D8D     		or	a0,a0,a5
+ 577 0008 2205     		slli	a0,a0,8
+ 578 000a 2181     		srli	a0,a0,8
+ 579 000c 8280     		ret
+ 581              		.section	.text.I2C_GetFlagStatus,"ax",@progbits
+ 582              		.align	1
+ 583              		.globl	I2C_GetFlagStatus
+ 585              	I2C_GetFlagStatus:
+ 586 0000 4111     		addi	sp,sp,-16
+ 587 0002 02C4     		sw	zero,8(sp)
+ 588 0004 02C6     		sw	zero,12(sp)
+ 589 0006 93D7C501 		srli	a5,a1,28
+ 590 000a 2AC6     		sw	a0,12(sp)
+ 591 000c 3EC4     		sw	a5,8(sp)
+ 592 000e A247     		lw	a5,8(sp)
+ 593 0010 A205     		slli	a1,a1,8
+ 594 0012 A181     		srli	a1,a1,8
+ 595 0014 99CB     		beq	a5,zero,.L99
+ 596 0016 B247     		lw	a5,12(sp)
+ 597 0018 D107     		addi	a5,a5,20
+ 598              	.L102:
+ 599 001a 3EC6     		sw	a5,12(sp)
+ 600 001c B247     		lw	a5,12(sp)
+ 601 001e 8843     		lw	a0,0(a5)
+ 602 0020 4101     		addi	sp,sp,16
+ 603 0022 6D8D     		and	a0,a0,a1
+ 604 0024 3335A000 		snez	a0,a0
+ 605 0028 8280     		jr	ra
+ 606              	.L99:
+ 607 002a B247     		lw	a5,12(sp)
+ 608 002c C181     		srli	a1,a1,16
+ 609 002e E107     		addi	a5,a5,24
+ 610 0030 EDB7     		j	.L102
+ 612              		.section	.text.I2C_ClearFlag,"ax",@progbits
+ 613              		.align	1
+ 614              		.globl	I2C_ClearFlag
+ 616              	I2C_ClearFlag:
+ 617 0000 93C5F5FF 		not	a1,a1
+ 618 0004 C205     		slli	a1,a1,16
+ 619 0006 C181     		srli	a1,a1,16
+ 620 0008 4EA9     		sh	a1,20(a0)
+ 621 000a 8280     		ret
+ 623              		.section	.text.I2C_GetITStatus,"ax",@progbits
+GAS LISTING /tmp/ccHWnHGh.s 			page 11
+
+
+ 624              		.align	1
+ 625              		.globl	I2C_GetITStatus
+ 627              	I2C_GetITStatus:
+ 628 0000 5E21     		lhu	a5,4(a0)
+ 629 0002 4A29     		lhu	a0,20(a0)
+ 630 0004 C207     		slli	a5,a5,16
+ 631 0006 6D8D     		and	a0,a0,a1
+ 632 0008 C183     		srli	a5,a5,16
+ 633 000a 01C9     		beq	a0,zero,.L104
+ 634 000c 13D50501 		srli	a0,a1,16
+ 635 0010 7D8D     		and	a0,a0,a5
+ 636 0012 13750570 		andi	a0,a0,1792
+ 637 0016 3335A000 		snez	a0,a0
+ 638              	.L104:
+ 639 001a 8280     		ret
+ 641              		.section	.text.I2C_ClearITPendingBit,"ax",@progbits
+ 642              		.align	1
+ 643              		.globl	I2C_ClearITPendingBit
+ 645              	I2C_ClearITPendingBit:
+ 646 0000 93C5F5FF 		not	a1,a1
+ 647 0004 C205     		slli	a1,a1,16
+ 648 0006 C181     		srli	a1,a1,16
+ 649 0008 4EA9     		sh	a1,20(a0)
+ 650 000a 8280     		ret
+ 652              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccHWnHGh.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_i2c.c
+     /tmp/ccHWnHGh.s:11     .text.I2C_DeInit:0000000000000000 I2C_DeInit
+     /tmp/ccHWnHGh.s:12     .text.I2C_DeInit:0000000000000000 $x
+     /tmp/ccHWnHGh.s:35     .text.I2C_Init:0000000000000000 I2C_Init
+     /tmp/ccHWnHGh.s:36     .text.I2C_Init:0000000000000000 $x
+     /tmp/ccHWnHGh.s:143    .text.I2C_StructInit:0000000000000000 I2C_StructInit
+     /tmp/ccHWnHGh.s:144    .text.I2C_StructInit:0000000000000000 $x
+     /tmp/ccHWnHGh.s:158    .text.I2C_Cmd:0000000000000000 I2C_Cmd
+     /tmp/ccHWnHGh.s:159    .text.I2C_Cmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:177    .text.I2C_DMACmd:0000000000000000 I2C_DMACmd
+     /tmp/ccHWnHGh.s:178    .text.I2C_DMACmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:198    .text.I2C_DMALastTransferCmd:0000000000000000 I2C_DMALastTransferCmd
+     /tmp/ccHWnHGh.s:199    .text.I2C_DMALastTransferCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:216    .text.I2C_GenerateSTART:0000000000000000 I2C_GenerateSTART
+     /tmp/ccHWnHGh.s:217    .text.I2C_GenerateSTART:0000000000000000 $x
+     /tmp/ccHWnHGh.s:235    .text.I2C_GenerateSTOP:0000000000000000 I2C_GenerateSTOP
+     /tmp/ccHWnHGh.s:236    .text.I2C_GenerateSTOP:0000000000000000 $x
+     /tmp/ccHWnHGh.s:254    .text.I2C_AcknowledgeConfig:0000000000000000 I2C_AcknowledgeConfig
+     /tmp/ccHWnHGh.s:255    .text.I2C_AcknowledgeConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:273    .text.I2C_OwnAddress2Config:0000000000000000 I2C_OwnAddress2Config
+     /tmp/ccHWnHGh.s:274    .text.I2C_OwnAddress2Config:0000000000000000 $x
+     /tmp/ccHWnHGh.s:287    .text.I2C_DualAddressCmd:0000000000000000 I2C_DualAddressCmd
+     /tmp/ccHWnHGh.s:288    .text.I2C_DualAddressCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:306    .text.I2C_GeneralCallCmd:0000000000000000 I2C_GeneralCallCmd
+     /tmp/ccHWnHGh.s:307    .text.I2C_GeneralCallCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:325    .text.I2C_ITConfig:0000000000000000 I2C_ITConfig
+     /tmp/ccHWnHGh.s:326    .text.I2C_ITConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:341    .text.I2C_SendData:0000000000000000 I2C_SendData
+     /tmp/ccHWnHGh.s:342    .text.I2C_SendData:0000000000000000 $x
+     /tmp/ccHWnHGh.s:349    .text.I2C_ReceiveData:0000000000000000 I2C_ReceiveData
+     /tmp/ccHWnHGh.s:350    .text.I2C_ReceiveData:0000000000000000 $x
+     /tmp/ccHWnHGh.s:358    .text.I2C_Send7bitAddress:0000000000000000 I2C_Send7bitAddress
+     /tmp/ccHWnHGh.s:359    .text.I2C_Send7bitAddress:0000000000000000 $x
+     /tmp/ccHWnHGh.s:370    .text.I2C_ReadRegister:0000000000000000 I2C_ReadRegister
+     /tmp/ccHWnHGh.s:371    .text.I2C_ReadRegister:0000000000000000 $x
+     /tmp/ccHWnHGh.s:386    .text.I2C_SoftwareResetCmd:0000000000000000 I2C_SoftwareResetCmd
+     /tmp/ccHWnHGh.s:387    .text.I2C_SoftwareResetCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:403    .text.I2C_NACKPositionConfig:0000000000000000 I2C_NACKPositionConfig
+     /tmp/ccHWnHGh.s:404    .text.I2C_NACKPositionConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:425    .text.I2C_SMBusAlertConfig:0000000000000000 I2C_SMBusAlertConfig
+     /tmp/ccHWnHGh.s:426    .text.I2C_SMBusAlertConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:445    .text.I2C_TransmitPEC:0000000000000000 I2C_TransmitPEC
+     /tmp/ccHWnHGh.s:446    .text.I2C_TransmitPEC:0000000000000000 $x
+     /tmp/ccHWnHGh.s:463    .text.I2C_PECPositionConfig:0000000000000000 I2C_PECPositionConfig
+     /tmp/ccHWnHGh.s:464    .text.I2C_PECPositionConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:470    .text.I2C_CalculatePEC:0000000000000000 I2C_CalculatePEC
+     /tmp/ccHWnHGh.s:471    .text.I2C_CalculatePEC:0000000000000000 $x
+     /tmp/ccHWnHGh.s:489    .text.I2C_GetPEC:0000000000000000 I2C_GetPEC
+     /tmp/ccHWnHGh.s:490    .text.I2C_GetPEC:0000000000000000 $x
+     /tmp/ccHWnHGh.s:498    .text.I2C_ARPCmd:0000000000000000 I2C_ARPCmd
+     /tmp/ccHWnHGh.s:499    .text.I2C_ARPCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:517    .text.I2C_StretchClockCmd:0000000000000000 I2C_StretchClockCmd
+     /tmp/ccHWnHGh.s:518    .text.I2C_StretchClockCmd:0000000000000000 $x
+     /tmp/ccHWnHGh.s:536    .text.I2C_FastModeDutyCycleConfig:0000000000000000 I2C_FastModeDutyCycleConfig
+     /tmp/ccHWnHGh.s:537    .text.I2C_FastModeDutyCycleConfig:0000000000000000 $x
+     /tmp/ccHWnHGh.s:556    .text.I2C_CheckEvent:0000000000000000 I2C_CheckEvent
+GAS LISTING /tmp/ccHWnHGh.s 			page 13
+
+
+     /tmp/ccHWnHGh.s:557    .text.I2C_CheckEvent:0000000000000000 $x
+     /tmp/ccHWnHGh.s:572    .text.I2C_GetLastEvent:0000000000000000 I2C_GetLastEvent
+     /tmp/ccHWnHGh.s:573    .text.I2C_GetLastEvent:0000000000000000 $x
+     /tmp/ccHWnHGh.s:585    .text.I2C_GetFlagStatus:0000000000000000 I2C_GetFlagStatus
+     /tmp/ccHWnHGh.s:586    .text.I2C_GetFlagStatus:0000000000000000 $x
+     /tmp/ccHWnHGh.s:616    .text.I2C_ClearFlag:0000000000000000 I2C_ClearFlag
+     /tmp/ccHWnHGh.s:617    .text.I2C_ClearFlag:0000000000000000 $x
+     /tmp/ccHWnHGh.s:627    .text.I2C_GetITStatus:0000000000000000 I2C_GetITStatus
+     /tmp/ccHWnHGh.s:628    .text.I2C_GetITStatus:0000000000000000 $x
+     /tmp/ccHWnHGh.s:645    .text.I2C_ClearITPendingBit:0000000000000000 I2C_ClearITPendingBit
+     /tmp/ccHWnHGh.s:646    .text.I2C_ClearITPendingBit:0000000000000000 $x
+     /tmp/ccHWnHGh.s:24     .text.I2C_DeInit:0000000000000038 .L2
+     /tmp/ccHWnHGh.s:21     .text.I2C_DeInit:0000000000000028 .L5
+     /tmp/ccHWnHGh.s:59     .text.I2C_Init:000000000000004a .L7
+     /tmp/ccHWnHGh.s:107    .text.I2C_Init:00000000000000c0 .L8
+     /tmp/ccHWnHGh.s:80     .text.I2C_Init:000000000000007c .L9
+     /tmp/ccHWnHGh.s:129    .text.I2C_Init:00000000000000fa .L11
+     /tmp/ccHWnHGh.s:121    .text.I2C_Init:00000000000000e4 .L13
+     /tmp/ccHWnHGh.s:83     .text.I2C_Init:0000000000000080 .L15
+     /tmp/ccHWnHGh.s:117    .text.I2C_Init:00000000000000da .L12
+     /tmp/ccHWnHGh.s:165    .text.I2C_Cmd:000000000000000c .L18
+     /tmp/ccHWnHGh.s:162    .text.I2C_Cmd:0000000000000008 .L20
+     /tmp/ccHWnHGh.s:188    .text.I2C_DMACmd:0000000000000014 .L22
+     /tmp/ccHWnHGh.s:185    .text.I2C_DMACmd:0000000000000010 .L24
+     /tmp/ccHWnHGh.s:206    .text.I2C_DMALastTransferCmd:000000000000000c .L26
+     /tmp/ccHWnHGh.s:203    .text.I2C_DMALastTransferCmd:0000000000000008 .L28
+     /tmp/ccHWnHGh.s:223    .text.I2C_GenerateSTART:000000000000000c .L30
+     /tmp/ccHWnHGh.s:220    .text.I2C_GenerateSTART:0000000000000008 .L32
+     /tmp/ccHWnHGh.s:242    .text.I2C_GenerateSTOP:000000000000000c .L34
+     /tmp/ccHWnHGh.s:239    .text.I2C_GenerateSTOP:0000000000000008 .L36
+     /tmp/ccHWnHGh.s:261    .text.I2C_AcknowledgeConfig:000000000000000c .L38
+     /tmp/ccHWnHGh.s:258    .text.I2C_AcknowledgeConfig:0000000000000008 .L40
+     /tmp/ccHWnHGh.s:294    .text.I2C_DualAddressCmd:000000000000000c .L43
+     /tmp/ccHWnHGh.s:291    .text.I2C_DualAddressCmd:0000000000000008 .L45
+     /tmp/ccHWnHGh.s:313    .text.I2C_GeneralCallCmd:000000000000000c .L47
+     /tmp/ccHWnHGh.s:310    .text.I2C_GeneralCallCmd:0000000000000008 .L49
+     /tmp/ccHWnHGh.s:332    .text.I2C_ITConfig:000000000000000a .L51
+     /tmp/ccHWnHGh.s:329    .text.I2C_ITConfig:0000000000000006 .L53
+     /tmp/ccHWnHGh.s:362    .text.I2C_Send7bitAddress:000000000000000a .L58
+     /tmp/ccHWnHGh.s:394    .text.I2C_SoftwareResetCmd:000000000000000c .L62
+     /tmp/ccHWnHGh.s:391    .text.I2C_SoftwareResetCmd:0000000000000008 .L64
+     /tmp/ccHWnHGh.s:415    .text.I2C_NACKPositionConfig:0000000000000018 .L66
+     /tmp/ccHWnHGh.s:412    .text.I2C_NACKPositionConfig:0000000000000014 .L68
+     /tmp/ccHWnHGh.s:434    .text.I2C_SMBusAlertConfig:0000000000000010 .L70
+     /tmp/ccHWnHGh.s:431    .text.I2C_SMBusAlertConfig:000000000000000c .L72
+     /tmp/ccHWnHGh.s:453    .text.I2C_TransmitPEC:000000000000000c .L74
+     /tmp/ccHWnHGh.s:450    .text.I2C_TransmitPEC:0000000000000008 .L76
+     /tmp/ccHWnHGh.s:477    .text.I2C_CalculatePEC:000000000000000c .L80
+     /tmp/ccHWnHGh.s:474    .text.I2C_CalculatePEC:0000000000000008 .L82
+     /tmp/ccHWnHGh.s:505    .text.I2C_ARPCmd:000000000000000c .L85
+     /tmp/ccHWnHGh.s:502    .text.I2C_ARPCmd:0000000000000008 .L87
+     /tmp/ccHWnHGh.s:524    .text.I2C_StretchClockCmd:000000000000000c .L89
+     /tmp/ccHWnHGh.s:521    .text.I2C_StretchClockCmd:0000000000000008 .L91
+     /tmp/ccHWnHGh.s:546    .text.I2C_FastModeDutyCycleConfig:0000000000000012 .L93
+     /tmp/ccHWnHGh.s:543    .text.I2C_FastModeDutyCycleConfig:000000000000000e .L95
+     /tmp/ccHWnHGh.s:606    .text.I2C_GetFlagStatus:000000000000002a .L99
+     /tmp/ccHWnHGh.s:598    .text.I2C_GetFlagStatus:000000000000001a .L102
+GAS LISTING /tmp/ccHWnHGh.s 			page 14
+
+
+     /tmp/ccHWnHGh.s:638    .text.I2C_GetITStatus:000000000000001a .L104
+
+UNDEFINED SYMBOLS
+__riscv_save_0
+RCC_APB1PeriphResetCmd
+__riscv_restore_0
+__riscv_save_3
+RCC_GetClocksFreq
+__riscv_restore_3

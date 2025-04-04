@@ -1,0 +1,1024 @@
+GAS LISTING /tmp/ccgmBVfE.s 			page 1
+
+
+   1              		.file	"ch32v20x_adc.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.ADC_DeInit,"ax",@progbits
+   8              		.align	1
+   9              		.globl	ADC_DeInit
+  11              	ADC_DeInit:
+  12 0000 17030000 		call	t0,__riscv_save_0
+  12      E7020300 
+  13 0008 B7270140 		li	a5,1073815552
+  14 000c 93870740 		addi	a5,a5,1024
+  15 0010 6314F502 		bne	a0,a5,.L2
+  16 0014 8545     		li	a1,1
+  17 0016 13050020 		li	a0,512
+  18 001a 97000000 		call	RCC_APB2PeriphResetCmd
+  18      E7800000 
+  19 0022 8145     		li	a1,0
+  20 0024 13050020 		li	a0,512
+  21              	.L5:
+  22 0028 97000000 		call	RCC_APB2PeriphResetCmd
+  22      E7800000 
+  23              	.L1:
+  24 0030 17030000 		tail	__riscv_restore_0
+  24      67000300 
+  25              	.L2:
+  26 0038 B7370140 		li	a5,1073819648
+  27 003c 93870780 		addi	a5,a5,-2048
+  28 0040 E318F5FE 		bne	a0,a5,.L1
+  29 0044 8545     		li	a1,1
+  30 0046 13050040 		li	a0,1024
+  31 004a 97000000 		call	RCC_APB2PeriphResetCmd
+  31      E7800000 
+  32 0052 8145     		li	a1,0
+  33 0054 13050040 		li	a0,1024
+  34 0058 C1BF     		j	.L5
+  36              		.section	.text.ADC_Init,"ax",@progbits
+  37              		.align	1
+  38              		.globl	ADC_Init
+  40              	ADC_Init:
+  41 0000 5841     		lw	a4,4(a0)
+  42 0002 B707F1E0 		li	a5,-521076736
+  43 0006 9387F7EF 		addi	a5,a5,-257
+  44 000a 944D     		lw	a3,24(a1)
+  45 000c 7D8F     		and	a4,a4,a5
+  46 000e 9C41     		lw	a5,0(a1)
+  47 0010 D58F     		or	a5,a5,a3
+  48 0012 D44D     		lw	a3,28(a1)
+  49 0014 D58F     		or	a5,a5,a3
+  50 0016 D441     		lw	a3,4(a1)
+  51 0018 A206     		slli	a3,a3,8
+  52 001a D58F     		or	a5,a5,a3
+  53 001c D98F     		or	a5,a5,a4
+  54 001e 5CC1     		sw	a5,4(a0)
+  55 0020 1845     		lw	a4,8(a0)
+GAS LISTING /tmp/ccgmBVfE.s 			page 2
+
+
+  56 0022 B7F7F1FF 		li	a5,-921600
+  57 0026 9387D77F 		addi	a5,a5,2045
+  58 002a D445     		lw	a3,12(a1)
+  59 002c 7D8F     		and	a4,a4,a5
+  60 002e 9C49     		lw	a5,16(a1)
+  61 0030 D58F     		or	a5,a5,a3
+  62 0032 9445     		lw	a3,8(a1)
+  63 0034 8606     		slli	a3,a3,1
+  64 0036 D58F     		or	a5,a5,a3
+  65 0038 D98F     		or	a5,a5,a4
+  66 003a 1CC5     		sw	a5,8(a0)
+  67 003c 5855     		lw	a4,44(a0)
+  68 003e B70710FF 		li	a5,-15728640
+  69 0042 FD17     		addi	a5,a5,-1
+  70 0044 7D8F     		and	a4,a4,a5
+  71 0046 DC29     		lbu	a5,20(a1)
+  72 0048 FD17     		addi	a5,a5,-1
+  73 004a 93F7F70F 		andi	a5,a5,0xff
+  74 004e D207     		slli	a5,a5,20
+  75 0050 D98F     		or	a5,a5,a4
+  76 0052 5CD5     		sw	a5,44(a0)
+  77 0054 8280     		ret
+  79              		.section	.text.ADC_StructInit,"ax",@progbits
+  80              		.align	1
+  81              		.globl	ADC_StructInit
+  83              	ADC_StructInit:
+  84 0000 8547     		li	a5,1
+  85 0002 23200500 		sw	zero,0(a0)
+  86 0006 23220500 		sw	zero,4(a0)
+  87 000a 23240500 		sw	zero,8(a0)
+  88 000e 23260500 		sw	zero,12(a0)
+  89 0012 23280500 		sw	zero,16(a0)
+  90 0016 5CA9     		sb	a5,20(a0)
+  91 0018 8280     		ret
+  93              		.section	.text.ADC_Cmd,"ax",@progbits
+  94              		.align	1
+  95              		.globl	ADC_Cmd
+  97              	ADC_Cmd:
+  98 0000 1C45     		lw	a5,8(a0)
+  99 0002 89C5     		beq	a1,zero,.L9
+ 100 0004 93E71700 		ori	a5,a5,1
+ 101              	.L11:
+ 102 0008 1CC5     		sw	a5,8(a0)
+ 103 000a 8280     		ret
+ 104              	.L9:
+ 105 000c F99B     		andi	a5,a5,-2
+ 106 000e EDBF     		j	.L11
+ 108              		.section	.text.ADC_DMACmd,"ax",@progbits
+ 109              		.align	1
+ 110              		.globl	ADC_DMACmd
+ 112              	ADC_DMACmd:
+ 113 0000 1C45     		lw	a5,8(a0)
+ 114 0002 89C5     		beq	a1,zero,.L13
+ 115 0004 93E70710 		ori	a5,a5,256
+ 116              	.L15:
+ 117 0008 1CC5     		sw	a5,8(a0)
+ 118 000a 8280     		ret
+GAS LISTING /tmp/ccgmBVfE.s 			page 3
+
+
+ 119              	.L13:
+ 120 000c 93F7F7EF 		andi	a5,a5,-257
+ 121 0010 E5BF     		j	.L15
+ 123              		.section	.text.ADC_ITConfig,"ax",@progbits
+ 124              		.align	1
+ 125              		.globl	ADC_ITConfig
+ 127              	ADC_ITConfig:
+ 128 0000 5C41     		lw	a5,4(a0)
+ 129 0002 93F5F50F 		andi	a1,a1,0xff
+ 130 0006 01C6     		beq	a2,zero,.L17
+ 131 0008 CD8F     		or	a5,a5,a1
+ 132 000a 5CC1     		sw	a5,4(a0)
+ 133 000c 8280     		ret
+ 134              	.L17:
+ 135 000e 93C5F5FF 		not	a1,a1
+ 136 0012 FD8D     		and	a1,a1,a5
+ 137 0014 4CC1     		sw	a1,4(a0)
+ 138 0016 8280     		ret
+ 140              		.section	.text.ADC_ResetCalibration,"ax",@progbits
+ 141              		.align	1
+ 142              		.globl	ADC_ResetCalibration
+ 144              	ADC_ResetCalibration:
+ 145 0000 1C45     		lw	a5,8(a0)
+ 146 0002 93E78700 		ori	a5,a5,8
+ 147 0006 1CC5     		sw	a5,8(a0)
+ 148 0008 8280     		ret
+ 150              		.section	.text.ADC_GetResetCalibrationStatus,"ax",@progbits
+ 151              		.align	1
+ 152              		.globl	ADC_GetResetCalibrationStatus
+ 154              	ADC_GetResetCalibrationStatus:
+ 155 0000 0845     		lw	a0,8(a0)
+ 156 0002 0D81     		srli	a0,a0,3
+ 157 0004 0589     		andi	a0,a0,1
+ 158 0006 8280     		ret
+ 160              		.section	.text.ADC_StartCalibration,"ax",@progbits
+ 161              		.align	1
+ 162              		.globl	ADC_StartCalibration
+ 164              	ADC_StartCalibration:
+ 165 0000 1C45     		lw	a5,8(a0)
+ 166 0002 93E74700 		ori	a5,a5,4
+ 167 0006 1CC5     		sw	a5,8(a0)
+ 168 0008 8280     		ret
+ 170              		.section	.text.ADC_GetCalibrationStatus,"ax",@progbits
+ 171              		.align	1
+ 172              		.globl	ADC_GetCalibrationStatus
+ 174              	ADC_GetCalibrationStatus:
+ 175 0000 0845     		lw	a0,8(a0)
+ 176 0002 0981     		srli	a0,a0,2
+ 177 0004 0589     		andi	a0,a0,1
+ 178 0006 8280     		ret
+ 180              		.section	.text.ADC_SoftwareStartConvCmd,"ax",@progbits
+ 181              		.align	1
+ 182              		.globl	ADC_SoftwareStartConvCmd
+ 184              	ADC_SoftwareStartConvCmd:
+ 185 0000 1C45     		lw	a5,8(a0)
+ 186 0002 91C5     		beq	a1,zero,.L24
+ 187 0004 37075000 		li	a4,5242880
+GAS LISTING /tmp/ccgmBVfE.s 			page 4
+
+
+ 188 0008 D98F     		or	a5,a5,a4
+ 189              	.L26:
+ 190 000a 1CC5     		sw	a5,8(a0)
+ 191 000c 8280     		ret
+ 192              	.L24:
+ 193 000e 3707B0FF 		li	a4,-5242880
+ 194 0012 7D17     		addi	a4,a4,-1
+ 195 0014 F98F     		and	a5,a5,a4
+ 196 0016 D5BF     		j	.L26
+ 198              		.section	.text.ADC_GetSoftwareStartConvStatus,"ax",@progbits
+ 199              		.align	1
+ 200              		.globl	ADC_GetSoftwareStartConvStatus
+ 202              	ADC_GetSoftwareStartConvStatus:
+ 203 0000 0845     		lw	a0,8(a0)
+ 204 0002 5981     		srli	a0,a0,22
+ 205 0004 0589     		andi	a0,a0,1
+ 206 0006 8280     		ret
+ 208              		.section	.text.ADC_DiscModeChannelCountConfig,"ax",@progbits
+ 209              		.align	1
+ 210              		.globl	ADC_DiscModeChannelCountConfig
+ 212              	ADC_DiscModeChannelCountConfig:
+ 213 0000 5C41     		lw	a5,4(a0)
+ 214 0002 4977     		li	a4,-57344
+ 215 0004 7D17     		addi	a4,a4,-1
+ 216 0006 FD15     		addi	a1,a1,-1
+ 217 0008 F98F     		and	a5,a5,a4
+ 218 000a B605     		slli	a1,a1,13
+ 219 000c DD8D     		or	a1,a1,a5
+ 220 000e 4CC1     		sw	a1,4(a0)
+ 221 0010 8280     		ret
+ 223              		.section	.text.ADC_DiscModeCmd,"ax",@progbits
+ 224              		.align	1
+ 225              		.globl	ADC_DiscModeCmd
+ 227              	ADC_DiscModeCmd:
+ 228 0000 5C41     		lw	a5,4(a0)
+ 229 0002 99C5     		beq	a1,zero,.L30
+ 230 0004 0567     		li	a4,4096
+ 231 0006 13070780 		addi	a4,a4,-2048
+ 232 000a D98F     		or	a5,a5,a4
+ 233              	.L32:
+ 234 000c 5CC1     		sw	a5,4(a0)
+ 235 000e 8280     		ret
+ 236              	.L30:
+ 237 0010 7D77     		li	a4,-4096
+ 238 0012 1307F77F 		addi	a4,a4,2047
+ 239 0016 F98F     		and	a5,a5,a4
+ 240 0018 D5BF     		j	.L32
+ 242              		.section	.text.ADC_RegularChannelConfig,"ax",@progbits
+ 243              		.align	1
+ 244              		.globl	ADC_RegularChannelConfig
+ 246              	ADC_RegularChannelConfig:
+ 247 0000 A547     		li	a5,9
+ 248 0002 63F7B704 		bleu	a1,a5,.L34
+ 249 0006 8D47     		li	a5,3
+ 250 0008 138765FF 		addi	a4,a1,-10
+ 251 000c 3307F702 		mul	a4,a4,a5
+ 252 0010 0328C500 		lw	a6,12(a0)
+GAS LISTING /tmp/ccgmBVfE.s 			page 5
+
+
+ 253 0014 9D47     		li	a5,7
+ 254 0016 B397E700 		sll	a5,a5,a4
+ 255 001a 93C7F7FF 		not	a5,a5
+ 256 001e B3F70701 		and	a5,a5,a6
+ 257 0022 B396E600 		sll	a3,a3,a4
+ 258 0026 DD8E     		or	a3,a3,a5
+ 259 0028 54C5     		sw	a3,12(a0)
+ 260              	.L35:
+ 261 002a 9947     		li	a5,6
+ 262 002c 63E3C704 		bgtu	a2,a5,.L36
+ 263 0030 9547     		li	a5,5
+ 264 0032 7D16     		addi	a2,a2,-1
+ 265 0034 3306F602 		mul	a2,a2,a5
+ 266 0038 5859     		lw	a4,52(a0)
+ 267 003a FD47     		li	a5,31
+ 268 003c B397C700 		sll	a5,a5,a2
+ 269 0040 93C7F7FF 		not	a5,a5
+ 270 0044 F98F     		and	a5,a5,a4
+ 271 0046 3396C500 		sll	a2,a1,a2
+ 272 004a 5D8E     		or	a2,a2,a5
+ 273 004c 50D9     		sw	a2,52(a0)
+ 274 004e 8280     		ret
+ 275              	.L34:
+ 276 0050 0D47     		li	a4,3
+ 277 0052 3387E502 		mul	a4,a1,a4
+ 278 0056 03280501 		lw	a6,16(a0)
+ 279 005a 9D47     		li	a5,7
+ 280 005c B397E700 		sll	a5,a5,a4
+ 281 0060 93C7F7FF 		not	a5,a5
+ 282 0064 B3F70701 		and	a5,a5,a6
+ 283 0068 B396E600 		sll	a3,a3,a4
+ 284 006c DD8E     		or	a3,a3,a5
+ 285 006e 14C9     		sw	a3,16(a0)
+ 286 0070 6DBF     		j	.L35
+ 287              	.L36:
+ 288 0072 B147     		li	a5,12
+ 289 0074 63E2C702 		bgtu	a2,a5,.L38
+ 290 0078 9547     		li	a5,5
+ 291 007a 6516     		addi	a2,a2,-7
+ 292 007c 3306F602 		mul	a2,a2,a5
+ 293 0080 1859     		lw	a4,48(a0)
+ 294 0082 FD47     		li	a5,31
+ 295 0084 B397C700 		sll	a5,a5,a2
+ 296 0088 93C7F7FF 		not	a5,a5
+ 297 008c F98F     		and	a5,a5,a4
+ 298 008e 3396C500 		sll	a2,a1,a2
+ 299 0092 5D8E     		or	a2,a2,a5
+ 300 0094 10D9     		sw	a2,48(a0)
+ 301 0096 8280     		ret
+ 302              	.L38:
+ 303 0098 9547     		li	a5,5
+ 304 009a 4D16     		addi	a2,a2,-13
+ 305 009c 3306F602 		mul	a2,a2,a5
+ 306 00a0 5855     		lw	a4,44(a0)
+ 307 00a2 FD47     		li	a5,31
+ 308 00a4 B397C700 		sll	a5,a5,a2
+ 309 00a8 93C7F7FF 		not	a5,a5
+GAS LISTING /tmp/ccgmBVfE.s 			page 6
+
+
+ 310 00ac F98F     		and	a5,a5,a4
+ 311 00ae B395C500 		sll	a1,a1,a2
+ 312 00b2 DD8D     		or	a1,a1,a5
+ 313 00b4 4CD5     		sw	a1,44(a0)
+ 314 00b6 8280     		ret
+ 316              		.section	.text.ADC_ExternalTrigConvCmd,"ax",@progbits
+ 317              		.align	1
+ 318              		.globl	ADC_ExternalTrigConvCmd
+ 320              	ADC_ExternalTrigConvCmd:
+ 321 0000 1C45     		lw	a5,8(a0)
+ 322 0002 91C5     		beq	a1,zero,.L40
+ 323 0004 37071000 		li	a4,1048576
+ 324 0008 D98F     		or	a5,a5,a4
+ 325              	.L42:
+ 326 000a 1CC5     		sw	a5,8(a0)
+ 327 000c 8280     		ret
+ 328              	.L40:
+ 329 000e 3707F0FF 		li	a4,-1048576
+ 330 0012 7D17     		addi	a4,a4,-1
+ 331 0014 F98F     		and	a5,a5,a4
+ 332 0016 D5BF     		j	.L42
+ 334              		.section	.text.ADC_GetConversionValue,"ax",@progbits
+ 335              		.align	1
+ 336              		.globl	ADC_GetConversionValue
+ 338              	ADC_GetConversionValue:
+ 339 0000 6845     		lw	a0,76(a0)
+ 340 0002 4205     		slli	a0,a0,16
+ 341 0004 4181     		srli	a0,a0,16
+ 342 0006 8280     		ret
+ 344              		.section	.text.ADC_GetDualModeConversionValue,"ax",@progbits
+ 345              		.align	1
+ 346              		.globl	ADC_GetDualModeConversionValue
+ 348              	ADC_GetDualModeConversionValue:
+ 349 0000 B7270140 		li	a5,1073815552
+ 350 0004 03A5C744 		lw	a0,1100(a5)
+ 351 0008 8280     		ret
+ 353              		.section	.text.ADC_AutoInjectedConvCmd,"ax",@progbits
+ 354              		.align	1
+ 355              		.globl	ADC_AutoInjectedConvCmd
+ 357              	ADC_AutoInjectedConvCmd:
+ 358 0000 5C41     		lw	a5,4(a0)
+ 359 0002 89C5     		beq	a1,zero,.L46
+ 360 0004 93E70740 		ori	a5,a5,1024
+ 361              	.L48:
+ 362 0008 5CC1     		sw	a5,4(a0)
+ 363 000a 8280     		ret
+ 364              	.L46:
+ 365 000c 93F7F7BF 		andi	a5,a5,-1025
+ 366 0010 E5BF     		j	.L48
+ 368              		.section	.text.ADC_InjectedDiscModeCmd,"ax",@progbits
+ 369              		.align	1
+ 370              		.globl	ADC_InjectedDiscModeCmd
+ 372              	ADC_InjectedDiscModeCmd:
+ 373 0000 5C41     		lw	a5,4(a0)
+ 374 0002 89C5     		beq	a1,zero,.L50
+ 375 0004 0567     		li	a4,4096
+ 376 0006 D98F     		or	a5,a5,a4
+GAS LISTING /tmp/ccgmBVfE.s 			page 7
+
+
+ 377              	.L52:
+ 378 0008 5CC1     		sw	a5,4(a0)
+ 379 000a 8280     		ret
+ 380              	.L50:
+ 381 000c 7D77     		li	a4,-4096
+ 382 000e 7D17     		addi	a4,a4,-1
+ 383 0010 F98F     		and	a5,a5,a4
+ 384 0012 DDBF     		j	.L52
+ 386              		.section	.text.ADC_ExternalTrigInjectedConvConfig,"ax",@progbits
+ 387              		.align	1
+ 388              		.globl	ADC_ExternalTrigInjectedConvConfig
+ 390              	ADC_ExternalTrigInjectedConvConfig:
+ 391 0000 1C45     		lw	a5,8(a0)
+ 392 0002 6577     		li	a4,-28672
+ 393 0004 7D17     		addi	a4,a4,-1
+ 394 0006 F98F     		and	a5,a5,a4
+ 395 0008 CD8F     		or	a5,a5,a1
+ 396 000a 1CC5     		sw	a5,8(a0)
+ 397 000c 8280     		ret
+ 399              		.section	.text.ADC_ExternalTrigInjectedConvCmd,"ax",@progbits
+ 400              		.align	1
+ 401              		.globl	ADC_ExternalTrigInjectedConvCmd
+ 403              	ADC_ExternalTrigInjectedConvCmd:
+ 404 0000 1C45     		lw	a5,8(a0)
+ 405 0002 89C5     		beq	a1,zero,.L55
+ 406 0004 2167     		li	a4,32768
+ 407 0006 D98F     		or	a5,a5,a4
+ 408              	.L57:
+ 409 0008 1CC5     		sw	a5,8(a0)
+ 410 000a 8280     		ret
+ 411              	.L55:
+ 412 000c 6177     		li	a4,-32768
+ 413 000e 7D17     		addi	a4,a4,-1
+ 414 0010 F98F     		and	a5,a5,a4
+ 415 0012 DDBF     		j	.L57
+ 417              		.section	.text.ADC_SoftwareStartInjectedConvCmd,"ax",@progbits
+ 418              		.align	1
+ 419              		.globl	ADC_SoftwareStartInjectedConvCmd
+ 421              	ADC_SoftwareStartInjectedConvCmd:
+ 422 0000 1C45     		lw	a5,8(a0)
+ 423 0002 91C5     		beq	a1,zero,.L59
+ 424 0004 37872000 		li	a4,2129920
+ 425 0008 D98F     		or	a5,a5,a4
+ 426              	.L61:
+ 427 000a 1CC5     		sw	a5,8(a0)
+ 428 000c 8280     		ret
+ 429              	.L59:
+ 430 000e 3787DFFF 		li	a4,-2129920
+ 431 0012 7D17     		addi	a4,a4,-1
+ 432 0014 F98F     		and	a5,a5,a4
+ 433 0016 D5BF     		j	.L61
+ 435              		.section	.text.ADC_GetSoftwareStartInjectedConvCmdStatus,"ax",@progbits
+ 436              		.align	1
+ 437              		.globl	ADC_GetSoftwareStartInjectedConvCmdStatus
+ 439              	ADC_GetSoftwareStartInjectedConvCmdStatus:
+ 440 0000 0845     		lw	a0,8(a0)
+ 441 0002 5581     		srli	a0,a0,21
+GAS LISTING /tmp/ccgmBVfE.s 			page 8
+
+
+ 442 0004 0589     		andi	a0,a0,1
+ 443 0006 8280     		ret
+ 445              		.section	.text.ADC_InjectedChannelConfig,"ax",@progbits
+ 446              		.align	1
+ 447              		.globl	ADC_InjectedChannelConfig
+ 449              	ADC_InjectedChannelConfig:
+ 450 0000 A547     		li	a5,9
+ 451 0002 63FBB704 		bleu	a1,a5,.L64
+ 452 0006 8D47     		li	a5,3
+ 453 0008 138765FF 		addi	a4,a1,-10
+ 454 000c 3307F702 		mul	a4,a4,a5
+ 455 0010 0328C500 		lw	a6,12(a0)
+ 456 0014 9D47     		li	a5,7
+ 457 0016 B397E700 		sll	a5,a5,a4
+ 458 001a 93C7F7FF 		not	a5,a5
+ 459 001e B3F70701 		and	a5,a5,a6
+ 460 0022 B396E600 		sll	a3,a3,a4
+ 461 0026 DD8E     		or	a3,a3,a5
+ 462 0028 54C5     		sw	a3,12(a0)
+ 463              	.L65:
+ 464 002a 145D     		lw	a3,56(a0)
+ 465 002c 93072600 		addi	a5,a2,2
+ 466 0030 13D74601 		srli	a4,a3,20
+ 467 0034 0D8B     		andi	a4,a4,3
+ 468 0036 998F     		sub	a5,a5,a4
+ 469 0038 93F7F70F 		andi	a5,a5,0xff
+ 470 003c 1547     		li	a4,5
+ 471 003e B387E702 		mul	a5,a5,a4
+ 472 0042 7D47     		li	a4,31
+ 473 0044 3317F700 		sll	a4,a4,a5
+ 474 0048 1347F7FF 		not	a4,a4
+ 475 004c 758F     		and	a4,a4,a3
+ 476 004e B395F500 		sll	a1,a1,a5
+ 477 0052 D98D     		or	a1,a1,a4
+ 478 0054 0CDD     		sw	a1,56(a0)
+ 479 0056 8280     		ret
+ 480              	.L64:
+ 481 0058 0D47     		li	a4,3
+ 482 005a 3387E502 		mul	a4,a1,a4
+ 483 005e 03280501 		lw	a6,16(a0)
+ 484 0062 9D47     		li	a5,7
+ 485 0064 B397E700 		sll	a5,a5,a4
+ 486 0068 93C7F7FF 		not	a5,a5
+ 487 006c B3F70701 		and	a5,a5,a6
+ 488 0070 B396E600 		sll	a3,a3,a4
+ 489 0074 DD8E     		or	a3,a3,a5
+ 490 0076 14C9     		sw	a3,16(a0)
+ 491 0078 4DBF     		j	.L65
+ 493              		.section	.text.ADC_InjectedSequencerLengthConfig,"ax",@progbits
+ 494              		.align	1
+ 495              		.globl	ADC_InjectedSequencerLengthConfig
+ 497              	ADC_InjectedSequencerLengthConfig:
+ 498 0000 1C5D     		lw	a5,56(a0)
+ 499 0002 3707D0FF 		li	a4,-3145728
+ 500 0006 7D17     		addi	a4,a4,-1
+ 501 0008 FD15     		addi	a1,a1,-1
+ 502 000a F98F     		and	a5,a5,a4
+GAS LISTING /tmp/ccgmBVfE.s 			page 9
+
+
+ 503 000c D205     		slli	a1,a1,20
+ 504 000e DD8D     		or	a1,a1,a5
+ 505 0010 0CDD     		sw	a1,56(a0)
+ 506 0012 8280     		ret
+ 508              		.section	.text.ADC_SetInjectedOffset,"ax",@progbits
+ 509              		.align	1
+ 510              		.globl	ADC_SetInjectedOffset
+ 512              	ADC_SetInjectedOffset:
+ 513 0000 4111     		addi	sp,sp,-16
+ 514 0002 02C6     		sw	zero,12(sp)
+ 515 0004 2AC6     		sw	a0,12(sp)
+ 516 0006 B247     		lw	a5,12(sp)
+ 517 0008 BE95     		add	a1,a1,a5
+ 518 000a 2EC6     		sw	a1,12(sp)
+ 519 000c B247     		lw	a5,12(sp)
+ 520 000e 90C3     		sw	a2,0(a5)
+ 521 0010 4101     		addi	sp,sp,16
+ 522 0012 8280     		jr	ra
+ 524              		.section	.text.ADC_GetInjectedConversionValue,"ax",@progbits
+ 525              		.align	1
+ 526              		.globl	ADC_GetInjectedConversionValue
+ 528              	ADC_GetInjectedConversionValue:
+ 529 0000 4111     		addi	sp,sp,-16
+ 530 0002 02C6     		sw	zero,12(sp)
+ 531 0004 2AC6     		sw	a0,12(sp)
+ 532 0006 B247     		lw	a5,12(sp)
+ 533 0008 93878702 		addi	a5,a5,40
+ 534 000c AE97     		add	a5,a5,a1
+ 535 000e 3EC6     		sw	a5,12(sp)
+ 536 0010 B247     		lw	a5,12(sp)
+ 537 0012 8843     		lw	a0,0(a5)
+ 538 0014 4101     		addi	sp,sp,16
+ 539 0016 4205     		slli	a0,a0,16
+ 540 0018 4181     		srli	a0,a0,16
+ 541 001a 8280     		jr	ra
+ 543              		.section	.text.ADC_AnalogWatchdogCmd,"ax",@progbits
+ 544              		.align	1
+ 545              		.globl	ADC_AnalogWatchdogCmd
+ 547              	ADC_AnalogWatchdogCmd:
+ 548 0000 5C41     		lw	a5,4(a0)
+ 549 0002 370740FF 		li	a4,-12582912
+ 550 0006 1307F7DF 		addi	a4,a4,-513
+ 551 000a F98F     		and	a5,a5,a4
+ 552 000c CD8F     		or	a5,a5,a1
+ 553 000e 5CC1     		sw	a5,4(a0)
+ 554 0010 8280     		ret
+ 556              		.section	.text.ADC_AnalogWatchdogThresholdsConfig,"ax",@progbits
+ 557              		.align	1
+ 558              		.globl	ADC_AnalogWatchdogThresholdsConfig
+ 560              	ADC_AnalogWatchdogThresholdsConfig:
+ 561 0000 4CD1     		sw	a1,36(a0)
+ 562 0002 10D5     		sw	a2,40(a0)
+ 563 0004 8280     		ret
+ 565              		.section	.text.ADC_AnalogWatchdogSingleChannelConfig,"ax",@progbits
+ 566              		.align	1
+ 567              		.globl	ADC_AnalogWatchdogSingleChannelConfig
+ 569              	ADC_AnalogWatchdogSingleChannelConfig:
+GAS LISTING /tmp/ccgmBVfE.s 			page 10
+
+
+ 570 0000 5C41     		lw	a5,4(a0)
+ 571 0002 819B     		andi	a5,a5,-32
+ 572 0004 DD8D     		or	a1,a1,a5
+ 573 0006 4CC1     		sw	a1,4(a0)
+ 574 0008 8280     		ret
+ 576              		.section	.text.ADC_TempSensorVrefintCmd,"ax",@progbits
+ 577              		.align	1
+ 578              		.globl	ADC_TempSensorVrefintCmd
+ 580              	ADC_TempSensorVrefintCmd:
+ 581 0000 B7270140 		li	a5,1073815552
+ 582 0004 93870740 		addi	a5,a5,1024
+ 583 0008 9847     		lw	a4,8(a5)
+ 584 000a 11C5     		beq	a0,zero,.L75
+ 585 000c B7068000 		li	a3,8388608
+ 586 0010 558F     		or	a4,a4,a3
+ 587              	.L77:
+ 588 0012 98C7     		sw	a4,8(a5)
+ 589 0014 8280     		ret
+ 590              	.L75:
+ 591 0016 B70680FF 		li	a3,-8388608
+ 592 001a FD16     		addi	a3,a3,-1
+ 593 001c 758F     		and	a4,a4,a3
+ 594 001e D5BF     		j	.L77
+ 596              		.section	.text.ADC_GetFlagStatus,"ax",@progbits
+ 597              		.align	1
+ 598              		.globl	ADC_GetFlagStatus
+ 600              	ADC_GetFlagStatus:
+ 601 0000 1C41     		lw	a5,0(a0)
+ 602 0002 33F5F500 		and	a0,a1,a5
+ 603 0006 3335A000 		snez	a0,a0
+ 604 000a 8280     		ret
+ 606              		.section	.text.ADC_ClearFlag,"ax",@progbits
+ 607              		.align	1
+ 608              		.globl	ADC_ClearFlag
+ 610              	ADC_ClearFlag:
+ 611 0000 93C5F5FF 		not	a1,a1
+ 612 0004 0CC1     		sw	a1,0(a0)
+ 613 0006 8280     		ret
+ 615              		.section	.text.ADC_GetITStatus,"ax",@progbits
+ 616              		.align	1
+ 617              		.globl	ADC_GetITStatus
+ 619              	ADC_GetITStatus:
+ 620 0000 5C41     		lw	a5,4(a0)
+ 621 0002 1841     		lw	a4,0(a0)
+ 622 0004 13D58500 		srli	a0,a1,8
+ 623 0008 798D     		and	a0,a0,a4
+ 624 000a 11C5     		beq	a0,zero,.L80
+ 625 000c 93F5F50F 		andi	a1,a1,0xff
+ 626 0010 FD8D     		and	a1,a1,a5
+ 627 0012 3335B000 		snez	a0,a1
+ 628              	.L80:
+ 629 0016 8280     		ret
+ 631              		.section	.text.ADC_ClearITPendingBit,"ax",@progbits
+ 632              		.align	1
+ 633              		.globl	ADC_ClearITPendingBit
+ 635              	ADC_ClearITPendingBit:
+ 636 0000 A181     		srli	a1,a1,8
+GAS LISTING /tmp/ccgmBVfE.s 			page 11
+
+
+ 637 0002 93C5F5FF 		not	a1,a1
+ 638 0006 0CC1     		sw	a1,0(a0)
+ 639 0008 8280     		ret
+ 641              		.section	.text.TempSensor_Volt_To_Temper,"ax",@progbits
+ 642              		.align	1
+ 643              		.globl	TempSensor_Volt_To_Temper
+ 645              	TempSensor_Volt_To_Temper:
+ 646 0000 B7F7FF1F 		li	a5,536866816
+ 647 0004 83A70772 		lw	a5,1824(a5)
+ 648 0008 13D70701 		srli	a4,a5,16
+ 649 000c C207     		slli	a5,a5,16
+ 650 000e C183     		srli	a5,a5,16
+ 651 0010 1D8D     		sub	a0,a0,a5
+ 652 0012 A947     		li	a5,10
+ 653 0014 3305F502 		mul	a0,a0,a5
+ 654 0018 9307B002 		li	a5,43
+ 655 001c 5505     		addi	a0,a0,21
+ 656 001e 3345F502 		div	a0,a0,a5
+ 657 0022 3305A740 		sub	a0,a4,a0
+ 658 0026 8280     		ret
+ 660              		.section	.text.ADC_BufferCmd,"ax",@progbits
+ 661              		.align	1
+ 662              		.globl	ADC_BufferCmd
+ 664              	ADC_BufferCmd:
+ 665 0000 5C41     		lw	a5,4(a0)
+ 666 0002 91C5     		beq	a1,zero,.L88
+ 667 0004 37070004 		li	a4,67108864
+ 668 0008 D98F     		or	a5,a5,a4
+ 669              	.L90:
+ 670 000a 5CC1     		sw	a5,4(a0)
+ 671 000c 8280     		ret
+ 672              	.L88:
+ 673 000e 370700FC 		li	a4,-67108864
+ 674 0012 7D17     		addi	a4,a4,-1
+ 675 0014 F98F     		and	a5,a5,a4
+ 676 0016 D5BF     		j	.L90
+ 678              		.section	.text.Get_CalibrationValue,"ax",@progbits
+ 679              		.align	1
+ 680              		.globl	Get_CalibrationValue
+ 682              	Get_CalibrationValue:
+ 683 0000 17030000 		call	t0,__riscv_save_2
+ 683      E7020300 
+ 684 0008 0111     		addi	sp,sp,-32
+ 685 000a 2A84     		mv	s0,a0
+ 686 000c 23030100 		sb	zero,6(sp)
+ 687 0010 A544     		li	s1,9
+ 688              	.L92:
+ 689 0012 1C83     		lbu	a5,6(sp)
+ 690 0014 63F6F406 		bleu	a5,s1,.L95
+ 691 0018 23030100 		sb	zero,6(sp)
+ 692 001c A546     		li	a3,9
+ 693 001e 2146     		li	a2,8
+ 694              	.L96:
+ 695 0020 1C83     		lbu	a5,6(sp)
+ 696 0022 63F1F60A 		bleu	a5,a3,.L100
+ 697 0026 23140100 		sh	zero,8(sp)
+ 698 002a 23150100 		sh	zero,10(sp)
+GAS LISTING /tmp/ccgmBVfE.s 			page 12
+
+
+ 699 002e 23030100 		sb	zero,6(sp)
+ 700 0032 9546     		li	a3,5
+ 701 0034 13060060 		li	a2,1536
+ 702              	.L101:
+ 703 0038 1C83     		lbu	a5,6(sp)
+ 704 003a 63F8F610 		bleu	a5,a3,.L103
+ 705              	.L102:
+ 706 003e 1C83     		lbu	a5,6(sp)
+ 707 0040 63820714 		beq	a5,zero,.L104
+ 708 0044 3884     		lhu	a4,8(sp)
+ 709 0046 1483     		lbu	a3,6(sp)
+ 710 0048 3C84     		lhu	a5,8(sp)
+ 711 004a 0C83     		lbu	a1,6(sp)
+ 712 004c 1083     		lbu	a2,6(sp)
+ 713 004e 3347D702 		div	a4,a4,a3
+ 714 0052 B3E7B702 		rem	a5,a5,a1
+ 715 0056 8607     		slli	a5,a5,1
+ 716 0058 B3C7C702 		div	a5,a5,a2
+ 717 005c BA97     		add	a5,a5,a4
+ 718 005e C207     		slli	a5,a5,16
+ 719 0060 C183     		srli	a5,a5,16
+ 720              	.L115:
+ 721 0062 7C84     		sh	a5,8(sp)
+ 722 0064 1883     		lbu	a4,6(sp)
+ 723 0066 9947     		li	a5,6
+ 724 0068 9546     		li	a3,5
+ 725 006a 998F     		sub	a5,a5,a4
+ 726 006c 93F7F70F 		andi	a5,a5,0xff
+ 727 0070 DC83     		sb	a5,7(sp)
+ 728 0072 9C83     		lbu	a5,7(sp)
+ 729 0074 639D0712 		bne	a5,zero,.L106
+ 730 0078 8567     		li	a5,4096
+ 731 007a 93870780 		addi	a5,a5,-2048
+ 732 007e 91AA     		j	.L116
+ 733              	.L95:
+ 734 0080 1C44     		lw	a5,8(s0)
+ 735 0082 93E78700 		ori	a5,a5,8
+ 736 0086 1CC4     		sw	a5,8(s0)
+ 737              	.L93:
+ 738 0088 2285     		mv	a0,s0
+ 739 008a 97000000 		call	ADC_GetResetCalibrationStatus
+ 739      E7800000 
+ 740 0092 7DF9     		bne	a0,zero,.L93
+ 741 0094 1C44     		lw	a5,8(s0)
+ 742 0096 93E74700 		ori	a5,a5,4
+ 743 009a 1CC4     		sw	a5,8(s0)
+ 744              	.L94:
+ 745 009c 2285     		mv	a0,s0
+ 746 009e 97000000 		call	ADC_GetCalibrationStatus
+ 746      E7800000 
+ 747 00a6 7DF9     		bne	a0,zero,.L94
+ 748 00a8 7844     		lw	a4,76(s0)
+ 749 00aa 1C83     		lbu	a5,6(sp)
+ 750 00ac 8607     		slli	a5,a5,1
+ 751 00ae 93870702 		addi	a5,a5,32
+ 752 00b2 8A97     		add	a5,a5,sp
+ 753 00b4 2396E7FE 		sh	a4,-20(a5)
+GAS LISTING /tmp/ccgmBVfE.s 			page 13
+
+
+ 754 00b8 1C83     		lbu	a5,6(sp)
+ 755 00ba 8507     		addi	a5,a5,1
+ 756 00bc 93F7F70F 		andi	a5,a5,0xff
+ 757 00c0 5C83     		sb	a5,6(sp)
+ 758 00c2 81BF     		j	.L92
+ 759              	.L100:
+ 760 00c4 A3030100 		sb	zero,7(sp)
+ 761              	.L97:
+ 762 00c8 9C83     		lbu	a5,7(sp)
+ 763 00ca 6378F600 		bleu	a5,a2,.L99
+ 764 00ce 1C83     		lbu	a5,6(sp)
+ 765 00d0 8507     		addi	a5,a5,1
+ 766 00d2 93F7F70F 		andi	a5,a5,0xff
+ 767 00d6 5C83     		sb	a5,6(sp)
+ 768 00d8 A1B7     		j	.L96
+ 769              	.L99:
+ 770 00da 9883     		lbu	a4,7(sp)
+ 771 00dc 9C83     		lbu	a5,7(sp)
+ 772 00de 0607     		slli	a4,a4,1
+ 773 00e0 8507     		addi	a5,a5,1
+ 774 00e2 8607     		slli	a5,a5,1
+ 775 00e4 13070702 		addi	a4,a4,32
+ 776 00e8 93870702 		addi	a5,a5,32
+ 777 00ec 0A97     		add	a4,a4,sp
+ 778 00ee 8A97     		add	a5,a5,sp
+ 779 00f0 0357C7FE 		lhu	a4,-20(a4)
+ 780 00f4 83D7C7FE 		lhu	a5,-20(a5)
+ 781 00f8 63F3E704 		bleu	a4,a5,.L98
+ 782 00fc 9C83     		lbu	a5,7(sp)
+ 783 00fe 8607     		slli	a5,a5,1
+ 784 0100 93870702 		addi	a5,a5,32
+ 785 0104 8A97     		add	a5,a5,sp
+ 786 0106 83D7C7FE 		lhu	a5,-20(a5)
+ 787 010a 7C84     		sh	a5,8(sp)
+ 788 010c 9C83     		lbu	a5,7(sp)
+ 789 010e 9883     		lbu	a4,7(sp)
+ 790 0110 8507     		addi	a5,a5,1
+ 791 0112 8607     		slli	a5,a5,1
+ 792 0114 93870702 		addi	a5,a5,32
+ 793 0118 8A97     		add	a5,a5,sp
+ 794 011a 83D5C7FE 		lhu	a1,-20(a5)
+ 795 011e 93171700 		slli	a5,a4,1
+ 796 0122 93870702 		addi	a5,a5,32
+ 797 0126 8A97     		add	a5,a5,sp
+ 798 0128 2396B7FE 		sh	a1,-20(a5)
+ 799 012c 9C83     		lbu	a5,7(sp)
+ 800 012e 3884     		lhu	a4,8(sp)
+ 801 0130 8507     		addi	a5,a5,1
+ 802 0132 8607     		slli	a5,a5,1
+ 803 0134 93870702 		addi	a5,a5,32
+ 804 0138 8A97     		add	a5,a5,sp
+ 805 013a 2396E7FE 		sh	a4,-20(a5)
+ 806              	.L98:
+ 807 013e 9C83     		lbu	a5,7(sp)
+ 808 0140 8507     		addi	a5,a5,1
+ 809 0142 93F7F70F 		andi	a5,a5,0xff
+ 810 0146 DC83     		sb	a5,7(sp)
+GAS LISTING /tmp/ccgmBVfE.s 			page 14
+
+
+ 811 0148 41B7     		j	.L97
+ 812              	.L103:
+ 813 014a 1C83     		lbu	a5,6(sp)
+ 814 014c 8907     		addi	a5,a5,2
+ 815 014e 8607     		slli	a5,a5,1
+ 816 0150 93870702 		addi	a5,a5,32
+ 817 0154 8A97     		add	a5,a5,sp
+ 818 0156 83D7C7FE 		lhu	a5,-20(a5)
+ 819 015a E362F6EE 		bgtu	a5,a2,.L102
+ 820 015e 1C83     		lbu	a5,6(sp)
+ 821 0160 3884     		lhu	a4,8(sp)
+ 822 0162 8907     		addi	a5,a5,2
+ 823 0164 8607     		slli	a5,a5,1
+ 824 0166 93870702 		addi	a5,a5,32
+ 825 016a 8A97     		add	a5,a5,sp
+ 826 016c 83D7C7FE 		lhu	a5,-20(a5)
+ 827 0170 BA97     		add	a5,a4,a5
+ 828 0172 C207     		slli	a5,a5,16
+ 829 0174 C183     		srli	a5,a5,16
+ 830 0176 7C84     		sh	a5,8(sp)
+ 831 0178 1C83     		lbu	a5,6(sp)
+ 832 017a 8507     		addi	a5,a5,1
+ 833 017c 93F7F70F 		andi	a5,a5,0xff
+ 834 0180 5C83     		sb	a5,6(sp)
+ 835 0182 5DBD     		j	.L101
+ 836              	.L104:
+ 837 0184 93070040 		li	a5,1024
+ 838 0188 E9BD     		j	.L115
+ 839              	.L108:
+ 840 018a 1C83     		lbu	a5,6(sp)
+ 841 018c 3885     		lhu	a4,10(sp)
+ 842 018e 8907     		addi	a5,a5,2
+ 843 0190 8607     		slli	a5,a5,1
+ 844 0192 93870702 		addi	a5,a5,32
+ 845 0196 8A97     		add	a5,a5,sp
+ 846 0198 83D7C7FE 		lhu	a5,-20(a5)
+ 847 019c BA97     		add	a5,a4,a5
+ 848 019e C207     		slli	a5,a5,16
+ 849 01a0 C183     		srli	a5,a5,16
+ 850 01a2 7C85     		sh	a5,10(sp)
+ 851 01a4 1C83     		lbu	a5,6(sp)
+ 852 01a6 8507     		addi	a5,a5,1
+ 853 01a8 93F7F70F 		andi	a5,a5,0xff
+ 854 01ac 5C83     		sb	a5,6(sp)
+ 855              	.L106:
+ 856 01ae 1C83     		lbu	a5,6(sp)
+ 857 01b0 E3FDF6FC 		bleu	a5,a3,.L108
+ 858 01b4 3885     		lhu	a4,10(sp)
+ 859 01b6 9483     		lbu	a3,7(sp)
+ 860 01b8 3C85     		lhu	a5,10(sp)
+ 861 01ba 8C83     		lbu	a1,7(sp)
+ 862 01bc 9083     		lbu	a2,7(sp)
+ 863 01be 3347D702 		div	a4,a4,a3
+ 864 01c2 B3E7B702 		rem	a5,a5,a1
+ 865 01c6 8607     		slli	a5,a5,1
+ 866 01c8 B3C7C702 		div	a5,a5,a2
+ 867 01cc BA97     		add	a5,a5,a4
+GAS LISTING /tmp/ccgmBVfE.s 			page 15
+
+
+ 868 01ce C207     		slli	a5,a5,16
+ 869 01d0 C183     		srli	a5,a5,16
+ 870              	.L116:
+ 871 01d2 7C85     		sh	a5,10(sp)
+ 872 01d4 2884     		lhu	a0,8(sp)
+ 873 01d6 3485     		lhu	a3,10(sp)
+ 874 01d8 2C84     		lhu	a1,8(sp)
+ 875 01da 3085     		lhu	a2,10(sp)
+ 876 01dc 0567     		li	a4,4096
+ 877 01de 93070040 		li	a5,1024
+ 878 01e2 13070780 		addi	a4,a4,-2048
+ 879 01e6 3385A740 		sub	a0,a5,a0
+ 880 01ea B306D740 		sub	a3,a4,a3
+ 881 01ee 8D8F     		sub	a5,a5,a1
+ 882 01f0 118F     		sub	a4,a4,a2
+ 883 01f2 4205     		slli	a0,a0,16
+ 884 01f4 C206     		slli	a3,a3,16
+ 885 01f6 C207     		slli	a5,a5,16
+ 886 01f8 4207     		slli	a4,a4,16
+ 887 01fa C186     		srai	a3,a3,16
+ 888 01fc 4187     		srai	a4,a4,16
+ 889 01fe 4185     		srai	a0,a0,16
+ 890 0200 C187     		srai	a5,a5,16
+ 891 0202 3695     		add	a0,a0,a3
+ 892 0204 BA97     		add	a5,a5,a4
+ 893 0206 8946     		li	a3,2
+ 894 0208 3345D502 		div	a0,a0,a3
+ 895 020c 0561     		addi	sp,sp,32
+ 896 020e B3E7D702 		rem	a5,a5,a3
+ 897 0212 3E95     		add	a0,a0,a5
+ 898 0214 4205     		slli	a0,a0,16
+ 899 0216 4185     		srai	a0,a0,16
+ 900 0218 17030000 		tail	__riscv_restore_2
+ 900      67000300 
+ 902              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccgmBVfE.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_adc.c
+     /tmp/ccgmBVfE.s:11     .text.ADC_DeInit:0000000000000000 ADC_DeInit
+     /tmp/ccgmBVfE.s:12     .text.ADC_DeInit:0000000000000000 $x
+     /tmp/ccgmBVfE.s:40     .text.ADC_Init:0000000000000000 ADC_Init
+     /tmp/ccgmBVfE.s:41     .text.ADC_Init:0000000000000000 $x
+     /tmp/ccgmBVfE.s:83     .text.ADC_StructInit:0000000000000000 ADC_StructInit
+     /tmp/ccgmBVfE.s:84     .text.ADC_StructInit:0000000000000000 $x
+     /tmp/ccgmBVfE.s:97     .text.ADC_Cmd:0000000000000000 ADC_Cmd
+     /tmp/ccgmBVfE.s:98     .text.ADC_Cmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:112    .text.ADC_DMACmd:0000000000000000 ADC_DMACmd
+     /tmp/ccgmBVfE.s:113    .text.ADC_DMACmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:127    .text.ADC_ITConfig:0000000000000000 ADC_ITConfig
+     /tmp/ccgmBVfE.s:128    .text.ADC_ITConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:144    .text.ADC_ResetCalibration:0000000000000000 ADC_ResetCalibration
+     /tmp/ccgmBVfE.s:145    .text.ADC_ResetCalibration:0000000000000000 $x
+     /tmp/ccgmBVfE.s:154    .text.ADC_GetResetCalibrationStatus:0000000000000000 ADC_GetResetCalibrationStatus
+     /tmp/ccgmBVfE.s:155    .text.ADC_GetResetCalibrationStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:164    .text.ADC_StartCalibration:0000000000000000 ADC_StartCalibration
+     /tmp/ccgmBVfE.s:165    .text.ADC_StartCalibration:0000000000000000 $x
+     /tmp/ccgmBVfE.s:174    .text.ADC_GetCalibrationStatus:0000000000000000 ADC_GetCalibrationStatus
+     /tmp/ccgmBVfE.s:175    .text.ADC_GetCalibrationStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:184    .text.ADC_SoftwareStartConvCmd:0000000000000000 ADC_SoftwareStartConvCmd
+     /tmp/ccgmBVfE.s:185    .text.ADC_SoftwareStartConvCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:202    .text.ADC_GetSoftwareStartConvStatus:0000000000000000 ADC_GetSoftwareStartConvStatus
+     /tmp/ccgmBVfE.s:203    .text.ADC_GetSoftwareStartConvStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:212    .text.ADC_DiscModeChannelCountConfig:0000000000000000 ADC_DiscModeChannelCountConfig
+     /tmp/ccgmBVfE.s:213    .text.ADC_DiscModeChannelCountConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:227    .text.ADC_DiscModeCmd:0000000000000000 ADC_DiscModeCmd
+     /tmp/ccgmBVfE.s:228    .text.ADC_DiscModeCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:246    .text.ADC_RegularChannelConfig:0000000000000000 ADC_RegularChannelConfig
+     /tmp/ccgmBVfE.s:247    .text.ADC_RegularChannelConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:320    .text.ADC_ExternalTrigConvCmd:0000000000000000 ADC_ExternalTrigConvCmd
+     /tmp/ccgmBVfE.s:321    .text.ADC_ExternalTrigConvCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:338    .text.ADC_GetConversionValue:0000000000000000 ADC_GetConversionValue
+     /tmp/ccgmBVfE.s:339    .text.ADC_GetConversionValue:0000000000000000 $x
+     /tmp/ccgmBVfE.s:348    .text.ADC_GetDualModeConversionValue:0000000000000000 ADC_GetDualModeConversionValue
+     /tmp/ccgmBVfE.s:349    .text.ADC_GetDualModeConversionValue:0000000000000000 $x
+     /tmp/ccgmBVfE.s:357    .text.ADC_AutoInjectedConvCmd:0000000000000000 ADC_AutoInjectedConvCmd
+     /tmp/ccgmBVfE.s:358    .text.ADC_AutoInjectedConvCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:372    .text.ADC_InjectedDiscModeCmd:0000000000000000 ADC_InjectedDiscModeCmd
+     /tmp/ccgmBVfE.s:373    .text.ADC_InjectedDiscModeCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:390    .text.ADC_ExternalTrigInjectedConvConfig:0000000000000000 ADC_ExternalTrigInjectedConvConfig
+     /tmp/ccgmBVfE.s:391    .text.ADC_ExternalTrigInjectedConvConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:403    .text.ADC_ExternalTrigInjectedConvCmd:0000000000000000 ADC_ExternalTrigInjectedConvCmd
+     /tmp/ccgmBVfE.s:404    .text.ADC_ExternalTrigInjectedConvCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:421    .text.ADC_SoftwareStartInjectedConvCmd:0000000000000000 ADC_SoftwareStartInjectedConvCmd
+     /tmp/ccgmBVfE.s:422    .text.ADC_SoftwareStartInjectedConvCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:439    .text.ADC_GetSoftwareStartInjectedConvCmdStatus:0000000000000000 ADC_GetSoftwareStartInjectedConvCmdStatus
+     /tmp/ccgmBVfE.s:440    .text.ADC_GetSoftwareStartInjectedConvCmdStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:449    .text.ADC_InjectedChannelConfig:0000000000000000 ADC_InjectedChannelConfig
+     /tmp/ccgmBVfE.s:450    .text.ADC_InjectedChannelConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:497    .text.ADC_InjectedSequencerLengthConfig:0000000000000000 ADC_InjectedSequencerLengthConfig
+     /tmp/ccgmBVfE.s:498    .text.ADC_InjectedSequencerLengthConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:512    .text.ADC_SetInjectedOffset:0000000000000000 ADC_SetInjectedOffset
+     /tmp/ccgmBVfE.s:513    .text.ADC_SetInjectedOffset:0000000000000000 $x
+     /tmp/ccgmBVfE.s:528    .text.ADC_GetInjectedConversionValue:0000000000000000 ADC_GetInjectedConversionValue
+GAS LISTING /tmp/ccgmBVfE.s 			page 17
+
+
+     /tmp/ccgmBVfE.s:529    .text.ADC_GetInjectedConversionValue:0000000000000000 $x
+     /tmp/ccgmBVfE.s:547    .text.ADC_AnalogWatchdogCmd:0000000000000000 ADC_AnalogWatchdogCmd
+     /tmp/ccgmBVfE.s:548    .text.ADC_AnalogWatchdogCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:560    .text.ADC_AnalogWatchdogThresholdsConfig:0000000000000000 ADC_AnalogWatchdogThresholdsConfig
+     /tmp/ccgmBVfE.s:561    .text.ADC_AnalogWatchdogThresholdsConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:569    .text.ADC_AnalogWatchdogSingleChannelConfig:0000000000000000 ADC_AnalogWatchdogSingleChannelConfig
+     /tmp/ccgmBVfE.s:570    .text.ADC_AnalogWatchdogSingleChannelConfig:0000000000000000 $x
+     /tmp/ccgmBVfE.s:580    .text.ADC_TempSensorVrefintCmd:0000000000000000 ADC_TempSensorVrefintCmd
+     /tmp/ccgmBVfE.s:581    .text.ADC_TempSensorVrefintCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:600    .text.ADC_GetFlagStatus:0000000000000000 ADC_GetFlagStatus
+     /tmp/ccgmBVfE.s:601    .text.ADC_GetFlagStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:610    .text.ADC_ClearFlag:0000000000000000 ADC_ClearFlag
+     /tmp/ccgmBVfE.s:611    .text.ADC_ClearFlag:0000000000000000 $x
+     /tmp/ccgmBVfE.s:619    .text.ADC_GetITStatus:0000000000000000 ADC_GetITStatus
+     /tmp/ccgmBVfE.s:620    .text.ADC_GetITStatus:0000000000000000 $x
+     /tmp/ccgmBVfE.s:635    .text.ADC_ClearITPendingBit:0000000000000000 ADC_ClearITPendingBit
+     /tmp/ccgmBVfE.s:636    .text.ADC_ClearITPendingBit:0000000000000000 $x
+     /tmp/ccgmBVfE.s:645    .text.TempSensor_Volt_To_Temper:0000000000000000 TempSensor_Volt_To_Temper
+     /tmp/ccgmBVfE.s:646    .text.TempSensor_Volt_To_Temper:0000000000000000 $x
+     /tmp/ccgmBVfE.s:664    .text.ADC_BufferCmd:0000000000000000 ADC_BufferCmd
+     /tmp/ccgmBVfE.s:665    .text.ADC_BufferCmd:0000000000000000 $x
+     /tmp/ccgmBVfE.s:682    .text.Get_CalibrationValue:0000000000000000 Get_CalibrationValue
+     /tmp/ccgmBVfE.s:683    .text.Get_CalibrationValue:0000000000000000 $x
+     /tmp/ccgmBVfE.s:25     .text.ADC_DeInit:0000000000000038 .L2
+     /tmp/ccgmBVfE.s:23     .text.ADC_DeInit:0000000000000030 .L1
+     /tmp/ccgmBVfE.s:21     .text.ADC_DeInit:0000000000000028 .L5
+     /tmp/ccgmBVfE.s:104    .text.ADC_Cmd:000000000000000c .L9
+     /tmp/ccgmBVfE.s:101    .text.ADC_Cmd:0000000000000008 .L11
+     /tmp/ccgmBVfE.s:119    .text.ADC_DMACmd:000000000000000c .L13
+     /tmp/ccgmBVfE.s:116    .text.ADC_DMACmd:0000000000000008 .L15
+     /tmp/ccgmBVfE.s:134    .text.ADC_ITConfig:000000000000000e .L17
+     /tmp/ccgmBVfE.s:192    .text.ADC_SoftwareStartConvCmd:000000000000000e .L24
+     /tmp/ccgmBVfE.s:189    .text.ADC_SoftwareStartConvCmd:000000000000000a .L26
+     /tmp/ccgmBVfE.s:236    .text.ADC_DiscModeCmd:0000000000000010 .L30
+     /tmp/ccgmBVfE.s:233    .text.ADC_DiscModeCmd:000000000000000c .L32
+     /tmp/ccgmBVfE.s:275    .text.ADC_RegularChannelConfig:0000000000000050 .L34
+     /tmp/ccgmBVfE.s:287    .text.ADC_RegularChannelConfig:0000000000000072 .L36
+     /tmp/ccgmBVfE.s:260    .text.ADC_RegularChannelConfig:000000000000002a .L35
+     /tmp/ccgmBVfE.s:302    .text.ADC_RegularChannelConfig:0000000000000098 .L38
+     /tmp/ccgmBVfE.s:328    .text.ADC_ExternalTrigConvCmd:000000000000000e .L40
+     /tmp/ccgmBVfE.s:325    .text.ADC_ExternalTrigConvCmd:000000000000000a .L42
+     /tmp/ccgmBVfE.s:364    .text.ADC_AutoInjectedConvCmd:000000000000000c .L46
+     /tmp/ccgmBVfE.s:361    .text.ADC_AutoInjectedConvCmd:0000000000000008 .L48
+     /tmp/ccgmBVfE.s:380    .text.ADC_InjectedDiscModeCmd:000000000000000c .L50
+     /tmp/ccgmBVfE.s:377    .text.ADC_InjectedDiscModeCmd:0000000000000008 .L52
+     /tmp/ccgmBVfE.s:411    .text.ADC_ExternalTrigInjectedConvCmd:000000000000000c .L55
+     /tmp/ccgmBVfE.s:408    .text.ADC_ExternalTrigInjectedConvCmd:0000000000000008 .L57
+     /tmp/ccgmBVfE.s:429    .text.ADC_SoftwareStartInjectedConvCmd:000000000000000e .L59
+     /tmp/ccgmBVfE.s:426    .text.ADC_SoftwareStartInjectedConvCmd:000000000000000a .L61
+     /tmp/ccgmBVfE.s:480    .text.ADC_InjectedChannelConfig:0000000000000058 .L64
+     /tmp/ccgmBVfE.s:463    .text.ADC_InjectedChannelConfig:000000000000002a .L65
+     /tmp/ccgmBVfE.s:590    .text.ADC_TempSensorVrefintCmd:0000000000000016 .L75
+     /tmp/ccgmBVfE.s:587    .text.ADC_TempSensorVrefintCmd:0000000000000012 .L77
+     /tmp/ccgmBVfE.s:628    .text.ADC_GetITStatus:0000000000000016 .L80
+     /tmp/ccgmBVfE.s:672    .text.ADC_BufferCmd:000000000000000e .L88
+     /tmp/ccgmBVfE.s:669    .text.ADC_BufferCmd:000000000000000a .L90
+     /tmp/ccgmBVfE.s:733    .text.Get_CalibrationValue:0000000000000080 .L95
+GAS LISTING /tmp/ccgmBVfE.s 			page 18
+
+
+     /tmp/ccgmBVfE.s:759    .text.Get_CalibrationValue:00000000000000c4 .L100
+     /tmp/ccgmBVfE.s:812    .text.Get_CalibrationValue:000000000000014a .L103
+     /tmp/ccgmBVfE.s:836    .text.Get_CalibrationValue:0000000000000184 .L104
+     /tmp/ccgmBVfE.s:855    .text.Get_CalibrationValue:00000000000001ae .L106
+     /tmp/ccgmBVfE.s:870    .text.Get_CalibrationValue:00000000000001d2 .L116
+     /tmp/ccgmBVfE.s:737    .text.Get_CalibrationValue:0000000000000088 .L93
+     /tmp/ccgmBVfE.s:744    .text.Get_CalibrationValue:000000000000009c .L94
+     /tmp/ccgmBVfE.s:688    .text.Get_CalibrationValue:0000000000000012 .L92
+     /tmp/ccgmBVfE.s:769    .text.Get_CalibrationValue:00000000000000da .L99
+     /tmp/ccgmBVfE.s:694    .text.Get_CalibrationValue:0000000000000020 .L96
+     /tmp/ccgmBVfE.s:806    .text.Get_CalibrationValue:000000000000013e .L98
+     /tmp/ccgmBVfE.s:761    .text.Get_CalibrationValue:00000000000000c8 .L97
+     /tmp/ccgmBVfE.s:705    .text.Get_CalibrationValue:000000000000003e .L102
+     /tmp/ccgmBVfE.s:702    .text.Get_CalibrationValue:0000000000000038 .L101
+     /tmp/ccgmBVfE.s:720    .text.Get_CalibrationValue:0000000000000062 .L115
+     /tmp/ccgmBVfE.s:839    .text.Get_CalibrationValue:000000000000018a .L108
+
+UNDEFINED SYMBOLS
+__riscv_save_0
+RCC_APB2PeriphResetCmd
+__riscv_restore_0
+__riscv_save_2
+__riscv_restore_2

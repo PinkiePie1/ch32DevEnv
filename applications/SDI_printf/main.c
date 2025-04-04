@@ -12,9 +12,11 @@
 
 /*
  *@Note
- *GPIO routine:
- *PA0 push-pull output.
- *
+ *SDI_Printf routine:
+ *It needs to be used with WCH-LinkUtility 1.8.
+ *Note:1.version of WCH-LinkUtility must after 1.8
+ *     2.Protection functions cannot be selected using this function.
+ *     3.Only LinkE Support this Function
  */
 
 #include "debug.h"
@@ -53,17 +55,22 @@ int main(void)
     u8 i = 0;
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-    SystemCoreClockUpdate();
     Delay_Init();
+
+#if (SDI_PRINT == SDI_PR_OPEN)
+    SDI_Printf_Enable();
+#else
     USART_Printf_Init(115200);
+#endif
+
     printf("SystemClk:%d\r\n", SystemCoreClock);
-    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
-    printf("GPIO Toggle TEST\r\n");
+
     GPIO_Toggle_INIT();
 
     while(1)
     {
-        Delay_Ms(250);
-        GPIO_WriteBit(GPIOA, GPIO_Pin_0, (i == 0) ? (i = Bit_SET) : (i = Bit_RESET));
+        Delay_Ms(1000);
+
+        printf("-DEBUG-PR-%08x\r\n", i++);
     }
 }

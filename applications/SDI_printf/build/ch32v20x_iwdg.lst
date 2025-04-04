@@ -1,0 +1,86 @@
+GAS LISTING /tmp/ccKqcYGD.s 			page 1
+
+
+   1              		.file	"ch32v20x_iwdg.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.IWDG_WriteAccessCmd,"ax",@progbits
+   8              		.align	1
+   9              		.globl	IWDG_WriteAccessCmd
+  11              	IWDG_WriteAccessCmd:
+  12 0000 B7370040 		li	a5,1073754112
+  13 0004 88C3     		sw	a0,0(a5)
+  14 0006 8280     		ret
+  16              		.section	.text.IWDG_SetPrescaler,"ax",@progbits
+  17              		.align	1
+  18              		.globl	IWDG_SetPrescaler
+  20              	IWDG_SetPrescaler:
+  21 0000 B7370040 		li	a5,1073754112
+  22 0004 C8C3     		sw	a0,4(a5)
+  23 0006 8280     		ret
+  25              		.section	.text.IWDG_SetReload,"ax",@progbits
+  26              		.align	1
+  27              		.globl	IWDG_SetReload
+  29              	IWDG_SetReload:
+  30 0000 B7370040 		li	a5,1073754112
+  31 0004 88C7     		sw	a0,8(a5)
+  32 0006 8280     		ret
+  34              		.section	.text.IWDG_ReloadCounter,"ax",@progbits
+  35              		.align	1
+  36              		.globl	IWDG_ReloadCounter
+  38              	IWDG_ReloadCounter:
+  39 0000 AD67     		li	a5,45056
+  40 0002 37370040 		li	a4,1073754112
+  41 0006 9387A7AA 		addi	a5,a5,-1366
+  42 000a 1CC3     		sw	a5,0(a4)
+  43 000c 8280     		ret
+  45              		.section	.text.IWDG_Enable,"ax",@progbits
+  46              		.align	1
+  47              		.globl	IWDG_Enable
+  49              	IWDG_Enable:
+  50 0000 B567     		li	a5,53248
+  51 0002 37370040 		li	a4,1073754112
+  52 0006 9387C7CC 		addi	a5,a5,-820
+  53 000a 1CC3     		sw	a5,0(a4)
+  54 000c 37170240 		li	a4,1073876992
+  55              	.L6:
+  56 0010 5C53     		lw	a5,36(a4)
+  57 0012 898B     		andi	a5,a5,2
+  58 0014 F5DF     		beq	a5,zero,.L6
+  59 0016 8280     		ret
+  61              		.section	.text.IWDG_GetFlagStatus,"ax",@progbits
+  62              		.align	1
+  63              		.globl	IWDG_GetFlagStatus
+  65              	IWDG_GetFlagStatus:
+  66 0000 B7370040 		li	a5,1073754112
+  67 0004 DC47     		lw	a5,12(a5)
+  68 0006 7D8D     		and	a0,a0,a5
+GAS LISTING /tmp/ccKqcYGD.s 			page 2
+
+
+  69 0008 3335A000 		snez	a0,a0
+  70 000c 8280     		ret
+  72              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccKqcYGD.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_iwdg.c
+     /tmp/ccKqcYGD.s:11     .text.IWDG_WriteAccessCmd:0000000000000000 IWDG_WriteAccessCmd
+     /tmp/ccKqcYGD.s:12     .text.IWDG_WriteAccessCmd:0000000000000000 $x
+     /tmp/ccKqcYGD.s:20     .text.IWDG_SetPrescaler:0000000000000000 IWDG_SetPrescaler
+     /tmp/ccKqcYGD.s:21     .text.IWDG_SetPrescaler:0000000000000000 $x
+     /tmp/ccKqcYGD.s:29     .text.IWDG_SetReload:0000000000000000 IWDG_SetReload
+     /tmp/ccKqcYGD.s:30     .text.IWDG_SetReload:0000000000000000 $x
+     /tmp/ccKqcYGD.s:38     .text.IWDG_ReloadCounter:0000000000000000 IWDG_ReloadCounter
+     /tmp/ccKqcYGD.s:39     .text.IWDG_ReloadCounter:0000000000000000 $x
+     /tmp/ccKqcYGD.s:49     .text.IWDG_Enable:0000000000000000 IWDG_Enable
+     /tmp/ccKqcYGD.s:50     .text.IWDG_Enable:0000000000000000 $x
+     /tmp/ccKqcYGD.s:65     .text.IWDG_GetFlagStatus:0000000000000000 IWDG_GetFlagStatus
+     /tmp/ccKqcYGD.s:66     .text.IWDG_GetFlagStatus:0000000000000000 $x
+     /tmp/ccKqcYGD.s:55     .text.IWDG_Enable:0000000000000010 .L6
+
+NO UNDEFINED SYMBOLS

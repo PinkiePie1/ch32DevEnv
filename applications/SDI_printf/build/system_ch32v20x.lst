@@ -1,0 +1,228 @@
+GAS LISTING /tmp/ccjpSh0w.s 			page 1
+
+
+   1              		.file	"system_ch32v20x.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.SystemInit,"ax",@progbits
+   8              		.align	1
+   9              		.globl	SystemInit
+  11              	SystemInit:
+  12 0000 B7170240 		li	a5,1073876992
+  13 0004 9843     		lw	a4,0(a5)
+  14 0006 B706FFF0 		li	a3,-251723776
+  15 000a 4111     		addi	sp,sp,-16
+  16 000c 13671700 		ori	a4,a4,1
+  17 0010 98C3     		sw	a4,0(a5)
+  18 0012 D843     		lw	a4,4(a5)
+  19 0014 37060200 		li	a2,131072
+  20 0018 758F     		and	a4,a4,a3
+  21 001a D8C3     		sw	a4,4(a5)
+  22 001c 9843     		lw	a4,0(a5)
+  23 001e B706F7FE 		li	a3,-17367040
+  24 0022 FD16     		addi	a3,a3,-1
+  25 0024 758F     		and	a4,a4,a3
+  26 0026 98C3     		sw	a4,0(a5)
+  27 0028 9843     		lw	a4,0(a5)
+  28 002a B706FCFF 		li	a3,-262144
+  29 002e FD16     		addi	a3,a3,-1
+  30 0030 758F     		and	a4,a4,a3
+  31 0032 98C3     		sw	a4,0(a5)
+  32 0034 D843     		lw	a4,4(a5)
+  33 0036 B70601FF 		li	a3,-16711680
+  34 003a FD16     		addi	a3,a3,-1
+  35 003c 758F     		and	a4,a4,a3
+  36 003e D8C3     		sw	a4,4(a5)
+  37 0040 37079F00 		li	a4,10420224
+  38 0044 98C7     		sw	a4,8(a5)
+  39 0046 02C4     		sw	zero,8(sp)
+  40 0048 02C6     		sw	zero,12(sp)
+  41 004a 9843     		lw	a4,0(a5)
+  42 004c C166     		li	a3,65536
+  43 004e 558F     		or	a4,a4,a3
+  44 0050 98C3     		sw	a4,0(a5)
+  45 0052 B7160240 		li	a3,1073876992
+  46 0056 0567     		li	a4,4096
+  47              	.L3:
+  48 0058 9C42     		lw	a5,0(a3)
+  49 005a F18F     		and	a5,a5,a2
+  50 005c 3EC6     		sw	a5,12(sp)
+  51 005e A247     		lw	a5,8(sp)
+  52 0060 8507     		addi	a5,a5,1
+  53 0062 3EC4     		sw	a5,8(sp)
+  54 0064 B247     		lw	a5,12(sp)
+  55 0066 81E7     		bne	a5,zero,.L2
+  56 0068 A247     		lw	a5,8(sp)
+  57 006a E397E7FE 		bne	a5,a4,.L3
+  58              	.L2:
+GAS LISTING /tmp/ccjpSh0w.s 			page 2
+
+
+  59 006e B7170240 		li	a5,1073876992
+  60 0072 9C43     		lw	a5,0(a5)
+  61 0074 37070200 		li	a4,131072
+  62 0078 F98F     		and	a5,a5,a4
+  63 007a B5C7     		beq	a5,zero,.L4
+  64 007c 8547     		li	a5,1
+  65 007e 3EC6     		sw	a5,12(sp)
+  66              	.L5:
+  67 0080 3247     		lw	a4,12(sp)
+  68 0082 8547     		li	a5,1
+  69 0084 631FF704 		bne	a4,a5,.L1
+  70 0088 B7170240 		li	a5,1073876992
+  71 008c D843     		lw	a4,4(a5)
+  72 008e B706C1FF 		li	a3,-4128768
+  73 0092 FD16     		addi	a3,a3,-1
+  74 0094 D8C3     		sw	a4,4(a5)
+  75 0096 D843     		lw	a4,4(a5)
+  76 0098 D8C3     		sw	a4,4(a5)
+  77 009a D843     		lw	a4,4(a5)
+  78 009c 13670740 		ori	a4,a4,1024
+  79 00a0 D8C3     		sw	a4,4(a5)
+  80 00a2 D843     		lw	a4,4(a5)
+  81 00a4 758F     		and	a4,a4,a3
+  82 00a6 D8C3     		sw	a4,4(a5)
+  83 00a8 D843     		lw	a4,4(a5)
+  84 00aa B7062900 		li	a3,2686976
+  85 00ae 558F     		or	a4,a4,a3
+  86 00b0 D8C3     		sw	a4,4(a5)
+  87 00b2 9843     		lw	a4,0(a5)
+  88 00b4 B7060001 		li	a3,16777216
+  89 00b8 558F     		or	a4,a4,a3
+  90 00ba 98C3     		sw	a4,0(a5)
+  91 00bc B7060002 		li	a3,33554432
+  92              	.L7:
+  93 00c0 9843     		lw	a4,0(a5)
+  94 00c2 758F     		and	a4,a4,a3
+  95 00c4 75DF     		beq	a4,zero,.L7
+  96 00c6 D843     		lw	a4,4(a5)
+  97 00c8 B7160240 		li	a3,1073876992
+  98 00cc 719B     		andi	a4,a4,-4
+  99 00ce D8C3     		sw	a4,4(a5)
+ 100 00d0 D843     		lw	a4,4(a5)
+ 101 00d2 13672700 		ori	a4,a4,2
+ 102 00d6 D8C3     		sw	a4,4(a5)
+ 103 00d8 2147     		li	a4,8
+ 104              	.L8:
+ 105 00da DC42     		lw	a5,4(a3)
+ 106 00dc B18B     		andi	a5,a5,12
+ 107 00de E39EE7FE 		bne	a5,a4,.L8
+ 108              	.L1:
+ 109 00e2 4101     		addi	sp,sp,16
+ 110 00e4 8280     		jr	ra
+ 111              	.L4:
+ 112 00e6 02C6     		sw	zero,12(sp)
+ 113 00e8 61BF     		j	.L5
+ 115              		.section	.text.SystemCoreClockUpdate,"ax",@progbits
+ 116              		.align	1
+GAS LISTING /tmp/ccjpSh0w.s 			page 3
+
+
+ 117              		.globl	SystemCoreClockUpdate
+ 119              	SystemCoreClockUpdate:
+ 120 0000 37170240 		li	a4,1073876992
+ 121 0004 5C43     		lw	a5,4(a4)
+ 122 0006 A146     		li	a3,8
+ 123 0008 B18B     		andi	a5,a5,12
+ 124 000a 6398D706 		bne	a5,a3,.L20
+ 125 000e 5C43     		lw	a5,4(a4)
+ 126 0010 5843     		lw	a4,4(a4)
+ 127 0012 C166     		li	a3,65536
+ 128 0014 C983     		srli	a5,a5,18
+ 129 0016 BD8B     		andi	a5,a5,15
+ 130 0018 758F     		and	a4,a4,a3
+ 131 001a 8907     		addi	a5,a5,2
+ 132 001c C546     		li	a3,17
+ 133 001e 6393D700 		bne	a5,a3,.L16
+ 134 0022 C947     		li	a5,18
+ 135              	.L16:
+ 136 0024 01EF     		bne	a4,zero,.L17
+ 137 0026 37470240 		li	a4,1073889280
+ 138 002a 03270780 		lw	a4,-2048(a4)
+ 139 002e 418B     		andi	a4,a4,16
+ 140 0030 09CF     		beq	a4,zero,.L18
+ 141              	.L19:
+ 142 0032 37177A00 		li	a4,7999488
+ 143 0036 13070720 		addi	a4,a4,512
+ 144 003a 21A8     		j	.L21
+ 145              	.L17:
+ 146 003c 37170240 		li	a4,1073876992
+ 147 0040 5843     		lw	a4,4(a4)
+ 148 0042 B7060200 		li	a3,131072
+ 149 0046 758F     		and	a4,a4,a3
+ 150 0048 6DD7     		beq	a4,zero,.L19
+ 151              	.L18:
+ 152 004a 37173D00 		li	a4,4001792
+ 153 004e 13070790 		addi	a4,a4,-1792
+ 154              	.L21:
+ 155 0052 B387E702 		mul	a5,a5,a4
+ 156              	.L15:
+ 157 0056 37170240 		li	a4,1073876992
+ 158 005a 5443     		lw	a3,4(a4)
+ 159 005c 37070000 		lui	a4,%hi(AHBPrescTable)
+ 160 0060 13070700 		addi	a4,a4,%lo(AHBPrescTable)
+ 161 0064 9182     		srli	a3,a3,4
+ 162 0066 BD8A     		andi	a3,a3,15
+ 163 0068 3697     		add	a4,a4,a3
+ 164 006a 1823     		lbu	a4,0(a4)
+ 165 006c B3D7E700 		srl	a5,a5,a4
+ 166 0070 37070000 		lui	a4,%hi(SystemCoreClock)
+ 167 0074 2320F700 		sw	a5,%lo(SystemCoreClock)(a4)
+ 168 0078 8280     		ret
+ 169              	.L20:
+ 170 007a B7177A00 		li	a5,7999488
+ 171 007e 93870720 		addi	a5,a5,512
+ 172 0082 D1BF     		j	.L15
+ 174              		.globl	AHBPrescTable
+ 175              		.section	.data.AHBPrescTable,"aw"
+GAS LISTING /tmp/ccjpSh0w.s 			page 4
+
+
+ 176              		.align	2
+ 179              	AHBPrescTable:
+ 180 0000 00       		.string	""
+ 181 0001 00       		.string	""
+ 182 0002 00       		.string	""
+ 183 0003 00       		.string	""
+ 184 0004 00       		.string	""
+ 185 0005 00       		.string	""
+ 186 0006 00       		.string	""
+ 187 0007 00       		.string	""
+ 188 0008 01020304 		.ascii	"\001\002\003\004\006\007\b\t"
+ 188      06070809 
+ 189              		.globl	SystemCoreClock
+ 190              		.section	.sdata.SystemCoreClock,"aw"
+ 191              		.align	2
+ 194              	SystemCoreClock:
+ 195 0000 00D8B805 		.word	96000000
+ 196              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccjpSh0w.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 system_ch32v20x.c
+     /tmp/ccjpSh0w.s:11     .text.SystemInit:0000000000000000 SystemInit
+     /tmp/ccjpSh0w.s:12     .text.SystemInit:0000000000000000 $x
+     /tmp/ccjpSh0w.s:119    .text.SystemCoreClockUpdate:0000000000000000 SystemCoreClockUpdate
+     /tmp/ccjpSh0w.s:120    .text.SystemCoreClockUpdate:0000000000000000 $x
+     /tmp/ccjpSh0w.s:179    .data.AHBPrescTable:0000000000000000 AHBPrescTable
+     /tmp/ccjpSh0w.s:194    .sdata.SystemCoreClock:0000000000000000 SystemCoreClock
+     /tmp/ccjpSh0w.s:58     .text.SystemInit:000000000000006e .L2
+     /tmp/ccjpSh0w.s:47     .text.SystemInit:0000000000000058 .L3
+     /tmp/ccjpSh0w.s:111    .text.SystemInit:00000000000000e6 .L4
+     /tmp/ccjpSh0w.s:108    .text.SystemInit:00000000000000e2 .L1
+     /tmp/ccjpSh0w.s:92     .text.SystemInit:00000000000000c0 .L7
+     /tmp/ccjpSh0w.s:104    .text.SystemInit:00000000000000da .L8
+     /tmp/ccjpSh0w.s:66     .text.SystemInit:0000000000000080 .L5
+     /tmp/ccjpSh0w.s:169    .text.SystemCoreClockUpdate:000000000000007a .L20
+     /tmp/ccjpSh0w.s:135    .text.SystemCoreClockUpdate:0000000000000024 .L16
+     /tmp/ccjpSh0w.s:145    .text.SystemCoreClockUpdate:000000000000003c .L17
+     /tmp/ccjpSh0w.s:151    .text.SystemCoreClockUpdate:000000000000004a .L18
+     /tmp/ccjpSh0w.s:154    .text.SystemCoreClockUpdate:0000000000000052 .L21
+     /tmp/ccjpSh0w.s:141    .text.SystemCoreClockUpdate:0000000000000032 .L19
+     /tmp/ccjpSh0w.s:156    .text.SystemCoreClockUpdate:0000000000000056 .L15
+
+NO UNDEFINED SYMBOLS

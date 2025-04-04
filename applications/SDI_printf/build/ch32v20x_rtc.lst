@@ -1,0 +1,325 @@
+GAS LISTING /tmp/ccdjS9oA.s 			page 1
+
+
+   1              		.file	"ch32v20x_rtc.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.RTC_ITConfig,"ax",@progbits
+   8              		.align	1
+   9              		.globl	RTC_ITConfig
+  11              	RTC_ITConfig:
+  12 0000 37370040 		li	a4,1073754112
+  13 0004 83570780 		lhu	a5,-2048(a4)
+  14 0008 89C5     		beq	a1,zero,.L2
+  15 000a C98F     		or	a5,a5,a0
+  16              	.L4:
+  17 000c 2310F780 		sh	a5,-2048(a4)
+  18 0010 8280     		ret
+  19              	.L2:
+  20 0012 1345F5FF 		not	a0,a0
+  21 0016 E98F     		and	a5,a5,a0
+  22 0018 D5BF     		j	.L4
+  24              		.section	.text.RTC_EnterConfigMode,"ax",@progbits
+  25              		.align	1
+  26              		.globl	RTC_EnterConfigMode
+  28              	RTC_EnterConfigMode:
+  29 0000 B7370040 		li	a5,1073754112
+  30 0004 03D74780 		lhu	a4,-2044(a5)
+  31 0008 13670701 		ori	a4,a4,16
+  32 000c 2392E780 		sh	a4,-2044(a5)
+  33 0010 8280     		ret
+  35              		.section	.text.RTC_ExitConfigMode,"ax",@progbits
+  36              		.align	1
+  37              		.globl	RTC_ExitConfigMode
+  39              	RTC_ExitConfigMode:
+  40 0000 37370040 		li	a4,1073754112
+  41 0004 83574780 		lhu	a5,-2044(a4)
+  42 0008 C207     		slli	a5,a5,16
+  43 000a C183     		srli	a5,a5,16
+  44 000c BD9B     		andi	a5,a5,-17
+  45 000e C207     		slli	a5,a5,16
+  46 0010 C183     		srli	a5,a5,16
+  47 0012 2312F780 		sh	a5,-2044(a4)
+  48 0016 8280     		ret
+  50              		.section	.text.RTC_GetCounter,"ax",@progbits
+  51              		.align	1
+  52              		.globl	RTC_GetCounter
+  54              	RTC_GetCounter:
+  55 0000 B7370040 		li	a5,1073754112
+  56 0004 93870780 		addi	a5,a5,-2048
+  57              	.L8:
+  58 0008 962F     		lhu	a3,24(a5)
+  59 000a 9A2F     		lhu	a4,24(a5)
+  60 000c 13160701 		slli	a2,a4,16
+  61 0010 4182     		srli	a2,a2,16
+  62 0012 E39BE6FE 		bne	a3,a4,.L8
+  63 0016 B7370040 		li	a5,1073754112
+  64 001a 93870780 		addi	a5,a5,-2048
+GAS LISTING /tmp/ccdjS9oA.s 			page 2
+
+
+  65              	.L9:
+  66 001e D62F     		lhu	a3,28(a5)
+  67 0020 DA2F     		lhu	a4,28(a5)
+  68 0022 13150701 		slli	a0,a4,16
+  69 0026 4181     		srli	a0,a0,16
+  70 0028 E39BE6FE 		bne	a3,a4,.L9
+  71 002c 37370040 		li	a4,1073754112
+  72 0030 13070780 		addi	a4,a4,-2048
+  73              	.L10:
+  74 0034 0E2F     		lhu	a1,24(a4)
+  75 0036 162F     		lhu	a3,24(a4)
+  76 0038 93970601 		slli	a5,a3,16
+  77 003c C183     		srli	a5,a5,16
+  78 003e E39BD5FE 		bne	a1,a3,.L10
+  79 0042 630DF600 		beq	a2,a5,.L11
+  80 0046 37370040 		li	a4,1073754112
+  81 004a 13070780 		addi	a4,a4,-2048
+  82              	.L12:
+  83 004e 522F     		lhu	a2,28(a4)
+  84 0050 562F     		lhu	a3,28(a4)
+  85 0052 13950601 		slli	a0,a3,16
+  86 0056 4181     		srli	a0,a0,16
+  87 0058 E31BD6FE 		bne	a2,a3,.L12
+  88              	.L11:
+  89 005c C207     		slli	a5,a5,16
+  90 005e 5D8D     		or	a0,a5,a0
+  91 0060 8280     		ret
+  93              		.section	.text.RTC_SetCounter,"ax",@progbits
+  94              		.align	1
+  95              		.globl	RTC_SetCounter
+  97              	RTC_SetCounter:
+  98 0000 17030000 		call	t0,__riscv_save_1
+  98      E7020300 
+  99 0008 2A84     		mv	s0,a0
+ 100 000a 97000000 		call	RTC_EnterConfigMode
+ 100      E7800000 
+ 101 0012 13570401 		srli	a4,s0,16
+ 102 0016 B7370040 		li	a5,1073754112
+ 103 001a 4204     		slli	s0,s0,16
+ 104 001c 239CE780 		sh	a4,-2024(a5)
+ 105 0020 4180     		srli	s0,s0,16
+ 106 0022 239E8780 		sh	s0,-2020(a5)
+ 107 0026 97000000 		call	RTC_ExitConfigMode
+ 107      E7800000 
+ 108 002e 17030000 		tail	__riscv_restore_1
+ 108      67000300 
+ 110              		.section	.text.RTC_SetPrescaler,"ax",@progbits
+ 111              		.align	1
+ 112              		.globl	RTC_SetPrescaler
+ 114              	RTC_SetPrescaler:
+ 115 0000 17030000 		call	t0,__riscv_save_1
+ 115      E7020300 
+ 116 0008 2A84     		mv	s0,a0
+ 117 000a 97000000 		call	RTC_EnterConfigMode
+ 117      E7800000 
+ 118 0012 13570401 		srli	a4,s0,16
+ 119 0016 B7370040 		li	a5,1073754112
+GAS LISTING /tmp/ccdjS9oA.s 			page 3
+
+
+ 120 001a 3D8B     		andi	a4,a4,15
+ 121 001c 4204     		slli	s0,s0,16
+ 122 001e 2394E780 		sh	a4,-2040(a5)
+ 123 0022 4180     		srli	s0,s0,16
+ 124 0024 23968780 		sh	s0,-2036(a5)
+ 125 0028 97000000 		call	RTC_ExitConfigMode
+ 125      E7800000 
+ 126 0030 17030000 		tail	__riscv_restore_1
+ 126      67000300 
+ 128              		.section	.text.RTC_SetAlarm,"ax",@progbits
+ 129              		.align	1
+ 130              		.globl	RTC_SetAlarm
+ 132              	RTC_SetAlarm:
+ 133 0000 17030000 		call	t0,__riscv_save_1
+ 133      E7020300 
+ 134 0008 2A84     		mv	s0,a0
+ 135 000a 97000000 		call	RTC_EnterConfigMode
+ 135      E7800000 
+ 136 0012 13570401 		srli	a4,s0,16
+ 137 0016 B7370040 		li	a5,1073754112
+ 138 001a 4204     		slli	s0,s0,16
+ 139 001c 2390E782 		sh	a4,-2016(a5)
+ 140 0020 4180     		srli	s0,s0,16
+ 141 0022 23928782 		sh	s0,-2012(a5)
+ 142 0026 97000000 		call	RTC_ExitConfigMode
+ 142      E7800000 
+ 143 002e 17030000 		tail	__riscv_restore_1
+ 143      67000300 
+ 145              		.section	.text.RTC_GetDivider,"ax",@progbits
+ 146              		.align	1
+ 147              		.globl	RTC_GetDivider
+ 149              	RTC_GetDivider:
+ 150 0000 B7370040 		li	a5,1073754112
+ 151 0004 93870780 		addi	a5,a5,-2048
+ 152              	.L24:
+ 153 0008 962B     		lhu	a3,16(a5)
+ 154 000a 9A2B     		lhu	a4,16(a5)
+ 155 000c 13160701 		slli	a2,a4,16
+ 156 0010 4182     		srli	a2,a2,16
+ 157 0012 E39BE6FE 		bne	a3,a4,.L24
+ 158 0016 B7370040 		li	a5,1073754112
+ 159 001a 93870780 		addi	a5,a5,-2048
+ 160              	.L25:
+ 161 001e D62B     		lhu	a3,20(a5)
+ 162 0020 DA2B     		lhu	a4,20(a5)
+ 163 0022 13150701 		slli	a0,a4,16
+ 164 0026 4181     		srli	a0,a0,16
+ 165 0028 E39BE6FE 		bne	a3,a4,.L25
+ 166 002c 37370040 		li	a4,1073754112
+ 167 0030 13070780 		addi	a4,a4,-2048
+ 168              	.L26:
+ 169 0034 0E2B     		lhu	a1,16(a4)
+ 170 0036 162B     		lhu	a3,16(a4)
+ 171 0038 93970601 		slli	a5,a3,16
+ 172 003c C183     		srli	a5,a5,16
+ 173 003e E39BD5FE 		bne	a1,a3,.L26
+ 174 0042 630DF600 		beq	a2,a5,.L27
+GAS LISTING /tmp/ccdjS9oA.s 			page 4
+
+
+ 175 0046 37370040 		li	a4,1073754112
+ 176 004a 13070780 		addi	a4,a4,-2048
+ 177              	.L28:
+ 178 004e 522B     		lhu	a2,20(a4)
+ 179 0050 562B     		lhu	a3,20(a4)
+ 180 0052 13950601 		slli	a0,a3,16
+ 181 0056 4181     		srli	a0,a0,16
+ 182 0058 E31BD6FE 		bne	a2,a3,.L28
+ 183              	.L27:
+ 184 005c 37070F00 		li	a4,983040
+ 185 0060 C207     		slli	a5,a5,16
+ 186 0062 F98F     		and	a5,a5,a4
+ 187 0064 5D8D     		or	a0,a5,a0
+ 188 0066 8280     		ret
+ 190              		.section	.text.RTC_WaitForLastTask,"ax",@progbits
+ 191              		.align	1
+ 192              		.globl	RTC_WaitForLastTask
+ 194              	RTC_WaitForLastTask:
+ 195 0000 37370040 		li	a4,1073754112
+ 196 0004 13070780 		addi	a4,a4,-2048
+ 197              	.L34:
+ 198 0008 5E23     		lhu	a5,4(a4)
+ 199 000a 93F70702 		andi	a5,a5,32
+ 200 000e EDDF     		beq	a5,zero,.L34
+ 201 0010 8280     		ret
+ 203              		.section	.text.RTC_WaitForSynchro,"ax",@progbits
+ 204              		.align	1
+ 205              		.globl	RTC_WaitForSynchro
+ 207              	RTC_WaitForSynchro:
+ 208 0000 37370040 		li	a4,1073754112
+ 209 0004 83574780 		lhu	a5,-2044(a4)
+ 210 0008 13070780 		addi	a4,a4,-2048
+ 211 000c C207     		slli	a5,a5,16
+ 212 000e C183     		srli	a5,a5,16
+ 213 0010 DD9B     		andi	a5,a5,-9
+ 214 0012 C207     		slli	a5,a5,16
+ 215 0014 C183     		srli	a5,a5,16
+ 216 0016 5EA3     		sh	a5,4(a4)
+ 217              	.L38:
+ 218 0018 5E23     		lhu	a5,4(a4)
+ 219 001a A18B     		andi	a5,a5,8
+ 220 001c F5DF     		beq	a5,zero,.L38
+ 221 001e 8280     		ret
+ 223              		.section	.text.RTC_GetFlagStatus,"ax",@progbits
+ 224              		.align	1
+ 225              		.globl	RTC_GetFlagStatus
+ 227              	RTC_GetFlagStatus:
+ 228 0000 B7370040 		li	a5,1073754112
+ 229 0004 93870780 		addi	a5,a5,-2048
+ 230 0008 DE23     		lhu	a5,4(a5)
+ 231 000a 7D8D     		and	a0,a5,a0
+ 232 000c 3335A000 		snez	a0,a0
+ 233 0010 8280     		ret
+ 235              		.section	.text.RTC_ClearFlag,"ax",@progbits
+ 236              		.align	1
+ 237              		.globl	RTC_ClearFlag
+ 239              	RTC_ClearFlag:
+GAS LISTING /tmp/ccdjS9oA.s 			page 5
+
+
+ 240 0000 B7370040 		li	a5,1073754112
+ 241 0004 03D74780 		lhu	a4,-2044(a5)
+ 242 0008 1345F5FF 		not	a0,a0
+ 243 000c 698F     		and	a4,a4,a0
+ 244 000e 2392E780 		sh	a4,-2044(a5)
+ 245 0012 8280     		ret
+ 247              		.section	.text.RTC_GetITStatus,"ax",@progbits
+ 248              		.align	1
+ 249              		.globl	RTC_GetITStatus
+ 251              	RTC_GetITStatus:
+ 252 0000 37370040 		li	a4,1073754112
+ 253 0004 83574780 		lhu	a5,-2044(a4)
+ 254 0008 03570780 		lhu	a4,-2048(a4)
+ 255 000c C207     		slli	a5,a5,16
+ 256 000e 698F     		and	a4,a4,a0
+ 257 0010 C183     		srli	a5,a5,16
+ 258 0012 09C7     		beq	a4,zero,.L45
+ 259 0014 7D8D     		and	a0,a5,a0
+ 260 0016 3335A000 		snez	a0,a0
+ 261 001a 8280     		ret
+ 262              	.L45:
+ 263 001c 0145     		li	a0,0
+ 264 001e 8280     		ret
+ 266              		.section	.text.RTC_ClearITPendingBit,"ax",@progbits
+ 267              		.align	1
+ 268              		.globl	RTC_ClearITPendingBit
+ 270              	RTC_ClearITPendingBit:
+ 271 0000 17030000 		tail	RTC_ClearFlag
+ 271      67000300 
+ 273              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccdjS9oA.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_rtc.c
+     /tmp/ccdjS9oA.s:11     .text.RTC_ITConfig:0000000000000000 RTC_ITConfig
+     /tmp/ccdjS9oA.s:12     .text.RTC_ITConfig:0000000000000000 $x
+     /tmp/ccdjS9oA.s:28     .text.RTC_EnterConfigMode:0000000000000000 RTC_EnterConfigMode
+     /tmp/ccdjS9oA.s:29     .text.RTC_EnterConfigMode:0000000000000000 $x
+     /tmp/ccdjS9oA.s:39     .text.RTC_ExitConfigMode:0000000000000000 RTC_ExitConfigMode
+     /tmp/ccdjS9oA.s:40     .text.RTC_ExitConfigMode:0000000000000000 $x
+     /tmp/ccdjS9oA.s:54     .text.RTC_GetCounter:0000000000000000 RTC_GetCounter
+     /tmp/ccdjS9oA.s:55     .text.RTC_GetCounter:0000000000000000 $x
+     /tmp/ccdjS9oA.s:97     .text.RTC_SetCounter:0000000000000000 RTC_SetCounter
+     /tmp/ccdjS9oA.s:98     .text.RTC_SetCounter:0000000000000000 $x
+     /tmp/ccdjS9oA.s:114    .text.RTC_SetPrescaler:0000000000000000 RTC_SetPrescaler
+     /tmp/ccdjS9oA.s:115    .text.RTC_SetPrescaler:0000000000000000 $x
+     /tmp/ccdjS9oA.s:132    .text.RTC_SetAlarm:0000000000000000 RTC_SetAlarm
+     /tmp/ccdjS9oA.s:133    .text.RTC_SetAlarm:0000000000000000 $x
+     /tmp/ccdjS9oA.s:149    .text.RTC_GetDivider:0000000000000000 RTC_GetDivider
+     /tmp/ccdjS9oA.s:150    .text.RTC_GetDivider:0000000000000000 $x
+     /tmp/ccdjS9oA.s:194    .text.RTC_WaitForLastTask:0000000000000000 RTC_WaitForLastTask
+     /tmp/ccdjS9oA.s:195    .text.RTC_WaitForLastTask:0000000000000000 $x
+     /tmp/ccdjS9oA.s:207    .text.RTC_WaitForSynchro:0000000000000000 RTC_WaitForSynchro
+     /tmp/ccdjS9oA.s:208    .text.RTC_WaitForSynchro:0000000000000000 $x
+     /tmp/ccdjS9oA.s:227    .text.RTC_GetFlagStatus:0000000000000000 RTC_GetFlagStatus
+     /tmp/ccdjS9oA.s:228    .text.RTC_GetFlagStatus:0000000000000000 $x
+     /tmp/ccdjS9oA.s:239    .text.RTC_ClearFlag:0000000000000000 RTC_ClearFlag
+     /tmp/ccdjS9oA.s:240    .text.RTC_ClearFlag:0000000000000000 $x
+     /tmp/ccdjS9oA.s:251    .text.RTC_GetITStatus:0000000000000000 RTC_GetITStatus
+     /tmp/ccdjS9oA.s:252    .text.RTC_GetITStatus:0000000000000000 $x
+     /tmp/ccdjS9oA.s:270    .text.RTC_ClearITPendingBit:0000000000000000 RTC_ClearITPendingBit
+     /tmp/ccdjS9oA.s:271    .text.RTC_ClearITPendingBit:0000000000000000 $x
+     /tmp/ccdjS9oA.s:19     .text.RTC_ITConfig:0000000000000012 .L2
+     /tmp/ccdjS9oA.s:16     .text.RTC_ITConfig:000000000000000c .L4
+     /tmp/ccdjS9oA.s:57     .text.RTC_GetCounter:0000000000000008 .L8
+     /tmp/ccdjS9oA.s:65     .text.RTC_GetCounter:000000000000001e .L9
+     /tmp/ccdjS9oA.s:73     .text.RTC_GetCounter:0000000000000034 .L10
+     /tmp/ccdjS9oA.s:88     .text.RTC_GetCounter:000000000000005c .L11
+     /tmp/ccdjS9oA.s:82     .text.RTC_GetCounter:000000000000004e .L12
+     /tmp/ccdjS9oA.s:152    .text.RTC_GetDivider:0000000000000008 .L24
+     /tmp/ccdjS9oA.s:160    .text.RTC_GetDivider:000000000000001e .L25
+     /tmp/ccdjS9oA.s:168    .text.RTC_GetDivider:0000000000000034 .L26
+     /tmp/ccdjS9oA.s:183    .text.RTC_GetDivider:000000000000005c .L27
+     /tmp/ccdjS9oA.s:177    .text.RTC_GetDivider:000000000000004e .L28
+     /tmp/ccdjS9oA.s:197    .text.RTC_WaitForLastTask:0000000000000008 .L34
+     /tmp/ccdjS9oA.s:217    .text.RTC_WaitForSynchro:0000000000000018 .L38
+     /tmp/ccdjS9oA.s:262    .text.RTC_GetITStatus:000000000000001c .L45
+
+UNDEFINED SYMBOLS
+__riscv_save_1
+__riscv_restore_1

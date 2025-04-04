@@ -1,0 +1,166 @@
+GAS LISTING /tmp/ccNTog19.s 			page 1
+
+
+   1              		.file	"ch32v20x_dbgmcu.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.DBGMCU_GetREVID,"ax",@progbits
+   8              		.align	1
+   9              		.globl	DBGMCU_GetREVID
+  11              	DBGMCU_GetREVID:
+  12 0000 B7F7FF1F 		li	a5,536866816
+  13 0004 03D56770 		lhu	a0,1798(a5)
+  14 0008 8280     		ret
+  16              		.section	.text.DBGMCU_GetDEVID,"ax",@progbits
+  17              		.align	1
+  18              		.globl	DBGMCU_GetDEVID
+  20              	DBGMCU_GetDEVID:
+  21 0000 B7F7FF1F 		li	a5,536866816
+  22 0004 03D54770 		lhu	a0,1796(a5)
+  23 0008 8280     		ret
+  25              		.section	.text.__get_DEBUG_CR,"ax",@progbits
+  26              		.align	1
+  27              		.globl	__get_DEBUG_CR
+  29              	__get_DEBUG_CR:
+  30              	 #APP
+  31              	# 51 "../../SRC/Peripheral/src/ch32v20x_dbgmcu.c" 1
+   1              	/********************************** (C) COPYRIGHT  *******************************
+   2              	 * File Name          : ch32v20x_dbgmcu.c
+   3              	 * Author             : WCH
+   4              	 * Version            : V1.0.0
+   5              	 * Date               : 2021/06/06
+   6              	 * Description        : This file provides all the DBGMCU firmware functions.
+   7              	 *********************************************************************************
+   8              	 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+   9              	 * Attention: This software (modified or not) and binary are used for 
+  10              	 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+  11              	 *******************************************************************************/
+  12              	#include "ch32v20x_dbgmcu.h"
+  13              	
+  14              	#define IDCODE_DEVID_MASK    ((uint32_t)0x0000FFFF)
+  15              	
+  16              	/*********************************************************************
+  17              	 * @fn      DBGMCU_GetREVID
+  18              	 *
+  19              	 * @brief   Returns the device revision identifier.
+  20              	 *
+  21              	 * @return  Revision identifier.
+  22              	 */
+  23              	uint32_t DBGMCU_GetREVID(void)
+  24              	{
+  25              		return ((*(uint32_t *)0x1FFFF704) >> 16);
+  26              	}
+  27              	
+  28              	/*********************************************************************
+  29              	 * @fn      DBGMCU_GetDEVID
+  30              	 *
+  31              	 * @brief   Returns the device identifier.
+GAS LISTING /tmp/ccNTog19.s 			page 2
+
+
+  32              	 *
+  33              	 * @return  Device identifier.
+  34              	 */
+  35              	uint32_t DBGMCU_GetDEVID(void)
+  36              	{
+  37              		return ((*(uint32_t *)0x1FFFF704) & IDCODE_DEVID_MASK);
+  38              	}
+  39              	
+  40              	/*********************************************************************
+  41              	 * @fn      __get_DEBUG_CR
+  42              	 *
+  43              	 * @brief   Return the DEBUGE Control Register
+  44              	 *
+  45              	 * @return  DEBUGE Control value
+  46              	 */
+  47              	uint32_t __get_DEBUG_CR(void)
+  48              	{
+  49              		uint32_t result;
+  50              	
+  51 0000 7325007C 		__asm volatile("csrr %0,""0x7C0" : "=r"(result));
+  52              		return (result);
+  32              		csrr a0,0x7C0
+  33              	# 0 "" 2
+  34              	 #NO_APP
+  35 0004 8280     		ret
+  37              		.section	.text.__set_DEBUG_CR,"ax",@progbits
+  38              		.align	1
+  39              		.globl	__set_DEBUG_CR
+  41              	__set_DEBUG_CR:
+  42              	 #APP
+  43              	# 66 "../../SRC/Peripheral/src/ch32v20x_dbgmcu.c" 1
+  53              	}
+  54              	
+  55              	/*********************************************************************
+  56              	 * @fn      __set_DEBUG_CR
+  57              	 *
+  58              	 * @brief   Set the DEBUGE Control Register
+  59              	 *
+  60              	 * @param   value  - set DEBUGE Control value
+  61              	 *
+  62              	 * @return  none
+  63              	 */
+  64              	void __set_DEBUG_CR(uint32_t value)
+  65              	{
+  66 0000 7310057C 		__asm volatile("csrw 0x7C0, %0" : : "r"(value));
+  67              	}
+  44              		csrw 0x7C0, a0
+  45              	# 0 "" 2
+  46              	 #NO_APP
+  47 0004 8280     		ret
+  49              		.section	.text.DBGMCU_Config,"ax",@progbits
+  50              		.align	1
+  51              		.globl	DBGMCU_Config
+  53              	DBGMCU_Config:
+  54 0000 81C5     		beq	a1,zero,.L6
+  55              	.L8:
+  56              	 #APP
+GAS LISTING /tmp/ccNTog19.s 			page 3
+
+
+  57              	# 66 "../../SRC/Peripheral/src/ch32v20x_dbgmcu.c" 1
+  58              		csrw 0x7C0, a0
+  59              	# 0 "" 2
+  60              	 #NO_APP
+  61 0006 8280     		ret
+  62              	.L6:
+  63              	 #APP
+  64              	# 51 "../../SRC/Peripheral/src/ch32v20x_dbgmcu.c" 1
+  65              		csrr a5,0x7C0
+  66              	# 0 "" 2
+  67              	 #NO_APP
+  68 000c 1345F5FF 		not	a0,a0
+  69 0010 7D8D     		and	a0,a0,a5
+  70 0012 C5BF     		j	.L8
+  72              		.section	.text.DBGMCU_GetCHIPID,"ax",@progbits
+  73              		.align	1
+  74              		.globl	DBGMCU_GetCHIPID
+  76              	DBGMCU_GetCHIPID:
+  77 0000 B7F7FF1F 		li	a5,536866816
+  78 0004 03A54770 		lw	a0,1796(a5)
+  79 0008 8280     		ret
+  81              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccNTog19.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_dbgmcu.c
+     /tmp/ccNTog19.s:11     .text.DBGMCU_GetREVID:0000000000000000 DBGMCU_GetREVID
+     /tmp/ccNTog19.s:12     .text.DBGMCU_GetREVID:0000000000000000 $x
+     /tmp/ccNTog19.s:20     .text.DBGMCU_GetDEVID:0000000000000000 DBGMCU_GetDEVID
+     /tmp/ccNTog19.s:21     .text.DBGMCU_GetDEVID:0000000000000000 $x
+     /tmp/ccNTog19.s:29     .text.__get_DEBUG_CR:0000000000000000 __get_DEBUG_CR
+../../SRC/Peripheral/src/ch32v20x_dbgmcu.c:51     .text.__get_DEBUG_CR:0000000000000000 $x
+     /tmp/ccNTog19.s:41     .text.__set_DEBUG_CR:0000000000000000 __set_DEBUG_CR
+../../SRC/Peripheral/src/ch32v20x_dbgmcu.c:66     .text.__set_DEBUG_CR:0000000000000000 $x
+     /tmp/ccNTog19.s:53     .text.DBGMCU_Config:0000000000000000 DBGMCU_Config
+     /tmp/ccNTog19.s:54     .text.DBGMCU_Config:0000000000000000 $x
+     /tmp/ccNTog19.s:76     .text.DBGMCU_GetCHIPID:0000000000000000 DBGMCU_GetCHIPID
+     /tmp/ccNTog19.s:77     .text.DBGMCU_GetCHIPID:0000000000000000 $x
+     /tmp/ccNTog19.s:62     .text.DBGMCU_Config:0000000000000008 .L6
+     /tmp/ccNTog19.s:55     .text.DBGMCU_Config:0000000000000002 .L8
+
+NO UNDEFINED SYMBOLS

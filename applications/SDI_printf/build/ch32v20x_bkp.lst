@@ -1,0 +1,219 @@
+GAS LISTING /tmp/ccnLGVO7.s 			page 1
+
+
+   1              		.file	"ch32v20x_bkp.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.BKP_DeInit,"ax",@progbits
+   8              		.align	1
+   9              		.globl	BKP_DeInit
+  11              	BKP_DeInit:
+  12 0000 17030000 		call	t0,__riscv_save_0
+  12      E7020300 
+  13 0008 0545     		li	a0,1
+  14 000a 97000000 		call	RCC_BackupResetCmd
+  14      E7800000 
+  15 0012 0145     		li	a0,0
+  16 0014 97000000 		call	RCC_BackupResetCmd
+  16      E7800000 
+  17 001c 17030000 		tail	__riscv_restore_0
+  17      67000300 
+  19              		.section	.text.BKP_TamperPinLevelConfig,"ax",@progbits
+  20              		.align	1
+  21              		.globl	BKP_TamperPinLevelConfig
+  23              	BKP_TamperPinLevelConfig:
+  24 0000 37770040 		li	a4,1073770496
+  25 0004 835707C3 		lhu	a5,-976(a4)
+  26 0008 130707C0 		addi	a4,a4,-1024
+  27 000c 09C5     		beq	a0,zero,.L4
+  28 000e 93E72700 		ori	a5,a5,2
+  29              	.L6:
+  30 0012 1EBB     		sh	a5,48(a4)
+  31 0014 8280     		ret
+  32              	.L4:
+  33 0016 C207     		slli	a5,a5,16
+  34 0018 C183     		srli	a5,a5,16
+  35 001a F59B     		andi	a5,a5,-3
+  36 001c C207     		slli	a5,a5,16
+  37 001e C183     		srli	a5,a5,16
+  38 0020 CDBF     		j	.L6
+  40              		.section	.text.BKP_TamperPinCmd,"ax",@progbits
+  41              		.align	1
+  42              		.globl	BKP_TamperPinCmd
+  44              	BKP_TamperPinCmd:
+  45 0000 37770040 		li	a4,1073770496
+  46 0004 835707C3 		lhu	a5,-976(a4)
+  47 0008 130707C0 		addi	a4,a4,-1024
+  48 000c 09C5     		beq	a0,zero,.L8
+  49 000e 93E71700 		ori	a5,a5,1
+  50              	.L10:
+  51 0012 1EBB     		sh	a5,48(a4)
+  52 0014 8280     		ret
+  53              	.L8:
+  54 0016 C207     		slli	a5,a5,16
+  55 0018 C183     		srli	a5,a5,16
+  56 001a F99B     		andi	a5,a5,-2
+  57 001c C207     		slli	a5,a5,16
+  58 001e C183     		srli	a5,a5,16
+GAS LISTING /tmp/ccnLGVO7.s 			page 2
+
+
+  59 0020 CDBF     		j	.L10
+  61              		.section	.text.BKP_ITConfig,"ax",@progbits
+  62              		.align	1
+  63              		.globl	BKP_ITConfig
+  65              	BKP_ITConfig:
+  66 0000 37770040 		li	a4,1073770496
+  67 0004 835747C3 		lhu	a5,-972(a4)
+  68 0008 130707C0 		addi	a4,a4,-1024
+  69 000c 09C5     		beq	a0,zero,.L12
+  70 000e 93E74700 		ori	a5,a5,4
+  71              	.L14:
+  72 0012 5EBB     		sh	a5,52(a4)
+  73 0014 8280     		ret
+  74              	.L12:
+  75 0016 C207     		slli	a5,a5,16
+  76 0018 C183     		srli	a5,a5,16
+  77 001a ED9B     		andi	a5,a5,-5
+  78 001c C207     		slli	a5,a5,16
+  79 001e C183     		srli	a5,a5,16
+  80 0020 CDBF     		j	.L14
+  82              		.section	.text.BKP_RTCOutputConfig,"ax",@progbits
+  83              		.align	1
+  84              		.globl	BKP_RTCOutputConfig
+  86              	BKP_RTCOutputConfig:
+  87 0000 37770040 		li	a4,1073770496
+  88 0004 8357C7C2 		lhu	a5,-980(a4)
+  89 0008 C207     		slli	a5,a5,16
+  90 000a C183     		srli	a5,a5,16
+  91 000c 93F7F7C7 		andi	a5,a5,-897
+  92 0010 C98F     		or	a5,a5,a0
+  93 0012 2316F7C2 		sh	a5,-980(a4)
+  94 0016 8280     		ret
+  96              		.section	.text.BKP_SetRTCCalibrationValue,"ax",@progbits
+  97              		.align	1
+  98              		.globl	BKP_SetRTCCalibrationValue
+ 100              	BKP_SetRTCCalibrationValue:
+ 101 0000 37770040 		li	a4,1073770496
+ 102 0004 8357C7C2 		lhu	a5,-980(a4)
+ 103 0008 C207     		slli	a5,a5,16
+ 104 000a C183     		srli	a5,a5,16
+ 105 000c 93F707F8 		andi	a5,a5,-128
+ 106 0010 5D8D     		or	a0,a0,a5
+ 107 0012 2316A7C2 		sh	a0,-980(a4)
+ 108 0016 8280     		ret
+ 110              		.section	.text.BKP_WriteBackupRegister,"ax",@progbits
+ 111              		.align	1
+ 112              		.globl	BKP_WriteBackupRegister
+ 114              	BKP_WriteBackupRegister:
+ 115 0000 4111     		addi	sp,sp,-16
+ 116 0002 B7770040 		li	a5,1073770496
+ 117 0006 02C6     		sw	zero,12(sp)
+ 118 0008 938707C0 		addi	a5,a5,-1024
+ 119 000c 3EC6     		sw	a5,12(sp)
+ 120 000e B247     		lw	a5,12(sp)
+ 121 0010 3E95     		add	a0,a0,a5
+ 122 0012 2AC6     		sw	a0,12(sp)
+ 123 0014 B247     		lw	a5,12(sp)
+GAS LISTING /tmp/ccnLGVO7.s 			page 3
+
+
+ 124 0016 8CC3     		sw	a1,0(a5)
+ 125 0018 4101     		addi	sp,sp,16
+ 126 001a 8280     		jr	ra
+ 128              		.section	.text.BKP_ReadBackupRegister,"ax",@progbits
+ 129              		.align	1
+ 130              		.globl	BKP_ReadBackupRegister
+ 132              	BKP_ReadBackupRegister:
+ 133 0000 4111     		addi	sp,sp,-16
+ 134 0002 B7770040 		li	a5,1073770496
+ 135 0006 02C6     		sw	zero,12(sp)
+ 136 0008 938707C0 		addi	a5,a5,-1024
+ 137 000c 3EC6     		sw	a5,12(sp)
+ 138 000e B247     		lw	a5,12(sp)
+ 139 0010 3E95     		add	a0,a0,a5
+ 140 0012 2AC6     		sw	a0,12(sp)
+ 141 0014 B247     		lw	a5,12(sp)
+ 142 0016 8A23     		lhu	a0,0(a5)
+ 143 0018 4101     		addi	sp,sp,16
+ 144 001a 8280     		jr	ra
+ 146              		.section	.text.BKP_GetFlagStatus,"ax",@progbits
+ 147              		.align	1
+ 148              		.globl	BKP_GetFlagStatus
+ 150              	BKP_GetFlagStatus:
+ 151 0000 B7770040 		li	a5,1073770496
+ 152 0004 03D547C3 		lhu	a0,-972(a5)
+ 153 0008 2181     		srli	a0,a0,8
+ 154 000a 0589     		andi	a0,a0,1
+ 155 000c 8280     		ret
+ 157              		.section	.text.BKP_ClearFlag,"ax",@progbits
+ 158              		.align	1
+ 159              		.globl	BKP_ClearFlag
+ 161              	BKP_ClearFlag:
+ 162 0000 B7770040 		li	a5,1073770496
+ 163 0004 03D747C3 		lhu	a4,-972(a5)
+ 164 0008 13671700 		ori	a4,a4,1
+ 165 000c 239AE7C2 		sh	a4,-972(a5)
+ 166 0010 8280     		ret
+ 168              		.section	.text.BKP_GetITStatus,"ax",@progbits
+ 169              		.align	1
+ 170              		.globl	BKP_GetITStatus
+ 172              	BKP_GetITStatus:
+ 173 0000 B7770040 		li	a5,1073770496
+ 174 0004 03D547C3 		lhu	a0,-972(a5)
+ 175 0008 2581     		srli	a0,a0,9
+ 176 000a 0589     		andi	a0,a0,1
+ 177 000c 8280     		ret
+ 179              		.section	.text.BKP_ClearITPendingBit,"ax",@progbits
+ 180              		.align	1
+ 181              		.globl	BKP_ClearITPendingBit
+ 183              	BKP_ClearITPendingBit:
+ 184 0000 B7770040 		li	a5,1073770496
+ 185 0004 03D747C3 		lhu	a4,-972(a5)
+ 186 0008 13672700 		ori	a4,a4,2
+ 187 000c 239AE7C2 		sh	a4,-972(a5)
+ 188 0010 8280     		ret
+ 190              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccnLGVO7.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ch32v20x_bkp.c
+     /tmp/ccnLGVO7.s:11     .text.BKP_DeInit:0000000000000000 BKP_DeInit
+     /tmp/ccnLGVO7.s:12     .text.BKP_DeInit:0000000000000000 $x
+     /tmp/ccnLGVO7.s:23     .text.BKP_TamperPinLevelConfig:0000000000000000 BKP_TamperPinLevelConfig
+     /tmp/ccnLGVO7.s:24     .text.BKP_TamperPinLevelConfig:0000000000000000 $x
+     /tmp/ccnLGVO7.s:44     .text.BKP_TamperPinCmd:0000000000000000 BKP_TamperPinCmd
+     /tmp/ccnLGVO7.s:45     .text.BKP_TamperPinCmd:0000000000000000 $x
+     /tmp/ccnLGVO7.s:65     .text.BKP_ITConfig:0000000000000000 BKP_ITConfig
+     /tmp/ccnLGVO7.s:66     .text.BKP_ITConfig:0000000000000000 $x
+     /tmp/ccnLGVO7.s:86     .text.BKP_RTCOutputConfig:0000000000000000 BKP_RTCOutputConfig
+     /tmp/ccnLGVO7.s:87     .text.BKP_RTCOutputConfig:0000000000000000 $x
+     /tmp/ccnLGVO7.s:100    .text.BKP_SetRTCCalibrationValue:0000000000000000 BKP_SetRTCCalibrationValue
+     /tmp/ccnLGVO7.s:101    .text.BKP_SetRTCCalibrationValue:0000000000000000 $x
+     /tmp/ccnLGVO7.s:114    .text.BKP_WriteBackupRegister:0000000000000000 BKP_WriteBackupRegister
+     /tmp/ccnLGVO7.s:115    .text.BKP_WriteBackupRegister:0000000000000000 $x
+     /tmp/ccnLGVO7.s:132    .text.BKP_ReadBackupRegister:0000000000000000 BKP_ReadBackupRegister
+     /tmp/ccnLGVO7.s:133    .text.BKP_ReadBackupRegister:0000000000000000 $x
+     /tmp/ccnLGVO7.s:150    .text.BKP_GetFlagStatus:0000000000000000 BKP_GetFlagStatus
+     /tmp/ccnLGVO7.s:151    .text.BKP_GetFlagStatus:0000000000000000 $x
+     /tmp/ccnLGVO7.s:161    .text.BKP_ClearFlag:0000000000000000 BKP_ClearFlag
+     /tmp/ccnLGVO7.s:162    .text.BKP_ClearFlag:0000000000000000 $x
+     /tmp/ccnLGVO7.s:172    .text.BKP_GetITStatus:0000000000000000 BKP_GetITStatus
+     /tmp/ccnLGVO7.s:173    .text.BKP_GetITStatus:0000000000000000 $x
+     /tmp/ccnLGVO7.s:183    .text.BKP_ClearITPendingBit:0000000000000000 BKP_ClearITPendingBit
+     /tmp/ccnLGVO7.s:184    .text.BKP_ClearITPendingBit:0000000000000000 $x
+     /tmp/ccnLGVO7.s:32     .text.BKP_TamperPinLevelConfig:0000000000000016 .L4
+     /tmp/ccnLGVO7.s:29     .text.BKP_TamperPinLevelConfig:0000000000000012 .L6
+     /tmp/ccnLGVO7.s:53     .text.BKP_TamperPinCmd:0000000000000016 .L8
+     /tmp/ccnLGVO7.s:50     .text.BKP_TamperPinCmd:0000000000000012 .L10
+     /tmp/ccnLGVO7.s:74     .text.BKP_ITConfig:0000000000000016 .L12
+     /tmp/ccnLGVO7.s:71     .text.BKP_ITConfig:0000000000000012 .L14
+
+UNDEFINED SYMBOLS
+__riscv_save_0
+RCC_BackupResetCmd
+__riscv_restore_0

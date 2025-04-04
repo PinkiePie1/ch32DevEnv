@@ -1,0 +1,266 @@
+GAS LISTING /tmp/cc8RJRGH.s 			page 1
+
+
+   1              		.file	"debug.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.Delay_Init,"ax",@progbits
+   8              		.align	1
+   9              		.globl	Delay_Init
+  11              	Delay_Init:
+  12 0000 B7070000 		lui	a5,%hi(SystemCoreClock)
+  13 0004 83A70700 		lw	a5,%lo(SystemCoreClock)(a5)
+  14 0008 37177A00 		li	a4,7999488
+  15 000c 13070720 		addi	a4,a4,512
+  16 0010 B3D7E702 		divu	a5,a5,a4
+  17 0014 37070000 		lui	a4,%hi(p_us)
+  18 0018 93F7F70F 		andi	a5,a5,0xff
+  19 001c 2300F700 		sb	a5,%lo(p_us)(a4)
+  20 0020 1307803E 		li	a4,1000
+  21 0024 B387E702 		mul	a5,a5,a4
+  22 0028 37070000 		lui	a4,%hi(p_ms)
+  23 002c 2310F700 		sh	a5,%lo(p_ms)(a4)
+  24 0030 8280     		ret
+  26              		.section	.text.Delay_Us,"ax",@progbits
+  27              		.align	1
+  28              		.globl	Delay_Us
+  30              	Delay_Us:
+  31 0000 B7F700E0 		li	a5,-536809472
+  32 0004 D843     		lw	a4,4(a5)
+  33 0006 8146     		li	a3,0
+  34 0008 799B     		andi	a4,a4,-2
+  35 000a D8C3     		sw	a4,4(a5)
+  36 000c 37070000 		lui	a4,%hi(p_us)
+  37 0010 03470700 		lbu	a4,%lo(p_us)(a4)
+  38 0014 3306A702 		mul	a2,a4,a0
+  39 0018 90CB     		sw	a2,16(a5)
+  40 001a D4CB     		sw	a3,20(a5)
+  41 001c 9843     		lw	a4,0(a5)
+  42 001e 13670701 		ori	a4,a4,16
+  43 0022 98C3     		sw	a4,0(a5)
+  44 0024 9843     		lw	a4,0(a5)
+  45 0026 13671702 		ori	a4,a4,33
+  46 002a 98C3     		sw	a4,0(a5)
+  47              	.L3:
+  48 002c D843     		lw	a4,4(a5)
+  49 002e 058B     		andi	a4,a4,1
+  50 0030 75DF     		beq	a4,zero,.L3
+  51 0032 9843     		lw	a4,0(a5)
+  52 0034 799B     		andi	a4,a4,-2
+  53 0036 98C3     		sw	a4,0(a5)
+  54 0038 8280     		ret
+  56              		.section	.text.Delay_Ms,"ax",@progbits
+  57              		.align	1
+  58              		.globl	Delay_Ms
+  60              	Delay_Ms:
+  61 0000 B7F700E0 		li	a5,-536809472
+  62 0004 D843     		lw	a4,4(a5)
+GAS LISTING /tmp/cc8RJRGH.s 			page 2
+
+
+  63 0006 8146     		li	a3,0
+  64 0008 799B     		andi	a4,a4,-2
+  65 000a D8C3     		sw	a4,4(a5)
+  66 000c 37070000 		lui	a4,%hi(p_ms)
+  67 0010 03570700 		lhu	a4,%lo(p_ms)(a4)
+  68 0014 3306A702 		mul	a2,a4,a0
+  69 0018 90CB     		sw	a2,16(a5)
+  70 001a D4CB     		sw	a3,20(a5)
+  71 001c 9843     		lw	a4,0(a5)
+  72 001e 13670701 		ori	a4,a4,16
+  73 0022 98C3     		sw	a4,0(a5)
+  74 0024 9843     		lw	a4,0(a5)
+  75 0026 13671702 		ori	a4,a4,33
+  76 002a 98C3     		sw	a4,0(a5)
+  77              	.L7:
+  78 002c D843     		lw	a4,4(a5)
+  79 002e 058B     		andi	a4,a4,1
+  80 0030 75DF     		beq	a4,zero,.L7
+  81 0032 9843     		lw	a4,0(a5)
+  82 0034 799B     		andi	a4,a4,-2
+  83 0036 98C3     		sw	a4,0(a5)
+  84 0038 8280     		ret
+  86              		.section	.text.USART_Printf_Init,"ax",@progbits
+  87              		.align	1
+  88              		.globl	USART_Printf_Init
+  90              	USART_Printf_Init:
+  91 0000 17030000 		call	t0,__riscv_save_1
+  91      E7020300 
+  92 0008 2A84     		mv	s0,a0
+  93 000a 1165     		li	a0,16384
+  94 000c 0111     		addi	sp,sp,-32
+  95 000e 8545     		li	a1,1
+  96 0010 1105     		addi	a0,a0,4
+  97 0012 97000000 		call	RCC_APB2PeriphClockCmd
+  97      E7800000 
+  98 001a 93070020 		li	a5,512
+  99 001e 7C82     		sh	a5,4(sp)
+ 100 0020 37150140 		li	a0,1073811456
+ 101 0024 8D47     		li	a5,3
+ 102 0026 3EC4     		sw	a5,8(sp)
+ 103 0028 4C00     		addi	a1,sp,4
+ 104 002a E147     		li	a5,24
+ 105 002c 13050580 		addi	a0,a0,-2048
+ 106 0030 3EC6     		sw	a5,12(sp)
+ 107 0032 97000000 		call	GPIO_Init
+ 107      E7800000 
+ 108 003a 22C8     		sw	s0,16(sp)
+ 109 003c 37440140 		li	s0,1073823744
+ 110 0040 B7070800 		li	a5,524288
+ 111 0044 0C08     		addi	a1,sp,16
+ 112 0046 13050480 		addi	a0,s0,-2048
+ 113 004a 3ECC     		sw	a5,24(sp)
+ 114 004c 02CA     		sw	zero,20(sp)
+ 115 004e 231E0100 		sh	zero,28(sp)
+ 116 0052 97000000 		call	USART_Init
+ 116      E7800000 
+ 117 005a 8545     		li	a1,1
+GAS LISTING /tmp/cc8RJRGH.s 			page 3
+
+
+ 118 005c 13050480 		addi	a0,s0,-2048
+ 119 0060 97000000 		call	USART_Cmd
+ 119      E7800000 
+ 120 0068 0561     		addi	sp,sp,32
+ 121 006a 17030000 		tail	__riscv_restore_1
+ 121      67000300 
+ 123              		.section	.text.SDI_Printf_Enable,"ax",@progbits
+ 124              		.align	1
+ 125              		.globl	SDI_Printf_Enable
+ 127              	SDI_Printf_Enable:
+ 128 0000 17030000 		call	t0,__riscv_save_0
+ 128      E7020300 
+ 129 0008 B70700E0 		li	a5,-536870912
+ 130 000c 23A00738 		sw	zero,896(a5)
+ 131 0010 97000000 		call	Delay_Init
+ 131      E7800000 
+ 132 0018 0545     		li	a0,1
+ 133 001a 97000000 		call	Delay_Ms
+ 133      E7800000 
+ 134 0022 17030000 		tail	__riscv_restore_0
+ 134      67000300 
+ 136              		.section	.text._write,"ax",@progbits
+ 137              		.align	1
+ 138              		.globl	_write
+ 140              	_write:
+ 141 0000 3285     		mv	a0,a2
+ 142 0002 3287     		mv	a4,a2
+ 143 0004 370800E0 		li	a6,-536870912
+ 144 0008 9D48     		li	a7,7
+ 145              	.L15:
+ 146 000a 93060838 		addi	a3,a6,896
+ 147 000e 9C42     		lw	a5,0(a3)
+ 148 0010 EDFF     		bne	a5,zero,.L15
+ 149 0012 83874500 		lb	a5,4(a1)
+ 150 0016 03865500 		lb	a2,5(a1)
+ 151 001a A207     		slli	a5,a5,8
+ 152 001c 4206     		slli	a2,a2,16
+ 153 001e D18F     		or	a5,a5,a2
+ 154 0020 03863500 		lb	a2,3(a1)
+ 155 0024 D18F     		or	a5,a5,a2
+ 156 0026 03866500 		lb	a2,6(a1)
+ 157 002a 6206     		slli	a2,a2,24
+ 158 002c D18F     		or	a5,a5,a2
+ 159 002e 13064838 		addi	a2,a6,900
+ 160 0032 1CC2     		sw	a5,0(a2)
+ 161 0034 83870500 		lb	a5,0(a1)
+ 162 0038 A207     		slli	a5,a5,8
+ 163 003a 63D0E802 		ble	a4,a7,.L16
+ 164 003e 03862500 		lb	a2,2(a1)
+ 165 0042 6517     		addi	a4,a4,-7
+ 166 0044 9D05     		addi	a1,a1,7
+ 167 0046 6206     		slli	a2,a2,24
+ 168 0048 D18F     		or	a5,a5,a2
+ 169 004a 0386A5FF 		lb	a2,-6(a1)
+ 170 004e 4206     		slli	a2,a2,16
+ 171 0050 D18F     		or	a5,a5,a2
+ 172 0052 93E77700 		ori	a5,a5,7
+GAS LISTING /tmp/cc8RJRGH.s 			page 4
+
+
+ 173 0056 9CC2     		sw	a5,0(a3)
+ 174 0058 4DBF     		j	.L15
+ 175              	.L16:
+ 176 005a D98F     		or	a5,a5,a4
+ 177 005c 03871500 		lb	a4,1(a1)
+ 178 0060 4207     		slli	a4,a4,16
+ 179 0062 D98F     		or	a5,a5,a4
+ 180 0064 03872500 		lb	a4,2(a1)
+ 181 0068 6207     		slli	a4,a4,24
+ 182 006a D98F     		or	a5,a5,a4
+ 183 006c 9CC2     		sw	a5,0(a3)
+ 184 006e 8280     		ret
+ 186              		.section	.text._sbrk,"ax",@progbits
+ 187              		.align	1
+ 188              		.globl	_sbrk
+ 190              	_sbrk:
+ 191 0000 B7060000 		lui	a3,%hi(curbrk.0)
+ 192 0004 AA87     		mv	a5,a0
+ 193 0006 03A50600 		lw	a0,%lo(curbrk.0)(a3)
+ 194 000a 37070000 		lui	a4,%hi(_end)
+ 195 000e 13070700 		addi	a4,a4,%lo(_end)
+ 196 0012 AA97     		add	a5,a0,a5
+ 197 0014 63EBE700 		bltu	a5,a4,.L22
+ 198 0018 37070000 		lui	a4,%hi(_heap_end)
+ 199 001c 13070700 		addi	a4,a4,%lo(_heap_end)
+ 200 0020 6365F700 		bgtu	a5,a4,.L22
+ 201 0024 23A0F600 		sw	a5,%lo(curbrk.0)(a3)
+ 202 0028 8280     		ret
+ 203              	.L22:
+ 204 002a 7D55     		li	a0,-1
+ 205 002c 8280     		ret
+ 207              		.section	.sdata.curbrk.0,"aw"
+ 208              		.align	2
+ 211              	curbrk.0:
+ 212 0000 00000000 		.word	_end
+ 213              		.section	.sbss.p_ms,"aw",@nobits
+ 214              		.align	1
+ 217              	p_ms:
+ 218 0000 0000     		.zero	2
+ 219              		.section	.sbss.p_us,"aw",@nobits
+ 222              	p_us:
+ 223 0000 00       		.zero	1
+ 224              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/cc8RJRGH.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 debug.c
+     /tmp/cc8RJRGH.s:11     .text.Delay_Init:0000000000000000 Delay_Init
+     /tmp/cc8RJRGH.s:12     .text.Delay_Init:0000000000000000 $x
+     /tmp/cc8RJRGH.s:222    .sbss.p_us:0000000000000000 p_us
+     /tmp/cc8RJRGH.s:217    .sbss.p_ms:0000000000000000 p_ms
+     /tmp/cc8RJRGH.s:30     .text.Delay_Us:0000000000000000 Delay_Us
+     /tmp/cc8RJRGH.s:31     .text.Delay_Us:0000000000000000 $x
+     /tmp/cc8RJRGH.s:60     .text.Delay_Ms:0000000000000000 Delay_Ms
+     /tmp/cc8RJRGH.s:61     .text.Delay_Ms:0000000000000000 $x
+     /tmp/cc8RJRGH.s:90     .text.USART_Printf_Init:0000000000000000 USART_Printf_Init
+     /tmp/cc8RJRGH.s:91     .text.USART_Printf_Init:0000000000000000 $x
+     /tmp/cc8RJRGH.s:127    .text.SDI_Printf_Enable:0000000000000000 SDI_Printf_Enable
+     /tmp/cc8RJRGH.s:128    .text.SDI_Printf_Enable:0000000000000000 $x
+     /tmp/cc8RJRGH.s:140    .text._write:0000000000000000 _write
+     /tmp/cc8RJRGH.s:141    .text._write:0000000000000000 $x
+     /tmp/cc8RJRGH.s:190    .text._sbrk:0000000000000000 _sbrk
+     /tmp/cc8RJRGH.s:191    .text._sbrk:0000000000000000 $x
+     /tmp/cc8RJRGH.s:211    .sdata.curbrk.0:0000000000000000 curbrk.0
+     /tmp/cc8RJRGH.s:47     .text.Delay_Us:000000000000002c .L3
+     /tmp/cc8RJRGH.s:77     .text.Delay_Ms:000000000000002c .L7
+     /tmp/cc8RJRGH.s:145    .text._write:000000000000000a .L15
+     /tmp/cc8RJRGH.s:175    .text._write:000000000000005a .L16
+     /tmp/cc8RJRGH.s:203    .text._sbrk:000000000000002a .L22
+
+UNDEFINED SYMBOLS
+SystemCoreClock
+__riscv_save_1
+RCC_APB2PeriphClockCmd
+GPIO_Init
+USART_Init
+USART_Cmd
+__riscv_restore_1
+__riscv_save_0
+__riscv_restore_0
+_end
+_heap_end

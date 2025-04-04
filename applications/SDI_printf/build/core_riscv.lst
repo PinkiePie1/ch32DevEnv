@@ -1,0 +1,573 @@
+GAS LISTING /tmp/ccDRtS2v.s 			page 1
+
+
+   1              		.file	"core_riscv.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.__get_MSTATUS,"ax",@progbits
+   8              		.align	1
+   9              		.globl	__get_MSTATUS
+  11              	__get_MSTATUS:
+  12              	 #APP
+  13              	# 46 "../../SRC/Core/core_riscv.c" 1
+   1              	/********************************** (C) COPYRIGHT  *******************************
+   2              	 * File Name          : core_riscv.c
+   3              	 * Author             : WCH
+   4              	 * Version            : V1.0.1
+   5              	 * Date               : 2023/11/11
+   6              	 * Description        : RISC-V V4 Core Peripheral Access Layer Source File for CH32V20x
+   7              	*********************************************************************************
+   8              	* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+   9              	* Attention: This software (modified or not) and binary are used for 
+  10              	* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+  11              	*******************************************************************************/
+  12              	#include <stdint.h>
+  13              	
+  14              	/* define compiler specific symbols */
+  15              	#if defined ( __CC_ARM   )
+  16              	  #define __ASM            __asm                                      /* asm keyword for ARM Compil
+  17              	  #define __INLINE         __inline                                   /* inline keyword for ARM Com
+  18              	
+  19              	#elif defined ( __ICCARM__ )
+  20              	  #define __ASM           __asm                                       /* asm keyword for IAR Compil
+  21              	  #define __INLINE        inline                                      /* inline keyword for IAR Com
+  22              	
+  23              	#elif defined   (  __GNUC__  )
+  24              	  #define __ASM            __asm                                      /* asm keyword for GNU Compil
+  25              	  #define __INLINE         inline                                     /* inline keyword for GNU Com
+  26              	
+  27              	#elif defined   (  __TASKING__  )
+  28              	  #define __ASM            __asm                                      /* asm keyword for TASKING Co
+  29              	  #define __INLINE         inline                                     /* inline keyword for TASKING
+  30              	
+  31              	#endif
+  32              	
+  33              	
+  34              	
+  35              	/*********************************************************************
+  36              	 * @fn      __get_MSTATUS
+  37              	 *
+  38              	 * @brief   Return the Machine Status Register
+  39              	 *
+  40              	 * @return  mstatus value
+  41              	 */
+  42              	uint32_t __get_MSTATUS(void)
+  43              	{
+  44              	  uint32_t result;
+  45              	
+GAS LISTING /tmp/ccDRtS2v.s 			page 2
+
+
+  46 0000 73250030 	  __ASM volatile ( "csrr %0," "mstatus" : "=r" (result) );
+  47              	  return (result);
+  14              		csrr a0,mstatus
+  15              	# 0 "" 2
+  16              	 #NO_APP
+  17 0004 8280     		ret
+  19              		.section	.text.__set_MSTATUS,"ax",@progbits
+  20              		.align	1
+  21              		.globl	__set_MSTATUS
+  23              	__set_MSTATUS:
+  24              	 #APP
+  25              	# 61 "../../SRC/Core/core_riscv.c" 1
+  48              	}
+  49              	
+  50              	/*********************************************************************
+  51              	 * @fn      __set_MSTATUS
+  52              	 *
+  53              	 * @brief   Set the Machine Status Register
+  54              	 *
+  55              	 * @param   value  - set mstatus value
+  56              	 *
+  57              	 * @return  none
+  58              	 */
+  59              	void __set_MSTATUS(uint32_t value)
+  60              	{
+  61 0000 73100530 	  __ASM volatile ("csrw mstatus, %0" : : "r" (value) );
+  62              	}
+  26              		csrw mstatus, a0
+  27              	# 0 "" 2
+  28              	 #NO_APP
+  29 0004 8280     		ret
+  31              		.section	.text.__get_MISA,"ax",@progbits
+  32              		.align	1
+  33              		.globl	__get_MISA
+  35              	__get_MISA:
+  36              	 #APP
+  37              	# 75 "../../SRC/Core/core_riscv.c" 1
+  63              	
+  64              	/*********************************************************************
+  65              	 * @fn      __get_MISA
+  66              	 *
+  67              	 * @brief   Return the Machine ISA Register
+  68              	 *
+  69              	 * @return  misa value
+  70              	 */
+  71              	uint32_t __get_MISA(void)
+  72              	{
+  73              	  uint32_t result;
+  74              	
+  75 0000 73251030 	  __ASM volatile ( "csrr %0," "misa" : "=r" (result) );
+  76              	  return (result);
+  38              		csrr a0,misa
+  39              	# 0 "" 2
+  40              	 #NO_APP
+  41 0004 8280     		ret
+  43              		.section	.text.__set_MISA,"ax",@progbits
+  44              		.align	1
+GAS LISTING /tmp/ccDRtS2v.s 			page 3
+
+
+  45              		.globl	__set_MISA
+  47              	__set_MISA:
+  48              	 #APP
+  49              	# 90 "../../SRC/Core/core_riscv.c" 1
+  77              	}
+  78              	
+  79              	/*********************************************************************
+  80              	 * @fn      __set_MISA
+  81              	 *
+  82              	 * @brief   Set the Machine ISA Register
+  83              	 *
+  84              	 * @param   value  - set misa value
+  85              	 *
+  86              	 * @return  none
+  87              	 */
+  88              	void __set_MISA(uint32_t value)
+  89              	{
+  90 0000 73101530 	  __ASM volatile ("csrw misa, %0" : : "r" (value) );
+  91              	}
+  50              		csrw misa, a0
+  51              	# 0 "" 2
+  52              	 #NO_APP
+  53 0004 8280     		ret
+  55              		.section	.text.__get_MTVEC,"ax",@progbits
+  56              		.align	1
+  57              		.globl	__get_MTVEC
+  59              	__get_MTVEC:
+  60              	 #APP
+  61              	# 104 "../../SRC/Core/core_riscv.c" 1
+  92              	
+  93              	/*********************************************************************
+  94              	 * @fn      __get_MTVEC
+  95              	 *
+  96              	 * @brief   Return the Machine Trap-Vector Base-Address Register
+  97              	 *
+  98              	 * @return  mtvec value
+  99              	 */
+ 100              	uint32_t __get_MTVEC(void)
+ 101              	{
+ 102              	  uint32_t result;
+ 103              	
+ 104 0000 73255030 	  __ASM volatile ( "csrr %0," "mtvec" : "=r" (result) );
+ 105              	  return (result);
+  62              		csrr a0,mtvec
+  63              	# 0 "" 2
+  64              	 #NO_APP
+  65 0004 8280     		ret
+  67              		.section	.text.__set_MTVEC,"ax",@progbits
+  68              		.align	1
+  69              		.globl	__set_MTVEC
+  71              	__set_MTVEC:
+  72              	 #APP
+  73              	# 119 "../../SRC/Core/core_riscv.c" 1
+ 106              	}
+ 107              	
+ 108              	/*********************************************************************
+ 109              	 * @fn      __set_MTVEC
+GAS LISTING /tmp/ccDRtS2v.s 			page 4
+
+
+ 110              	 *
+ 111              	 * @brief   Set the Machine Trap-Vector Base-Address Register
+ 112              	 *
+ 113              	 * @param   value  - set mtvec value
+ 114              	 *
+ 115              	 * @return  none
+ 116              	 */
+ 117              	void __set_MTVEC(uint32_t value)
+ 118              	{
+ 119 0000 73105530 	  __ASM volatile ("csrw mtvec, %0" : : "r" (value) );
+ 120              	}
+  74              		csrw mtvec, a0
+  75              	# 0 "" 2
+  76              	 #NO_APP
+  77 0004 8280     		ret
+  79              		.section	.text.__get_MSCRATCH,"ax",@progbits
+  80              		.align	1
+  81              		.globl	__get_MSCRATCH
+  83              	__get_MSCRATCH:
+  84              	 #APP
+  85              	# 133 "../../SRC/Core/core_riscv.c" 1
+ 121              	
+ 122              	/*********************************************************************
+ 123              	 * @fn      __get_MSCRATCH
+ 124              	 *
+ 125              	 * @brief   Return the Machine Seratch Register
+ 126              	 *
+ 127              	 * @return  mscratch value
+ 128              	 */
+ 129              	uint32_t __get_MSCRATCH(void)
+ 130              	{
+ 131              	  uint32_t result;
+ 132              	
+ 133 0000 73250034 	  __ASM volatile ( "csrr %0," "mscratch" : "=r" (result) );
+ 134              	  return (result);
+  86              		csrr a0,mscratch
+  87              	# 0 "" 2
+  88              	 #NO_APP
+  89 0004 8280     		ret
+  91              		.section	.text.__set_MSCRATCH,"ax",@progbits
+  92              		.align	1
+  93              		.globl	__set_MSCRATCH
+  95              	__set_MSCRATCH:
+  96              	 #APP
+  97              	# 148 "../../SRC/Core/core_riscv.c" 1
+ 135              	}
+ 136              	
+ 137              	/*********************************************************************
+ 138              	 * @fn      __set_MSCRATCH
+ 139              	 *
+ 140              	 * @brief   Set the Machine Seratch Register
+ 141              	 *
+ 142              	 * @param   value  - set mscratch value
+ 143              	 *
+ 144              	 * @return  none
+ 145              	 */
+ 146              	void __set_MSCRATCH(uint32_t value)
+GAS LISTING /tmp/ccDRtS2v.s 			page 5
+
+
+ 147              	{
+ 148 0000 73100534 	  __ASM volatile ("csrw mscratch, %0" : : "r" (value) );
+ 149              	}
+  98              		csrw mscratch, a0
+  99              	# 0 "" 2
+ 100              	 #NO_APP
+ 101 0004 8280     		ret
+ 103              		.section	.text.__get_MEPC,"ax",@progbits
+ 104              		.align	1
+ 105              		.globl	__get_MEPC
+ 107              	__get_MEPC:
+ 108              	 #APP
+ 109              	# 162 "../../SRC/Core/core_riscv.c" 1
+ 150              	
+ 151              	/*********************************************************************
+ 152              	 * @fn      __get_MEPC
+ 153              	 *
+ 154              	 * @brief   Return the Machine Exception Program Register
+ 155              	 *
+ 156              	 * @return  mepc value
+ 157              	 */
+ 158              	uint32_t __get_MEPC(void)
+ 159              	{
+ 160              	  uint32_t result;
+ 161              	
+ 162 0000 73251034 	  __ASM volatile ( "csrr %0," "mepc" : "=r" (result) );
+ 163              	  return (result);
+ 110              		csrr a0,mepc
+ 111              	# 0 "" 2
+ 112              	 #NO_APP
+ 113 0004 8280     		ret
+ 115              		.section	.text.__set_MEPC,"ax",@progbits
+ 116              		.align	1
+ 117              		.globl	__set_MEPC
+ 119              	__set_MEPC:
+ 120              	 #APP
+ 121              	# 175 "../../SRC/Core/core_riscv.c" 1
+ 164              	}
+ 165              	
+ 166              	/*********************************************************************
+ 167              	 * @fn      __set_MEPC
+ 168              	 *
+ 169              	 * @brief   Set the Machine Exception Program Register
+ 170              	 *
+ 171              	 * @return  mepc value
+ 172              	 */
+ 173              	void __set_MEPC(uint32_t value)
+ 174              	{
+ 175 0000 73101534 	  __ASM volatile ("csrw mepc, %0" : : "r" (value) );
+ 176              	}
+ 122              		csrw mepc, a0
+ 123              	# 0 "" 2
+ 124              	 #NO_APP
+ 125 0004 8280     		ret
+ 127              		.section	.text.__get_MCAUSE,"ax",@progbits
+ 128              		.align	1
+ 129              		.globl	__get_MCAUSE
+GAS LISTING /tmp/ccDRtS2v.s 			page 6
+
+
+ 131              	__get_MCAUSE:
+ 132              	 #APP
+ 133              	# 189 "../../SRC/Core/core_riscv.c" 1
+ 177              	
+ 178              	/*********************************************************************
+ 179              	 * @fn      __get_MCAUSE
+ 180              	 *
+ 181              	 * @brief   Return the Machine Cause Register
+ 182              	 *
+ 183              	 * @return  mcause value
+ 184              	 */
+ 185              	uint32_t __get_MCAUSE(void)
+ 186              	{
+ 187              	  uint32_t result;
+ 188              	
+ 189 0000 73252034 	  __ASM volatile ( "csrr %0," "mcause" : "=r" (result) );
+ 190              	  return (result);
+ 134              		csrr a0,mcause
+ 135              	# 0 "" 2
+ 136              	 #NO_APP
+ 137 0004 8280     		ret
+ 139              		.section	.text.__set_MCAUSE,"ax",@progbits
+ 140              		.align	1
+ 141              		.globl	__set_MCAUSE
+ 143              	__set_MCAUSE:
+ 144              	 #APP
+ 145              	# 202 "../../SRC/Core/core_riscv.c" 1
+ 191              	}
+ 192              	
+ 193              	/*********************************************************************
+ 194              	 * @fn      __set_MEPC
+ 195              	 *
+ 196              	 * @brief   Set the Machine Cause Register
+ 197              	 *
+ 198              	 * @return  mcause value
+ 199              	 */
+ 200              	void __set_MCAUSE(uint32_t value)
+ 201              	{
+ 202 0000 73102534 	  __ASM volatile ("csrw mcause, %0" : : "r" (value) );
+ 203              	}
+ 146              		csrw mcause, a0
+ 147              	# 0 "" 2
+ 148              	 #NO_APP
+ 149 0004 8280     		ret
+ 151              		.section	.text.__get_MTVAL,"ax",@progbits
+ 152              		.align	1
+ 153              		.globl	__get_MTVAL
+ 155              	__get_MTVAL:
+ 156              	 #APP
+ 157              	# 216 "../../SRC/Core/core_riscv.c" 1
+ 204              	
+ 205              	/*********************************************************************
+ 206              	 * @fn      __get_MTVAL
+ 207              	 *
+ 208              	 * @brief   Return the Machine Trap Value Register
+ 209              	 *
+ 210              	 * @return  mtval value
+GAS LISTING /tmp/ccDRtS2v.s 			page 7
+
+
+ 211              	 */
+ 212              	uint32_t __get_MTVAL(void)
+ 213              	{
+ 214              	  uint32_t result;
+ 215              	
+ 216 0000 73253034 	  __ASM volatile ( "csrr %0," "mtval" : "=r" (result) );
+ 217              	  return (result);
+ 158              		csrr a0,mtval
+ 159              	# 0 "" 2
+ 160              	 #NO_APP
+ 161 0004 8280     		ret
+ 163              		.section	.text.__set_MTVAL,"ax",@progbits
+ 164              		.align	1
+ 165              		.globl	__set_MTVAL
+ 167              	__set_MTVAL:
+ 168              	 #APP
+ 169              	# 229 "../../SRC/Core/core_riscv.c" 1
+ 218              	}
+ 219              	
+ 220              	/*********************************************************************
+ 221              	 * @fn      __set_MTVAL
+ 222              	 *
+ 223              	 * @brief   Set the Machine Trap Value Register
+ 224              	 *
+ 225              	 * @return  mtval value
+ 226              	 */
+ 227              	void __set_MTVAL(uint32_t value)
+ 228              	{
+ 229 0000 73103534 	  __ASM volatile ("csrw mtval, %0" : : "r" (value) );
+ 230              	}
+ 170              		csrw mtval, a0
+ 171              	# 0 "" 2
+ 172              	 #NO_APP
+ 173 0004 8280     		ret
+ 175              		.section	.text.__get_MVENDORID,"ax",@progbits
+ 176              		.align	1
+ 177              		.globl	__get_MVENDORID
+ 179              	__get_MVENDORID:
+ 180              	 #APP
+ 181              	# 243 "../../SRC/Core/core_riscv.c" 1
+ 231              	
+ 232              	/*********************************************************************
+ 233              	 * @fn      __get_MVENDORID
+ 234              	 *
+ 235              	 * @brief   Return Vendor ID Register
+ 236              	 *
+ 237              	 * @return  mvendorid value
+ 238              	 */
+ 239              	uint32_t __get_MVENDORID(void)
+ 240              	{
+ 241              	  uint32_t result;
+ 242              	
+ 243 0000 732510F1 	  __ASM volatile ( "csrr %0," "mvendorid" : "=r" (result) );
+ 244              	  return (result);
+ 182              		csrr a0,mvendorid
+ 183              	# 0 "" 2
+ 184              	 #NO_APP
+GAS LISTING /tmp/ccDRtS2v.s 			page 8
+
+
+ 185 0004 8280     		ret
+ 187              		.section	.text.__get_MARCHID,"ax",@progbits
+ 188              		.align	1
+ 189              		.globl	__get_MARCHID
+ 191              	__get_MARCHID:
+ 192              	 #APP
+ 193              	# 258 "../../SRC/Core/core_riscv.c" 1
+ 245              	}
+ 246              	
+ 247              	/*********************************************************************
+ 248              	 * @fn      __get_MARCHID
+ 249              	 *
+ 250              	 * @brief   Return Machine Architecture ID Register
+ 251              	 *
+ 252              	 * @return  marchid value
+ 253              	 */
+ 254              	uint32_t __get_MARCHID(void)
+ 255              	{
+ 256              	  uint32_t result;
+ 257              	
+ 258 0000 732520F1 	  __ASM volatile ( "csrr %0," "marchid" : "=r" (result) );
+ 259              	  return (result);
+ 194              		csrr a0,marchid
+ 195              	# 0 "" 2
+ 196              	 #NO_APP
+ 197 0004 8280     		ret
+ 199              		.section	.text.__get_MIMPID,"ax",@progbits
+ 200              		.align	1
+ 201              		.globl	__get_MIMPID
+ 203              	__get_MIMPID:
+ 204              	 #APP
+ 205              	# 273 "../../SRC/Core/core_riscv.c" 1
+ 260              	}
+ 261              	
+ 262              	/*********************************************************************
+ 263              	 * @fn      __get_MIMPID
+ 264              	 *
+ 265              	 * @brief   Return Machine Implementation ID Register
+ 266              	 *
+ 267              	 * @return  mimpid value
+ 268              	 */
+ 269              	uint32_t __get_MIMPID(void)
+ 270              	{
+ 271              	  uint32_t result;
+ 272              	
+ 273 0000 732530F1 	  __ASM volatile ( "csrr %0," "mimpid" : "=r" (result) );
+ 274              	  return (result);
+ 206              		csrr a0,mimpid
+ 207              	# 0 "" 2
+ 208              	 #NO_APP
+ 209 0004 8280     		ret
+ 211              		.section	.text.__get_MHARTID,"ax",@progbits
+ 212              		.align	1
+ 213              		.globl	__get_MHARTID
+ 215              	__get_MHARTID:
+ 216              	 #APP
+ 217              	# 288 "../../SRC/Core/core_riscv.c" 1
+GAS LISTING /tmp/ccDRtS2v.s 			page 9
+
+
+ 275              	}
+ 276              	
+ 277              	/*********************************************************************
+ 278              	 * @fn      __get_MHARTID
+ 279              	 *
+ 280              	 * @brief   Return Hart ID Register
+ 281              	 *
+ 282              	 * @return  mhartid value
+ 283              	 */
+ 284              	uint32_t __get_MHARTID(void)
+ 285              	{
+ 286              	  uint32_t result;
+ 287              	
+ 288 0000 732540F1 	  __ASM volatile ( "csrr %0," "mhartid" : "=r" (result) );
+ 289              	  return (result);
+ 218              		csrr a0,mhartid
+ 219              	# 0 "" 2
+ 220              	 #NO_APP
+ 221 0004 8280     		ret
+ 223              		.section	.text.__get_SP,"ax",@progbits
+ 224              		.align	1
+ 225              		.globl	__get_SP
+ 227              	__get_SP:
+ 228              	 #APP
+ 229              	# 303 "../../SRC/Core/core_riscv.c" 1
+ 290              	}
+ 291              	
+ 292              	/*********************************************************************
+ 293              	 * @fn      __get_SP
+ 294              	 *
+ 295              	 * @brief   Return SP Register
+ 296              	 *
+ 297              	 * @return  SP value
+ 298              	 */
+ 299              	uint32_t __get_SP(void)
+ 300              	{
+ 301              	  uint32_t result;
+ 302              	
+ 303 0000 0A85     	  __ASM volatile ( "mv %0," "sp" : "=r"(result) : );
+ 304              	  return (result);
+ 230              		mv a0,sp
+ 231              	# 0 "" 2
+ 232              	 #NO_APP
+ 233 0002 8280     		ret
+ 235              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccDRtS2v.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 core_riscv.c
+     /tmp/ccDRtS2v.s:11     .text.__get_MSTATUS:0000000000000000 __get_MSTATUS
+../../SRC/Core/core_riscv.c:46     .text.__get_MSTATUS:0000000000000000 $x
+     /tmp/ccDRtS2v.s:23     .text.__set_MSTATUS:0000000000000000 __set_MSTATUS
+../../SRC/Core/core_riscv.c:61     .text.__set_MSTATUS:0000000000000000 $x
+     /tmp/ccDRtS2v.s:35     .text.__get_MISA:0000000000000000 __get_MISA
+../../SRC/Core/core_riscv.c:75     .text.__get_MISA:0000000000000000 $x
+     /tmp/ccDRtS2v.s:47     .text.__set_MISA:0000000000000000 __set_MISA
+../../SRC/Core/core_riscv.c:90     .text.__set_MISA:0000000000000000 $x
+     /tmp/ccDRtS2v.s:59     .text.__get_MTVEC:0000000000000000 __get_MTVEC
+../../SRC/Core/core_riscv.c:104    .text.__get_MTVEC:0000000000000000 $x
+     /tmp/ccDRtS2v.s:71     .text.__set_MTVEC:0000000000000000 __set_MTVEC
+../../SRC/Core/core_riscv.c:119    .text.__set_MTVEC:0000000000000000 $x
+     /tmp/ccDRtS2v.s:83     .text.__get_MSCRATCH:0000000000000000 __get_MSCRATCH
+../../SRC/Core/core_riscv.c:133    .text.__get_MSCRATCH:0000000000000000 $x
+     /tmp/ccDRtS2v.s:95     .text.__set_MSCRATCH:0000000000000000 __set_MSCRATCH
+../../SRC/Core/core_riscv.c:148    .text.__set_MSCRATCH:0000000000000000 $x
+     /tmp/ccDRtS2v.s:107    .text.__get_MEPC:0000000000000000 __get_MEPC
+../../SRC/Core/core_riscv.c:162    .text.__get_MEPC:0000000000000000 $x
+     /tmp/ccDRtS2v.s:119    .text.__set_MEPC:0000000000000000 __set_MEPC
+../../SRC/Core/core_riscv.c:175    .text.__set_MEPC:0000000000000000 $x
+     /tmp/ccDRtS2v.s:131    .text.__get_MCAUSE:0000000000000000 __get_MCAUSE
+../../SRC/Core/core_riscv.c:189    .text.__get_MCAUSE:0000000000000000 $x
+     /tmp/ccDRtS2v.s:143    .text.__set_MCAUSE:0000000000000000 __set_MCAUSE
+../../SRC/Core/core_riscv.c:202    .text.__set_MCAUSE:0000000000000000 $x
+     /tmp/ccDRtS2v.s:155    .text.__get_MTVAL:0000000000000000 __get_MTVAL
+../../SRC/Core/core_riscv.c:216    .text.__get_MTVAL:0000000000000000 $x
+     /tmp/ccDRtS2v.s:167    .text.__set_MTVAL:0000000000000000 __set_MTVAL
+../../SRC/Core/core_riscv.c:229    .text.__set_MTVAL:0000000000000000 $x
+     /tmp/ccDRtS2v.s:179    .text.__get_MVENDORID:0000000000000000 __get_MVENDORID
+../../SRC/Core/core_riscv.c:243    .text.__get_MVENDORID:0000000000000000 $x
+     /tmp/ccDRtS2v.s:191    .text.__get_MARCHID:0000000000000000 __get_MARCHID
+../../SRC/Core/core_riscv.c:258    .text.__get_MARCHID:0000000000000000 $x
+     /tmp/ccDRtS2v.s:203    .text.__get_MIMPID:0000000000000000 __get_MIMPID
+../../SRC/Core/core_riscv.c:273    .text.__get_MIMPID:0000000000000000 $x
+     /tmp/ccDRtS2v.s:215    .text.__get_MHARTID:0000000000000000 __get_MHARTID
+../../SRC/Core/core_riscv.c:288    .text.__get_MHARTID:0000000000000000 $x
+     /tmp/ccDRtS2v.s:227    .text.__get_SP:0000000000000000 __get_SP
+../../SRC/Core/core_riscv.c:303    .text.__get_SP:0000000000000000 $x
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,117 @@
+GAS LISTING /tmp/ccVHmir1.s 			page 1
+
+
+   1              		.file	"main.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0_xw"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              		.section	.text.GPIO_Toggle_INIT,"ax",@progbits
+   8              		.align	1
+   9              		.globl	GPIO_Toggle_INIT
+  11              	GPIO_Toggle_INIT:
+  12 0000 17030000 		call	t0,__riscv_save_0
+  12      E7020300 
+  13 0008 4111     		addi	sp,sp,-16
+  14 000a 8545     		li	a1,1
+  15 000c 1145     		li	a0,4
+  16 000e 02C2     		sw	zero,4(sp)
+  17 0010 02C4     		sw	zero,8(sp)
+  18 0012 02C6     		sw	zero,12(sp)
+  19 0014 97000000 		call	RCC_APB2PeriphClockCmd
+  19      E7800000 
+  20 001c 8547     		li	a5,1
+  21 001e 7C82     		sh	a5,4(sp)
+  22 0020 37150140 		li	a0,1073811456
+  23 0024 C147     		li	a5,16
+  24 0026 3EC6     		sw	a5,12(sp)
+  25 0028 4C00     		addi	a1,sp,4
+  26 002a 8D47     		li	a5,3
+  27 002c 13050580 		addi	a0,a0,-2048
+  28 0030 3EC4     		sw	a5,8(sp)
+  29 0032 97000000 		call	GPIO_Init
+  29      E7800000 
+  30 003a 4101     		addi	sp,sp,16
+  31 003c 17030000 		tail	__riscv_restore_0
+  31      67000300 
+  33              		.section	.rodata.main.str1.4,"aMS",@progbits,1
+  34              		.align	2
+  35              	.LC0:
+  36 0000 53797374 		.string	"SystemClk:%d\r\n"
+  36      656D436C 
+  36      6B3A2564 
+  36      0D0A00
+  37 000f 00       		.align	2
+  38              	.LC1:
+  39 0010 2D444542 		.string	"-DEBUG-PR-%08x\r\n"
+  39      55472D50 
+  39      522D2530 
+  39      38780D0A 
+  39      00
+  40              		.section	.text.startup.main,"ax",@progbits
+  41              		.align	1
+  42              		.globl	main
+  44              	main:
+  45 0000 17030000 		call	t0,__riscv_save_2
+  45      E7020300 
+  46 0008 4111     		addi	sp,sp,-16
+  47 000a 0545     		li	a0,1
+  48 000c 97000000 		call	NVIC_PriorityGroupConfig
+GAS LISTING /tmp/ccVHmir1.s 			page 2
+
+
+  48      E7800000 
+  49 0014 97000000 		call	Delay_Init
+  49      E7800000 
+  50 001c 97000000 		call	SDI_Printf_Enable
+  50      E7800000 
+  51 0024 B7070000 		lui	a5,%hi(SystemCoreClock)
+  52 0028 83A50700 		lw	a1,%lo(SystemCoreClock)(a5)
+  53 002c 37050000 		lui	a0,%hi(.LC0)
+  54 0030 13050500 		addi	a0,a0,%lo(.LC0)
+  55 0034 97000000 		call	printf
+  55      E7800000 
+  56 003c 97000000 		call	GPIO_Toggle_INIT
+  56      E7800000 
+  57 0044 8145     		li	a1,0
+  58 0046 B7040000 		lui	s1,%hi(.LC1)
+  59              	.L4:
+  60 004a 1305803E 		li	a0,1000
+  61 004e 2EC6     		sw	a1,12(sp)
+  62 0050 97000000 		call	Delay_Ms
+  62      E7800000 
+  63 0058 B245     		lw	a1,12(sp)
+  64 005a 13850400 		addi	a0,s1,%lo(.LC1)
+  65 005e 13841500 		addi	s0,a1,1
+  66 0062 1374F40F 		andi	s0,s0,0xff
+  67 0066 97000000 		call	printf
+  67      E7800000 
+  68 006e A285     		mv	a1,s0
+  69 0070 E9BF     		j	.L4
+  71              		.ident	"GCC: (xPack GNU RISC-V Embedded GCC x86_64) 12.2.0"
+GAS LISTING /tmp/ccVHmir1.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccVHmir1.s:11     .text.GPIO_Toggle_INIT:0000000000000000 GPIO_Toggle_INIT
+     /tmp/ccVHmir1.s:12     .text.GPIO_Toggle_INIT:0000000000000000 $x
+     /tmp/ccVHmir1.s:44     .text.startup.main:0000000000000000 main
+     /tmp/ccVHmir1.s:45     .text.startup.main:0000000000000000 $x
+     /tmp/ccVHmir1.s:35     .rodata.main.str1.4:0000000000000000 .LC0
+     /tmp/ccVHmir1.s:38     .rodata.main.str1.4:0000000000000010 .LC1
+     /tmp/ccVHmir1.s:59     .text.startup.main:000000000000004a .L4
+
+UNDEFINED SYMBOLS
+__riscv_save_0
+RCC_APB2PeriphClockCmd
+GPIO_Init
+__riscv_restore_0
+__riscv_save_2
+NVIC_PriorityGroupConfig
+Delay_Init
+SDI_Printf_Enable
+SystemCoreClock
+printf
+Delay_Ms
