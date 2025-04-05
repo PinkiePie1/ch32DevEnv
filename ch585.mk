@@ -8,16 +8,18 @@ $(info build dir at : $(BUILD_DIR))
 ######################################
 # C sources
 C_SOURCES +=	\
-$(wildcard $(SELF_DIR)SRC/Core/*.c) \
-$(wildcard $(SELF_DIR)SRC/Debug/*.c) \
-$(wildcard $(SELF_DIR)SRC/Peripheral/src/*.c) 
+$(wildcard $(SELF_DIR)CH585Libs/HAL/*.c) \
+$(wildcard $(SELF_DIR)CH585Libs/BLELIB/*.c) \
+$(wildcard $(SELF_DIR)CH585Libs/StdPeriphDriver/*.c) 
 
 # c sources here
 C_SOURCES += \
-$(wildcard ./*.c) 
+$(wildcard ./APP/*.c) \
+$(wildcard ./Profile/*.c) 
 
 # ASM sources
-ASM_SOURCES = $(SELF_DIR)SRC/Startup/startup_ch32v20x_D6.S
+ASM_SOURCES = $(SELF_DIR)CH585Libs/Startup/startup_CH585.S
+ASM_SOURCES += $(SELF_DIR)CH585Libs/BLELIB/ble_task_scheduler.S
 
 
 ######################################
@@ -25,16 +27,22 @@ ASM_SOURCES = $(SELF_DIR)SRC/Startup/startup_ch32v20x_D6.S
 ######################################
 # C includes
 C_INCLUDES +=	\
--I"$(SELF_DIR)SRC/Peripheral/inc" \
--I"$(SELF_DIR)SRC/Core" \
--I"$(SELF_DIR)SRC/Debug" 
+-I"$(SELF_DIR)CH585Libs/StdPeriphDriver/inc" \
+-I"$(SELF_DIR)CH585Libs/Startup" \
+-I"$(SELF_DIR)CH585Libs/RVMSIS" \
+-I"$(SELF_DIR)CH585Libs/BLELIB" \
+-I"$(SELF_DIR)CH585Libs/HAL/include" 
+
 
 # add your includes here
 C_INCLUDES += \
--I"./"
+-I"./"\
+-I"./APP/include"\
+-I"./Profile/include"
 
 # AS includes
-AS_INCLUDES = -I"$(SELF_DIR)SRC/Startup" 
+AS_INCLUDES = -I"$(SELF_DIR)CH585Libs/Startup" 
+AS_INCLUDES += -I"$(SELF_DIR)CH585Libs/BLELIB"
 
 # optimization
 OPT = -Os
@@ -43,17 +51,19 @@ OPT = -Os
 # Defines
 ######################################
 # macros for gcc
-C_DEFS =
+C_DEFS =\
+-D CLK_OSC32K=0\
+-D DEBUG=0
 
 # AS defines
-AS_DEFS = 
+AS_DEFS = $(C_DEFS)
 
 
 #######################################
 # Linker
 #######################################
 # link script
-LDSCRIPT = $(SELF_DIR)SRC/Ld/Link.ld
+LDSCRIPT = $(SELF_DIR)CH585Libs/Ld/Link.ld
 
 
 PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/'RISC-V Embedded GCC12'/bin/
@@ -75,21 +85,21 @@ BIN = $(CP) -O binary -S
 # Flags
 #######################################
 # architecture
-ARCH = -march=rv32imacxw -mabi=ilp32
+ARCH = -march=rv32imc_zba_zbb_zbc_zbs_xw -mabi=ilp32
 
 # compile gcc flags
 CFLAGS = $(ARCH)
-CFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
+CFLAGS += -mcmodel=medany -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
--fno-common -Wunused -Wuninitialized
+-fno-common
 CFLAGS += -g
-CFLAGS += $(C_INCLUDES)
+CFLAGS += $(C_INCLUDES) $(C_DEFS)
 CFLAGS += -std=gnu17 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
 ASFLAGS = $(ARCH)
-ASFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
+ASFLAGS += -mcmodel=medany -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
--fno-common -Wunused -Wuninitialized
+-fno-common $(AS_DEFS)
 ASFLAGS += -g -x assembler-with-cpp 
 ASFLAGS += $(AS_INCLUDES)
 ASFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
@@ -97,21 +107,18 @@ ASFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
 
 # libraries
-LIBS = -lprintf
-LIBDIR = 
-LDFLAGS = $(ARCH)  $(LIBDIR) $(PERIFLIB_SOURCES)
+LIBS = -lprintf -lISP585 -lCH58xBLE
+LIBDIR = -L"$(SELF_DIR)CH585Libs/BLELIB" -L"." -L"$(SELF_DIR)CH585Libs/StdPeriphDriver"
+LDFLAGS = $(ARCH) $(PERIFLIB_SOURCES)
 
-LDFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20\
+LDFLAGS += -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20\
 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
--fno-common -Wunused -Wuninitialized -g\
--T $(LDSCRIPT)\
--nostartfiles -Xlinker --gc-sections\
+-fno-common --param=highcode-gen-section-name=1 -g\
+-T $(LDSCRIPT) \
+-nostartfiles -Xlinker --gc-sections $(LIBDIR)\
+-Xlinker --print-memory-usage\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\
 --specs=nano.specs --specs=nosys.specs\
-
-#移除clangd不喜欢的flag
-
-
 
 
 # default action: build all
