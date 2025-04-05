@@ -1,3 +1,0 @@
-CompileFlags:
-  Remove: [-march=*, -mabi=*, -mcpu=*, -msave-restore,-G]
-  CompilationDatabase: ./applications/blink/

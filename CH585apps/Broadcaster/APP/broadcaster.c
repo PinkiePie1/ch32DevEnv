@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2020/08/06
- * Description        : �㲥Ӧ�ó��򣬳�ʼ���㲥���Ӳ�����Ȼ���ڹ㲥̬һֱ�㲥
+ * Description        : 持续广播
 
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
