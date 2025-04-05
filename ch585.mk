@@ -51,9 +51,7 @@ OPT = -Os
 # Defines
 ######################################
 # macros for gcc
-C_DEFS =\
--D CLK_OSC32K=0\
--D DEBUG=0
+C_DEFS ?=
 
 # AS defines
 AS_DEFS = $(C_DEFS)
