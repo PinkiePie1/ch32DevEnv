@@ -40,20 +40,20 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         80
+#define DEFAULT_ADVERTISING_INTERVAL         160
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
 #define DEFAULT_DISCOVERABLE_MODE            GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 6=7.5ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    600
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    50
 
 // Maximum connection interval (units of 1.25ms, 100=125ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    3100
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    100
 
 // Slave latency to use parameter update
-#define DEFAULT_DESIRED_SLAVE_LATENCY        0
+#define DEFAULT_DESIRED_SLAVE_LATENCY        4
 
 // Supervision timeout value (units of 10ms, 100=1s)
 #define DEFAULT_DESIRED_CONN_TIMEOUT         800

@@ -1,7 +1,7 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 BUILD_DIR = objs
-$(info self at: $(SELF_DIR))
-$(info build dir at : $(BUILD_DIR))
+$(info lib file location: $(SELF_DIR))
+$(info build output dir at : $(BUILD_DIR))
 
 ######################################
 # Source
@@ -137,29 +137,29 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
-	@echo "CC $<"
-	$(CC) $(CFLAGS) -c -o "$@" "$<"
+	$(info Compiling c source: $<)
+	@$(CC) $(CFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
-	@echo "AS $<"
-	$(AS) $(ASFLAGS) -c -o "$@" "$<"
+	$(info Compiling assembler source: $<)
+	@$(AS) $(ASFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
-	@echo "LD $@"
-	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
-	@echo "OD $@"
-	$(OD) --all-headers --demangle --disassemble -M xw $(BUILD_DIR)/$(TARGET).elf > $(BUILD_DIR)/$(TARGET).lst 
-	@echo "SZ $@"
-	$(SZ) $@
-#需要移除clangd不喜欢的flag
+	$(info Linking: $@)
+	@$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
+	@$(OD) --all-headers --demangle --disassemble -M xw $(BUILD_DIR)/$(TARGET).elf > $(BUILD_DIR)/$(TARGET).lst 
+	@$(SZ) $@
+
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(HEX) $< $@
+	$(info Generating hex file: $@)
+	@$(HEX) $< $@
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(info Generating bin file: $@)
+	@$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir -p $@
+	@mkdir -p $@
 
 #######################################
 # Clean up

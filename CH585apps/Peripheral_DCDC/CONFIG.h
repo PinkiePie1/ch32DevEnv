@@ -27,6 +27,8 @@
 
 #define DCDC_ENABLE TRUE
 #define HAL_SLEEP TRUE
+#define BLE_MEMHEAP_SIZE (1024*12) // 12K
+#define BLE_BUFF_MAX_LEN 300 // 这样MTU能很高。最高512-4.
 /*********************************************************************
  【MAC】
  BLE_MAC                                    - 是否自定义蓝牙Mac地址 ( 默认:FALSE - 使用芯片Mac地址 )，需要在main.c修改Mac地址定义
