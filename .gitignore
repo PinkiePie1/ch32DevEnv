@@ -54,3 +54,4 @@ dkms.conf
 #bear outputs
 compile_commands.json
 .cache
+objs
