@@ -3,8 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2018/12/10
- * Description        : ����ӻ�������Ӧ�ó��򣬳�ʼ���㲥���Ӳ�����Ȼ��㲥������������
- *                      ����������Ӳ�����ͨ���Զ������������
+ * Description        : 应用层程序主要部分
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -27,10 +26,10 @@
  * CONSTANTS
  */
 
-// How often to perform periodic event
+//多久进行一次周期时间（例程中是周期上报特征4的值）
 #define SBP_PERIODIC_EVT_PERIOD              1600
 
-// How often to perform read rssi event
+//多久进行一次RSSI事件
 #define SBP_READ_RSSI_EVT_PERIOD             3200
 
 // Parameter update delay
@@ -335,7 +334,12 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PARAM_UPDATE_EVT)
     {
-        // Send connect param update request
+        // 与主机协商连接间隔。
+        // 注意协商会在下一次连接时发生
+        // 所以调用函数之后不会立刻生效
+        // 协商失败也不是通过返回值判断
+        // 目前能想到的是判断协商的方式
+        // 就是在数个连接间隔之后重新判断。
         GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
                                              DEFAULT_DESIRED_MIN_CONN_INTERVAL,
                                              DEFAULT_DESIRED_MAX_CONN_INTERVAL,
