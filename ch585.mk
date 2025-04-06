@@ -61,7 +61,9 @@ AS_DEFS = $(C_DEFS)
 # Linker
 #######################################
 # link script
-LDSCRIPT = $(SELF_DIR)CH585Libs/Ld/Link.ld
+LDSCRIPT ?= $(SELF_DIR)CH585Libs/Ld/Link.ld
+
+$(info using LD script: $(LDSCRIPT))
 
 
 PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/'RISC-V Embedded GCC12'/bin/

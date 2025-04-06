@@ -27,7 +27,7 @@
 
 #define DCDC_ENABLE TRUE
 #define HAL_SLEEP TRUE
-#define BLE_MEMHEAP_SIZE (1024*12) // 12K
+#define BLE_MEMHEAP_SIZE (1024*7) // 7K
 #define BLE_BUFF_MAX_LEN 300 // 这样MTU能很高。最高512-4.
 /*********************************************************************
  【MAC】
