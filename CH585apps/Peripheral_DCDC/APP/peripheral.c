@@ -447,6 +447,8 @@ static void Peripheral_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
  * @param   pEvent - event to process
  *
  * @return  none
+ *
+ * @note 连接建立回调函数。建立蓝牙连接的时候会协议栈会调用一次这个函数
  */
 static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
 {
@@ -465,14 +467,27 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         peripheralConnList.connSlaveLatency = event->connLatency;
         peripheralConnList.connTimeout = event->connTimeout;
         peripheralMTU = ATT_MTU_SIZE;
-        // Set timer for periodic event
-        tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, SBP_PERIODIC_EVT_PERIOD);
+        //启用周期事件
+        tmos_start_task(Peripheral_TaskID, 
+        				SBP_PERIODIC_EVT, 
+        				SBP_PERIODIC_EVT_PERIOD);
 
-        // Set timer for param update event
-        tmos_start_task(Peripheral_TaskID, SBP_PARAM_UPDATE_EVT, SBP_PARAM_UPDATE_DELAY);
+        //设置连接间隔更新事件。
+        //连接上主机后，一般来说主机会先用高连接间隔
+        //以发现设备的所有服务，随后会协商到设备喜欢的
+        //连接间隔。所以从机的协商应该在连上之后等一会
+        //再发出。虽然几乎市面上所有的电脑和手机
+        //会尊重从机的选择，但其实连接间隔是由主机最终
+        //决定的，这意味着主机可以改变连接间隔，而从机
+        //应该选择遵守。
+        tmos_start_task(Peripheral_TaskID,
+        				SBP_PARAM_UPDATE_EVT, 
+        				SBP_PARAM_UPDATE_DELAY);
 
         // Start read rssi
-        tmos_start_task(Peripheral_TaskID, SBP_READ_RSSI_EVT, SBP_READ_RSSI_EVT_PERIOD);
+        tmos_start_task(Peripheral_TaskID, 
+        				SBP_READ_RSSI_EVT, 
+        				SBP_READ_RSSI_EVT_PERIOD);
 
         PRINT("Conn %x - Int %x \n", event->connectionHandle, event->connInterval);
     }
