@@ -105,14 +105,14 @@ ASFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
 
 # libraries
-LIBS = -lprintf -lISP585 -lCH58xBLE
-LIBDIR = -L"$(SELF_DIR)CH585Libs/BLELIB" -L"." -L"$(SELF_DIR)CH585Libs/StdPeriphDriver"
+LIBS = -lprintf -lCH58xBLE -lISP585 
+LIBDIR = -L"$(SELF_DIR)CH585Libs/BLELIB" -L"../" -L"$(SELF_DIR)CH585Libs/StdPeriphDriver" 
 LDFLAGS = $(ARCH) $(PERIFLIB_SOURCES)
 
 LDFLAGS += -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20\
 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
 -fno-common --param=highcode-gen-section-name=1 -g\
--T $(LDSCRIPT) \
+-T"$(LDSCRIPT)" \
 -nostartfiles -Xlinker --gc-sections $(LIBDIR)\
 -Xlinker --print-memory-usage\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\

@@ -17,10 +17,7 @@
 *.pch
 
 # Libraries
-*.lib
-*.a
-*.la
-*.lo
+# we actually need libs for BLE.
 
 # Shared objects (inc. Windows DLLs)
 *.dll
