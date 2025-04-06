@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT ******************************
  * File Name         : wchrf.h
  * Author            : WCH
- * Version           : V1.10
- * Date              : 2024/7/27
+ * Version           : V1.33
+ * Date              : 2024/9/27
  * Description       : head file(CH585/CH584)
  *
  * Copyright (c) 2023 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -58,6 +58,7 @@ typedef struct
 #define    RF_STATE_TX_FINISH      (1<<4)
 #define    RF_STATE_TX_IDLE        (1<<5)
 #define    RF_STATE_RX_RETRY       (1<<6)
+#define    RF_STATE_MAP_UPDATE     (1<<7) //!< map update enable
 } rfRoleConfig_t;
 
 /*********************************************************************
@@ -82,6 +83,18 @@ typedef struct
 #define  RF_ROLE_ID_MASK         (0x07)
 #define  RF_ROLE_BOUND_MAX       (0x07)
 #define  RF_ROLE_BOUND_ID        RF_ROLE_ID_INVALD
+#define  RF_ROLE_DISCARDED_EN    (1<<3)
+
+/* bound status */
+#define BOUND_STA_SUCCESS        0x00   //!< Success
+#define BOUND_STA_FAILURE        0x01   //!< Failure
+#define BOUND_STA_INVALIDPARM    0x02   //!< Invalid request field
+#define BOUND_STA_TIMEOUT        0x17   //!< timeout
+
+/* bound request */
+#define  BOUNG_REQ_TYPE          0x01  //!< 4k mode
+#define  BOUNG_FAST_REQ_TYPE     0x02  //!< 8k mode
+#define  BOUNG_UNACK_REQ_TYPE    0x03  //!< unack mode
 
 /* package type */
 typedef struct
@@ -105,6 +118,7 @@ typedef struct
     uint16_t rxMaxLen;            //!< The maximum length of data received
     uint16_t sendInterval;        //!< Resend interval N*0.5us
     uint16_t sendTime;            //!< Time to switch from Rx t0 Tx (N*0.5us)+24us
+    uint8_t mapCheckCount;        //!< Set the threshold of continuous packet loss to determine the quality of the channel.(default 2)
 } rfRoleParam_t;
 
 /* rfip tx parameter */
@@ -119,6 +133,7 @@ typedef struct
                                   //!< BIT4-5 00-1M  01-2M
     uint32_t txDMA;               //!< Tx DMA address
     uint8_t  whiteChannel;        //!< white channel(properties bit2 = 1)
+    uint8_t  sendTime;            //!< Time to switch from Rx t0 Tx (N*0.5us)+24us
     uint16_t sendCount;           //!< resend count
 } rfipTx_t;
 
@@ -140,9 +155,10 @@ typedef struct
 typedef struct
 {
     bStatus_t status; //!< Status for the connection
-    /* SUCESS
-     * bleTimeout:When the connection times out, it automatically switches to the bindable state
-     * FAILURE:If the device binding fails on the device side, the application layer needs to restart the binding */
+    /* SUCCESS
+     * BOUND_STA_FAILURE: If the device binding fails on the device side, the application layer needs to restart the binding
+     * BOUND_STA_INVALIDPARM: When the host receives a mismatched connection request, devType indicates the bound request type of the peer side
+     * BOUND_STA_TIMEOUT: When the connection times out, it automatically switches to the bind state */
     uint8_t role;     //!< the role of the binding
     uint8_t devId;    //!< The ID number of the binding
     uint8_t devType;  //!< The device type of the binding
@@ -185,7 +201,7 @@ typedef struct
     uint8_t devType;   //!< reserved
     uint16_t timeout; //!< Connection communication timeout period (in about 1 ms)
     uint8_t OwnInfo[6]; //!< Local Information
-    uint8_t PeerInfo[6];   //!< Peer information
+    uint8_t PeerInfo[6];   //!< resv
     pfnRfRoleBoundCB rfBoundCB;
     uint32_t ChannelMap;  //!< indicating  Used and Unused data channels.Every channel is represented with a
                           //!< bit positioned as per the data channel index,The LSB represents data channel index 0
@@ -257,6 +273,24 @@ void RFIP_Calibration( void );
 void RFIP_WakeUpRegInit( void );
 
 /**
+ * @brief   rf mode single channel mode.
+ *
+ * @param   ch - rf channel,f=2402+ch*2 MHz, ch=0,...,39
+ *
+ * @return  0 - success, 1- phy busy
+ */
+bStatus_t RFIP_SingleChannel( uint8_t ch );
+
+/**
+ * @brief   used to stop single channel mode.
+ *
+ * @param   None.
+ *
+ * @return  None.
+ */
+void RFIP_TestEnd( void );
+
+/**
  * @brief   library-fast initial
  *
  * @param   pConf - rfRole config
@@ -300,6 +334,15 @@ bStatus_t RFRole_SetParam( rfRoleParam_t *pParam );
  * @return  0-success.
  */
 bStatus_t RFBound_SetSpeedType( rfRoleSpeed_t *pList_t );
+
+/**
+ * @brief   Stop binding, disconnect the connection, and clear the sending and receiving data status.
+ *
+ * @param   None
+ *
+ * @return  0-success.
+ */
+bStatus_t RFBound_Stop( void );
 
 /**
  * @brief   start host mode(8k)
@@ -376,11 +419,45 @@ bStatus_t RFRole_ClearRxData( uint8_t dev_id );
 /**
  * @brief   switch rf mode,must idle status.
  *
- * @param   mode - 0:BLE   1:RF
+ * @param   mode - 0:BLE   1:RF basic  2:RF fast
  *
  * @return  0-success.
  */
 bStatus_t RFRole_SwitchMode( uint8_t mode );
+
+/**
+ * @brief   channel map detection and start map update
+ *
+ * note: only the host role can be called
+ *
+ * @param   rssi -
+ * @param   id -
+ *
+ * @return  0-success.
+ */
+bStatus_t RFRole_MapCheck( int8_t rssi,uint8_t id );
+
+/**
+ * @brief   Set a lower power consumption mode.
+ *
+ * note: only the device role can be called
+ *
+ * @param   level - 0:disable(Slightly improve the transmission efficiency.) others: lower power level
+ *
+ * @return  None.
+ */
+void RFRole_LowPower( uint8_t level );
+
+/**
+ * @brief   start phy update.
+ *
+ * note:  supported in version 1.3 and above.
+ *
+ * @param   phy - 0:1M  1:2M
+ *
+ * @return  0-success.
+ */
+bStatus_t RFRole_PHYUpdate( uint8_t dev_id, uint8_t phy );
 
 /**
  * @brief   library-basic initial

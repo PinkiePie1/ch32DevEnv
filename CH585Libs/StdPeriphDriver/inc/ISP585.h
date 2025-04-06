@@ -4,8 +4,8 @@
 /* Author:   W.ch 2020.06        */
 /* V1.0 FlashROM library for USER/BOOT */
 /* for the target in USER code area on the chip divided into USER code area and BOOT area */
-/* ç”¨äºå…·æœ‰ç”¨æˆ·ä»£ç åŒºå’Œå¼•å¯¼åŒºçš„èŠ¯ç‰‡ã€æ“ä½œç›®æ ‡ä¸ºç”¨æˆ·ä»£ç åŒºçš„æƒ…å†µï¼Œ
-   å¯ä»¥åœ¨ç”¨æˆ·ä»£ç ä¸­è¢«è°ƒç”¨ï¼ˆIAPï¼Œæ“¦å†™è‡ªèº«ï¼‰ï¼Œä¹Ÿå¯ä»¥åœ¨å¼•å¯¼ä»£ç ä¸­è¢«è°ƒç”¨ï¼ˆæ›´æ–°ç”¨æˆ·ä»£ç ï¼‰ */
+/* ÓÃÓÚ¾ßÓĞÓÃ»§´úÂëÇøºÍÒıµ¼ÇøµÄĞ¾Æ¬¡¢²Ù×÷Ä¿±êÎªÓÃ»§´úÂëÇøµÄÇé¿ö£¬
+   ¿ÉÒÔÔÚÓÃ»§´úÂëÖĞ±»µ÷ÓÃ£¨IAP£¬²ÁĞ´×ÔÉí£©£¬Ò²¿ÉÒÔÔÚÒıµ¼´úÂëÖĞ±»µ÷ÓÃ£¨¸üĞÂÓÃ»§´úÂë£© */
 
 /* Flash-ROM feature:
      for store program code, support block erasing, dword and page writing, dword verifying, unit for Length is byte,
@@ -60,8 +60,8 @@
  *
  * @param   cmd         - CMD_* for caller from FlashROM or RAM.
  * @param   StartAddr   - Address of the data to be process.
- * @param   Buffer      - Pointer to the buffer where data should be process, Must be aligned to 4 bytes.
- * @param   Length      - Size of data to be process, in bytes.
+
+ * @param   Buffer      - Pointer to the buffer where data should be process, Must in RAM and be aligned to 4 bytes. * @param   Length      - Size of data to be process, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
  */
@@ -84,7 +84,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
 /**
  * @brief   get 6 bytes MAC address
  *
- * @param   Buffer      - Pointer to the buffer where data should be stored, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the buffer where data should be stored, Must in RAM and be aligned to 4 bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
  */
@@ -93,7 +93,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
 /**
  * @brief   get 8 bytes BOOT information
  *
- * @param   Buffer      - Pointer to the buffer where data should be stored, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the buffer where data should be stored, Must in RAM and be aligned to 4 bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
  */
@@ -117,7 +117,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
  * @brief   read Data-Flash data block
  *
  * @param   StartAddr   - Address of the data to be read.
- * @param   Buffer      - Pointer to the buffer where data should be stored, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the buffer where data should be stored, Must in RAM and be aligned to 4 bytes.
  * @param   Length      - Size of data to be read, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
@@ -137,7 +137,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
  * @brief   write Data-Flash data block
  *
  * @param   StartAddr   - Address of the data to be written.
- * @param   Buffer      - Pointer to the source buffer, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the source buffer, Must in RAM and be aligned to 4 bytes.
  * @param   Length      - Size of data to be written, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
@@ -158,7 +158,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
  * @brief   write FlashROM data block, minimal block is dword.
  *
  * @param   StartAddr   - Address of the data to be written.
- * @param   Buffer      - Pointer to the source buffer, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the source buffer, Must in RAM and be aligned to 4 bytes.
  * @param   Length      - Size of data to be written, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
@@ -169,7 +169,7 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
  * @brief   verify FlashROM data block, minimal block is dword.
  *
  * @param   StartAddr   - Address of the data to verify.
- * @param   Buffer      - Pointer to the source buffer, Must be aligned to 4 bytes.
+ * @param   Buffer      - Pointer to the source buffer, Must in RAM and be aligned to 4 bytes.
  * @param   Length      - Size of data to verify, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE

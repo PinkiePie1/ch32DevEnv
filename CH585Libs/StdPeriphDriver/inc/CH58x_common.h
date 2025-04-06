@@ -46,18 +46,18 @@
 #endif
 
 /**
- * @brief  ç³»ç»Ÿä¸»é¢‘æ—¶é’Ÿï¼ˆHzï¼‰
+ * @brief  ÏµÍ³Ö÷ÆµÊ±ÖÓ£¨Hz£©
  */
 #ifndef	 FREQ_SYS
 #define  FREQ_SYS		62400000
 #endif
 
 #ifndef  SAFEOPERATE
-#define  SAFEOPERATE   __nop();__nop()
+#define  SAFEOPERATE   asm volatile("fence.i")
 #endif
 
 /**
- * @brief  32Kæ—¶é’Ÿï¼ˆHzï¼‰
+ * @brief  32KÊ±ÖÓ£¨Hz£©
  */
 #ifdef CLK_OSC32K
 #if ( CLK_OSC32K == 1 )

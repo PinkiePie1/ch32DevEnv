@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT ******************************
  * File Name         : CH58xBLE_ROM.H
  * Author            : WCH
- * Version           : v1.10
- * Date              : 2024/04/10
+ * Version           : v1.30
+ * Date              : 2025/02/07
  * Description       : head file(ch585/ch584)
  *                    Address Space
  *                       CODE:   00040000H - 0006FFFFH   192K
@@ -124,7 +124,6 @@ typedef struct tag_ble_clock_config
     uint16_t ClockFrequency;        // The timing clock frequency(Hz)
     uint16_t ClockAccuracy;         // The timing clock accuracy(ppm)
     uint8_t  irqEnable;             // resv
-    // resv
     uint32_t Clock1Frequency;
     pfnGetSysClock getClock1Value;
     pfnSetSysClockIRQ SetClock1PendingIRQ;
@@ -156,7 +155,7 @@ typedef struct
 /*********************************************************************
  * GLOBAL MACROS
  */
-#define VER_FILE  "CH585_BLE_LIB_V1.1"
+#define VER_FILE  "CH585_BLE_LIB_V1.3"
 extern const uint8_t VER_LIB[];  // LIB version
 #define SYSTEM_TIME_MICROSEN            625   // unit of process event timer is 625us
 #define MS1_TO_SYSTEM_TIME(x)  ((x)*1000/SYSTEM_TIME_MICROSEN)   // transform unit in ms to unit in 625us ( attentional bias )
@@ -2355,6 +2354,8 @@ typedef int (*pfnEcc_alg_f5_t)( uint8_t *w, uint8_t *n1, uint8_t *n2,
 typedef int (*pfnEcc_alg_f6_t)( uint8_t *w, uint8_t *n1, uint8_t *n2, uint8_t *r,
     uint8_t *iocap, uint8_t a1t, uint8_t *a1, uint8_t a2t, uint8_t *a2, uint8_t *check );
 
+typedef void (*pfnSm_randkey_t)( uint8_t *randkey, uint8_t keylen );
+
 /**
  * Callback Registration Structure
  */
@@ -2366,6 +2367,7 @@ typedef struct
     pfnEcc_alg_g2_t alg_g2; //!< LE Secure Connections numeric comparison value generation function g2
     pfnEcc_alg_f5_t alg_f5; //!< LE Secure Connect ions key generation function  f5
     pfnEcc_alg_f6_t alg_f6; //!< LE Secure  Connections check value generation function  f6
+    pfnSm_randkey_t randkey;
 } gapEccCBs_t;
 
 /**
