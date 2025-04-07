@@ -9,6 +9,9 @@
 
 void paint_SetImageCache(uint8_t *imagePtr);
 void drawLine(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);
+void drawRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);
+void fillRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);
+void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t color);
 
 
 #endif
