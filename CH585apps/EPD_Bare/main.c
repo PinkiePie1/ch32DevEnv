@@ -27,13 +27,21 @@ void main(void)
 {
 	HSECFG_Capacitance(HSECap_18p);
 	SetSysClock(CLK_SOURCE_HSE_PLL_62_4MHz);
-
+	//在sys.c里已经写了highcode_init，并且会放到startup之后
+	//所以在这里初始化时钟应该是不必要的。
+	
+	tickDelayInit();
 	GPIOInit();
+	
+
+	
 
     for(;;)
     {
-    	GPIOA_InverseBits( bv(13)|bv(14)|bv(11)|bv(9)|bv(8)|bv(7) );
-    	DelayMs(1000);
+    
+    	tickDelayMs(1000);
+        GPIOA_InverseBits( bv(13)|bv(14)|bv(11)|bv(9)|bv(8)|bv(7) );
+    	//DelayMs(100);
     }
 	
 }

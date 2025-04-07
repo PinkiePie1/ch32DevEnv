@@ -17,6 +17,7 @@
 extern "C" {
 #endif
 
+
 typedef void (*MachineMode_Call_func)(void);
 
 /**
@@ -191,6 +192,12 @@ void WWDG_ResetCfg(FunctionalState s);
  * @brief   清除看门狗中断标志，重新加载计数值也可清除
  */
 void WWDG_ClearFlag(void);
+
+//使用Systick延时。
+void tickDelayInit(void);
+void tickDelayUs(uint32_t n);
+void tickDelayMs(uint32_t n);
+
 
 /**
  * @brief   uS 延时
