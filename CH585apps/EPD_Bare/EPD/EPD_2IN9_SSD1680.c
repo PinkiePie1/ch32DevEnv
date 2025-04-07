@@ -23,7 +23,7 @@ const uint8_t MyFastFullLUT[159] =
 0x0,    0x0,    0x0,    0x0,    0x0,    0x0,    0x0,
 0x0,    0x0,    0x0,    0x0,    0x0,    0x0,    0x0,
 0x33,   0x44,   0x44,   0x45,   0x43,   0x44,   0x0,    0x0,    0x0,     //FR01 FR23 FR45 FR67 FR89 FR1011 XON0AB0CD1AB1CD2AB2CD3AB3CD XON4_7 XON8_11
-0x22,   0x17,   0x4A,   0x0,    0x38,   0x36                             //EOPT VGH VSH1 VSH2 VSL VCOM
+0x22,   0x17,   0x4A,   0x0,    0x38,   0x36,                              //EOPT VGH VSH1 VSH2 VSL VCOM
 };
 
 
@@ -87,13 +87,14 @@ static void EPD_LUT(const uint8_t *lutPtr)
 	EPD_Cmd(0x32);
 	for(uint16_t i=0; i<153; i++)
 	{
-		EPD_Dat(lutPtr[i]);
+		EPD_Dat( lutPtr[i] );
 	}
+	WAIT_BUSY;
 /*    DC_HIGH;
 	CS_LOW;
 	SPI0_MasterDMATrans(lutPtr,153);
 	CS_HIGH;*/
-	EPD_Cmd( 0x3f );
+	EPD_Cmd( 0x3F );
 	EPD_Dat( lutPtr[153] );
 	EPD_Cmd( 0x03 );
 	EPD_Dat( lutPtr[154] );
@@ -103,7 +104,6 @@ static void EPD_LUT(const uint8_t *lutPtr)
 	EPD_Dat( lutPtr[157] );
 	EPD_Cmd( 0x2c );
 	EPD_Dat( lutPtr[158] );
-	WAIT_BUSY;
 	
 }
 
@@ -159,6 +159,8 @@ void EPD_Init(void)
 
 	EPD_Cmd( 0x21 );
 	EPD_Dat( 0x00 );
+	EPD_Dat( 0x80 );
+	
 	EPD_SetCursor(0, 0);
 	WAIT_BUSY;
 
@@ -169,7 +171,7 @@ void EPD_Init(void)
 void EPD_Update(void)
 {
     EPD_Cmd( 0x22 );
-    EPD_Cmd( 0xC7 );
+    EPD_Dat( 0xC7 );
     EPD_Cmd( 0x20 );
     WAIT_BUSY;	
     
@@ -179,7 +181,7 @@ void EPD_Update(void)
 void EPD_PartialUpdate(void)
 {
     EPD_Cmd( 0x22 );
-    EPD_Cmd( 0x0F );
+    EPD_Dat( 0x0F );
     EPD_Cmd( 0x20 );
     WAIT_BUSY;	
     
@@ -192,7 +194,7 @@ void EPD_Clear(void)
 	EPD_Cmd(0x24);
 	for(uint32_t i = 0; i < 4736; i++)
 	{
-		EPD_Dat(0xF0);
+		EPD_Dat(0xAA);
 	}
 	EPD_Cmd(0x26);
 	for(uint32_t i = 0; i < 4736; i++)
