@@ -8,18 +8,15 @@ $(info build output dir at : $(BUILD_DIR))
 ######################################
 # C sources
 C_SOURCES +=	\
-$(wildcard $(SELF_DIR)CH585Libs/HAL/*.c) \
-$(wildcard $(SELF_DIR)CH585Libs/BLELIB/*.c) \
 $(wildcard $(SELF_DIR)CH585Libs/StdPeriphDriver/*.c) 
 
 # c sources here
 C_SOURCES += \
-$(wildcard ./APP/*.c) \
-$(wildcard ./Profile/*.c) 
+$(wildcard ./*.c)
 
 # ASM sources
-ASM_SOURCES = $(SELF_DIR)CH585Libs/Startup/startup_CH585.S
-ASM_SOURCES += $(SELF_DIR)CH585Libs/BLELIB/ble_task_scheduler.S
+ASM_SOURCES += $(SELF_DIR)CH585Libs/Startup/startup_CH585.S
+
 
 
 ######################################
@@ -30,19 +27,18 @@ C_INCLUDES +=	\
 -I"$(SELF_DIR)CH585Libs/StdPeriphDriver/inc" \
 -I"$(SELF_DIR)CH585Libs/Startup" \
 -I"$(SELF_DIR)CH585Libs/RVMSIS" \
--I"$(SELF_DIR)CH585Libs/BLELIB" \
--I"$(SELF_DIR)CH585Libs/HAL/include" 
+
 
 
 # add your includes here
 C_INCLUDES += \
 -I"./"\
--I"./APP/include"\
--I"./Profile/include"
+-I"./inc"
+
 
 # AS includes
-AS_INCLUDES = -I"$(SELF_DIR)CH585Libs/Startup" 
-AS_INCLUDES += -I"$(SELF_DIR)CH585Libs/BLELIB"
+AS_INCLUDES += -I"$(SELF_DIR)CH585Libs/Startup" 
+
 
 # optimization
 OPT = -Os
