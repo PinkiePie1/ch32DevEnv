@@ -324,7 +324,7 @@ uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i)
 __HIGH_CODE
 void SYS_ResetExecute(void)
 {
-    FLASH_ROM_SW_RESET();
+    FLASH_ROM_SW_RESET();//有需要可以注释掉这个函数，能省下2k左右的RAM。
     sys_safe_access_enable();
     R8_RST_WDOG_CTRL |= RB_SOFTWARE_RESET;
     sys_safe_access_disable();
@@ -462,7 +462,7 @@ __HIGH_CODE
 __attribute__((weak))
 void HardFault_Handler(void)
 {
-    FLASH_ROM_SW_RESET();
+    FLASH_ROM_SW_RESET();//有需要可以注释掉这个函数，能省下2k左右的RAM。
     sys_safe_access_enable();
     R16_INT32K_TUNE = 0xFFFF;
     sys_safe_access_disable();
