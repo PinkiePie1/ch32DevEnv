@@ -6,8 +6,10 @@
  * Description        : 裸机驱动墨水屏
  *********************************************************************************/
 #include "CH58x_common.h"
-
 #include "main.h"
+uint8_t imageCache[4736] = {0};
+
+static void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s++) *s = c; }
 
 static void GPIOInit(void)
 {
@@ -22,11 +24,20 @@ void main(void)
 	//所以在这里初始化时钟是不必要的。	
 	tickDelayInit();
 	GPIOInit();
-
+	
+	mymemset(imageCache,0xFF,4736);
+	paint_SetImageCache(imageCache);
+	
+	drawLine(0,147,127,147,BLACK);
+	drawLine(0,0,0,295,BLACK);
+	drawLine(0,295,127,295,BLACK);
+	drawLine(127,295,127,0,BLACK);
+	drawLine(127,0,0,0,BLACK);
 	GPIOB_ResetBits(GPIO_Pin_6);
 	EPD_Init();
-
 	EPD_Clear();
+	tickDelayMs(15);
+	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
 	while(1);
 	

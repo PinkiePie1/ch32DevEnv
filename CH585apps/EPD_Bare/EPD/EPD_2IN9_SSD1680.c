@@ -194,7 +194,7 @@ void EPD_Clear(void)
 	EPD_Cmd(0x24);
 	for(uint32_t i = 0; i < 4736; i++)
 	{
-		EPD_Dat(0xAA);
+		EPD_Dat(0xFF);
 	}
 	EPD_Cmd(0x26);
 	for(uint32_t i = 0; i < 4736; i++)
@@ -204,6 +204,21 @@ void EPD_Clear(void)
 
 	EPD_Update();
 	
+}
+
+void EPD_SendDisplay(uint8_t *image)
+{
+	EPD_Cmd(0x24);
+	for(uint32_t i=0; i < 4736; i++)
+	{
+		EPD_Dat(image[i]);
+	}
+	EPD_Cmd(0x26);
+	for(uint32_t i=0; i < 4736; i++)
+	{
+		EPD_Dat(image[i]);
+	}
+	EPD_Update();
 }
 
 //让屏幕睡眠

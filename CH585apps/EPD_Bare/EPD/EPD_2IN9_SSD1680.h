@@ -34,5 +34,5 @@ void EPD_Update(void);
 void EPD_PartialUpdate(void);
 void EPD_Clear(void);
 void EPD_Sleep(void);
-
+void EPD_SendDisplay(uint8_t *image);
 #endif
