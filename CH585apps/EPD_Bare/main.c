@@ -5,43 +5,29 @@
  * Date               : 2025/04/07
  * Description        : 裸机驱动墨水屏
  *********************************************************************************/
-
-
-
-
 #include "CH58x_common.h"
+
 #include "main.h"
 
 static void GPIOInit(void)
 {
-	GPIOA_ModeCfg(bv(13)|
-	              bv(14)|
-	              bv(11)|
-	              bv(9)|
-	              bv(8)|
-	              bv(7), 
-	              GPIO_ModeOut_PP_5mA);//PA13,14,9,8,7初始化为输出
+	EPD_Hal_Init();
+	GPIOB_ModeCfg(GPIO_Pin_6,GPIO_ModeOut_PP_5mA);
+	GPIOB_SetBits(GPIO_Pin_6);
 }
 
 void main(void)
 {
-	HSECFG_Capacitance(HSECap_18p);
-	SetSysClock(CLK_SOURCE_HSE_PLL_62_4MHz);
 	//在sys.c里已经写了highcode_init，并且会放到startup之后
-	//所以在这里初始化时钟应该是不必要的。
-	
+	//所以在这里初始化时钟是不必要的。	
 	tickDelayInit();
 	GPIOInit();
-	
 
-	
+	GPIOB_ResetBits(GPIO_Pin_6);
+	EPD_Init();
 
-    for(;;)
-    {
-    
-    	tickDelayMs(1000);
-        GPIOA_InverseBits( bv(13)|bv(14)|bv(11)|bv(9)|bv(8)|bv(7) );
-    	//DelayMs(100);
-    }
+	EPD_Clear();
+	EPD_Sleep();
+	while(1);
 	
 }
