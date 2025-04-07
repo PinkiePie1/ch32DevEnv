@@ -86,26 +86,35 @@ void fillRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 }
 
 //  快速画方块，注意第三和第四个参数是长度，不是终点。
-//  虽然速度很快，但会覆盖非整数倍的方块
-//  在需要擦除一块文字或者画面时会有用。
+//  虽然速度快，但会覆盖非整数倍的方块
+//  在需要擦除一块文字或者画面时会有用
+//  x不能为0，如果有这个需求就多画一条线，此处不实装了。
 void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t color)
 {
 	uint16_t index;
-	
+	uint8_t tmp;
+	//这是边缘的像素块，需要相应的移位到正确的地方
+	//同时需要利用-1移位是补1不是补0
 	int8_t mask1 = color ? (-1) << (7-(x+xblock)&7) : ~(0xFF<<(7-(x+xblock)&7));
-	int8_t mask2 = color ? ~((-1) << (7-x&7))            : (0xFF)<<(7-x&7);
-    //像素所对应的字节的位置
-    for( uint16_t i = y; i <= (y+yblock); i++)
+	int8_t mask2 = color ? ~((-1) << (7-(x-1)&7))       : (0xFF)<<(7-(x-1)&7);
+
+	//覆盖对应的位置，先覆盖头，再覆盖中间，最后覆盖尾。
+    for( uint16_t i = y; i <= (y+yblock); i++ )
     {	
 		index = (x>>3) + (i<<4);
-		image[index] = color ? ( image[index] | mask2 ) : ( image[index] & mask2 );
+		tmp = image[index];
+		image[index] = color ? ( tmp | mask2 ) : ( tmp & mask2 );
+		
     	for (uint16_t j = x+8; j < ( x + xblock ); j += 8 )
     	{
     		index = (j>>3) + (i<<4);
     		image[index] = color;
 		}
+				
 		index = ((x+xblock)>>3) + (i<<4);
-		image[index] = color ? ( image[index] | mask1 ) : ( image[index] & mask1 );
+		tmp = image[index];
+		image[index] = color ? ( tmp | mask1 ) : ( tmp & mask1 );
     }	
 
 }
+//67-2

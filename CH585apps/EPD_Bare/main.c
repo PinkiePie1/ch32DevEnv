@@ -37,11 +37,11 @@ void main(void)
 	drawRect(10,10,50,50,BLACK);
 	fillRect(60,10,80,50,BLACK);
 
-	fastFill(10,60,40,40,BLACK);
+	fastFill(1,51,40,40,BLACK);
 	drawLine(50,25,50,80,BLACK);
 	drawLine(50,100,100,100,BLACK);
 
-	fastFill(23,64,16,16,WHITE);
+	fastFill(23,64,2,2,WHITE);
 	
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
