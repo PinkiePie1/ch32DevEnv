@@ -9,7 +9,8 @@
 #include "main.h"
 uint8_t imageCache[4736] = {0};
 
-static void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s++) *s = c; }
+//和memset
+static inline void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s++) *s = c; }
 
 static void GPIOInit(void)
 {
@@ -26,21 +27,15 @@ void main(void)
 	GPIOInit();
 	
 	mymemset(imageCache,0xFF,4736);
+	
 	paint_SetImageCache(imageCache);
 	
 	drawLine(0,147,127,147,BLACK);
-	drawLine(0,0,0,295,BLACK);
-	drawLine(0,295,127,295,BLACK);
-	drawLine(127,295,127,0,BLACK);
-	drawLine(127,0,0,0,BLACK);
+	drawRect(0,0,127,295,BLACK);
 
 	drawRect(10,10,50,50,BLACK);
-	fillRect(60,10,80,50,BLACK);
 
-	fastFill(1,51,40,40,BLACK);
-	drawLine(50,25,50,80,BLACK);
-	drawLine(50,100,100,100,BLACK);
-
+	fastFill(10,52,40,40,BLACK);
 	fastFill(23,64,2,2,WHITE);
 	
 	

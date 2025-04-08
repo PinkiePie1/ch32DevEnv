@@ -1,7 +1,18 @@
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 BUILD_DIR = objs
+
 $(info lib file location: $(SELF_DIR))
 $(info build output dir at : $(BUILD_DIR))
+
+#烧录工具的地址
+ISPTOOL = $(SELF_DIR)WCHISPTool/WCHISPTool_CH57x-59x.exe
+ISP_CONFIG = $(SELF_DIR)WCHISPTool/CH585.INI
+
+WIN_CONFIG_PATH = "$(shell wslpath -w "$(ISP_CONFIG)")"
+
+WIN_BIN_PATH = "$(shell wslpath -w "$(BUILD_DIR)/$(TARGET).bin")"
+
+$(info using ISP tool: $(ISPTOOL))
 
 ######################################
 # Source
@@ -178,3 +189,7 @@ clangd_clean :
 	rm -rf .cache
 
 build: $(BUILD_DIR)/$(TARGET).bin
+
+flash: $(BUILD_DIR)/$(TARGET).bin
+	$(info "Flashing: $<") 
+	$(ISPTOOL) -c $(WIN_CONFIG_PATH) -f $(WIN_BIN_PATH) -o download

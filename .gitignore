@@ -25,13 +25,20 @@
 *.so.*
 *.dylib
 
+# files of the ISP tool, needed for flashing.
+!CH343PT.DLL
+!WCH55xISPDLL.dll
+
+
 # Executables
-*.exe
+# *.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
+
+!WCHISPTool_CH57x-59x.exe
 
 # Debug files
 *.dSYM/
