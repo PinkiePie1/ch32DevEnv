@@ -99,7 +99,7 @@ CFLAGS = $(ARCH)
 CFLAGS += -mcmodel=medany -msmall-data-limit=8 -msave-restore -fmax-errors=20 $(OPT)\
 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections\
 -fno-common
-CFLAGS += -g
+CFLAGS += -Wl,--wrap=memcpy
 CFLAGS += $(C_INCLUDES) $(C_DEFS)
 CFLAGS += -std=gnu17 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
@@ -126,6 +126,7 @@ LDFLAGS += -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=2
 -Xlinker --print-memory-usage\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\
 --specs=nano.specs --specs=nosys.specs\
+-Wl,--wrap=memcpy\
 
 
 # default action: build all

@@ -1,4 +1,5 @@
 #include "miniGUI.h"
+#include "CH58x_common.h"
 /*
 写显存的重新实现
 只适用于2.9寸的SSD1680
@@ -17,6 +18,7 @@ void paint_SetImageCache(uint8_t *imagePtr)
 }
 
 //设定某个像素的值，x范围0-127，y范围0-295
+__HIGH_CODE
 static inline void setPixel(uint16_t x, uint16_t y, uint8_t color)
 {
 //    x = x>128?128:x; 
@@ -117,4 +119,14 @@ void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t 
     }	
 
 }
-//67-2
+
+
+//快速显示图像，图像的的宽度必须是128，两个参数指定了图像
+//在屏幕上的起点和终点。
+void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
+{
+	uint32_t length = (xEnd-xStart) << 4;
+	memcpy( (void *)( (uint32_t)image+ (xStart<<4)), 
+	imgDat, 
+	length);
+}

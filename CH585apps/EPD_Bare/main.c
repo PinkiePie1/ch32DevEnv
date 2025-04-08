@@ -7,7 +7,7 @@
  *********************************************************************************/
 #include "CH58x_common.h"
 #include "main.h"
-uint8_t imageCache[4736] = {0};
+__attribute__((aligned(4))) uint8_t imageCache[4736] = {0};//显存，为了提高memcpy的速度需要四字节对齐。
 
 //和memset
 static inline void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s++) *s = c; }
@@ -25,7 +25,8 @@ void main(void)
 	//所以在这里初始化时钟是不必要的。	
 	tickDelayInit();
 	GPIOInit();
-	
+
+	GPIOB_SetBits(GPIO_Pin_6);
 	mymemset(imageCache,0xFF,4736);
 	
 	paint_SetImageCache(imageCache);
@@ -37,14 +38,22 @@ void main(void)
 
 	fastFill(10,52,40,40,BLACK);
 	fastFill(23,64,2,2,WHITE);
+
+	FastImg(147,295,gImage_full);
 	
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
 	EPD_Init();
-	EPD_Clear();
-	tickDelayMs(15);
+	
+	//tickDelayMs(15);
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
+	//tickDelayMs(3000);
+	//EPD_Init();
+	//EPD_SendDisplay( (unsigned char *)gImage_full );//显示大图像，直接从flash读取
+
+	
+//	EPD_Sleep();
 	while(1);
 	
 }

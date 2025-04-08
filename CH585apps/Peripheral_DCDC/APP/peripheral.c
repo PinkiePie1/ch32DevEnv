@@ -84,11 +84,8 @@ static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
     // complete name
-    0x0E, // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'M', 'y', 'p', 'e', 'r', 'i', 'p', 'h', 'e', 'r', 'i', 'a', 'l', 
     // connection interval range
-    0x05, // length of this data
+    0x06, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
     LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
     HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
@@ -110,13 +107,19 @@ static uint8_t advertData[] = {
     0x02, // length of this data
     GAP_ADTYPE_FLAGS,
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
+    0x0E, // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'M', 'y', 'p', 'e', 'r', 'i', 'p', 'h', 'e', 'r', 'i', 'a', 'l', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
     0x03,                  // length of this data
     GAP_ADTYPE_16BIT_MORE, // some of the UUID's, but not all
     LO_UINT16(SIMPLEPROFILE_SERV_UUID),
-    HI_UINT16(SIMPLEPROFILE_SERV_UUID)
+    HI_UINT16(SIMPLEPROFILE_SERV_UUID),
+
+  
+    
 };
 
 // GAP GATT Attributes
