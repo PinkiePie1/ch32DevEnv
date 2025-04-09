@@ -88,7 +88,6 @@ void fillRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 }
 
 //  快速画方块，注意第三和第四个参数是长度，不是终点。
-//  虽然速度快，但会覆盖非整数倍的方块
 //  在需要擦除一块文字或者画面时会有用
 //  x不能为0，如果有这个需求就多画一条线，此处不实装了。
 void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t color)
