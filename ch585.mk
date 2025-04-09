@@ -192,5 +192,6 @@ clangd_clean :
 build: $(BUILD_DIR)/$(TARGET).bin
 
 flash: $(BUILD_DIR)/$(TARGET).bin
-	$(info "Flashing: $<") 
-	$(ISPTOOL) -c $(WIN_CONFIG_PATH) -f $(WIN_BIN_PATH) -o download
+	$(info Flashing: $<) 
+	echo $(shell powershell.exe $(ISPTOOL) -c $(WIN_CONFIG_PATH) -f $(WIN_BIN_PATH) -o download)
+#当然也可直接运行命令，但这样能防止ISPtool的输出溢出tmux

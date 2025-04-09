@@ -3,6 +3,7 @@
 //上面这些define是为了防止头文件被重复引用
 
 #include "CH58x_common.h"
+#include "fonts.h"
 
 #define BLACK 0x00//黑色
 #define WHITE 0xFF//白色
@@ -13,6 +14,7 @@ void drawRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 void fillRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);
 void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t color);
 void FastImg(uint16_t xStart, uint16_t xEnd,const char *imgDat);
-
+void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font);
+void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const uint8_t *font);
 
 #endif

@@ -1,5 +1,8 @@
 #include "miniGUI.h"
 #include "CH58x_common.h"
+
+#define FONT_GETWIDTH(x) (x[1])
+#define FONT_GETHEIGHT(x) (x[0])
 /*
 写显存的重新实现
 只适用于2.9寸的SSD1680
@@ -128,4 +131,32 @@ void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 	memcpy( (void *)( (uint32_t)image+ (xStart<<4)), 
 	imgDat, 
 	length);
+}
+
+//x轴只支持字节对齐，也就是只有16行,
+void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
+{	
+	if (FONT_GETHEIGHT(font) == 0x08)
+	{
+		int width = FONT_GETWIDTH(font);
+	    for (uint8_t i=0; i<width; i++)
+	    {
+	    	uint16_t index = (xStart>>3)+((yStart+i)<<4);
+	    	image[index] = ~font[width*(chara-' '+1)+i];
+	    }	
+	}
+}
+
+void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const uint8_t *font)
+{
+	if (FONT_GETHEIGHT(font) == 0x08)
+	{
+		int i = 0;
+		int width = FONT_GETWIDTH(font);
+		for( ; *stringToPrint; stringToPrint++)
+		{
+		    i++;
+			fastDrawChar(xStart,yStart-i*7,*stringToPrint,font8);	
+		}	
+	}
 }

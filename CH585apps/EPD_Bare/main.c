@@ -30,6 +30,8 @@ void main(void)
 	mymemset(imageCache,0xFF,4736);
 	
 	paint_SetImageCache(imageCache);
+
+	FastImg(147,295,gImage_full);
 	
 	drawLine(0,147,127,147,BLACK);
 	drawRect(0,0,127,295,BLACK);
@@ -39,8 +41,21 @@ void main(void)
 	fastFill(10,52,40,40,BLACK);
 	fastFill(23,64,2,2,WHITE);
 
-	FastImg(147,295,gImage_full);
-	
+	fastDrawChar(80,10,'7',font8);
+	fastDrawChar(80,17,'=',font8);
+	fastDrawChar(80,24,'X',font8);
+	fastDrawChar(80,31,'s',font8);
+
+	fastDrawString(88,81,"12345abc",font8);
+/*
+	uint8_t *tstring = (char *)"yuanshen";
+	int i = 0;
+	for( ; *tstring; tstring++)
+	{
+	    i++;
+		fastDrawChar(96,100-i*7,*tstring,font8);	
+	}
+*/	
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
 	EPD_Init();
