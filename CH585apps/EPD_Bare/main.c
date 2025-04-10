@@ -47,21 +47,25 @@ void main(void)
 	fastRect(10,10,50,50,BLACK);
 	fastDrawString(80,90,"1234567890abcdefghijklmnopqrstuvwxyz,./?;:!@#$%^&*()",font8);
 
-	//需要setpixel的显示字符串，几个毫秒
-//	drawChar(77,50,'y',font8,WHITE);
-//	drawChar(77,50,'y',font8,WHITE);
-//	drawChar(77,50,'y',font8,WHITE);
+	//需要setpixel的显示字符
 //	drawChar(77,50,'y',font8,WHITE);
 //	drawStr(60,81,"12345abc",font8,WHITE);
 
-//	drawStr(60,145,"This is EPD test program.",font8,WHITE);
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
-	//tickDelayMs(3000);
-	//EPD_Init();
+	tickDelayMs(3000);
+	//局刷
+	drawStr(60,145,"This is EPD test program.",font8,WHITE);
+	for(int i=0;i<9;i++)
+	{
+	drawChar(80,138,i+'1',font8,BLACK);
+	EPD_PartialDisplay(imageCache);
+	EPD_Sleep();
+	tickDelayMs(1000);
+	}
 	//EPD_SendDisplay( (unsigned char *)gImage_full );//显示大图像，直接从flash读取
 
 	
