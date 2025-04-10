@@ -210,7 +210,7 @@ void EPD_Update(void)
 void EPD_PartialUpdate(void)
 {
     EPD_Cmd( 0x22 );
-    EPD_Dat( 0x0F );
+    EPD_Dat( 0xCF );
     EPD_Cmd( 0x20 );
     WAIT_BUSY;	
     
@@ -223,12 +223,12 @@ void EPD_Clear(void)
 	EPD_Cmd(0x24);
 	for(uint32_t i = 0; i < 4736; i++)
 	{
-		EPD_Dat(0xFF);
+		EPD_Dat(0x00);
 	}
 	EPD_Cmd(0x26);
 	for(uint32_t i = 0; i < 4736; i++)
 	{
-		EPD_Dat(0xFF);
+		EPD_Dat(0x00);
 	}
 
 	EPD_Update();
@@ -263,6 +263,8 @@ void EPD_PartialDisplay(uint8_t *image)
 	devDelay( 100 );
 
 	EPD_LUT(MyPartialLUT);
+	//可以不用指定WS，因为用的是内存里的LUT
+	/*
 	EPD_Cmd( 0x37 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
@@ -274,16 +276,18 @@ void EPD_PartialDisplay(uint8_t *image)
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
-
+*/
     //边框颜色,这里边框接地
 	EPD_Cmd( 0x3C );
 	EPD_Dat( 0x80 );
 
+	//可以不用先开启analog，等刷新指令的时候再开也不迟
+/*
 	EPD_Cmd( 0x22 );
 	EPD_Dat( 0xC0 );
 	EPD_Cmd( 0x20 );
 	WAIT_BUSY;
-
+*/	
 	EPD_SetWindows(0, 0, EPD_WIDTH-1, EPD_HEIGHT-1);
 	EPD_SetCursor(0, 0);
 
