@@ -269,15 +269,15 @@ void EPD_PartialDisplay(uint8_t *image)
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
-	EPD_Dat( 0x40 );
+	EPD_Dat( 0x40|1<<6 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
 	EPD_Dat( 0x00 );
 
-		//边框颜色
+    //边框颜色,这里边框接地
 	EPD_Cmd( 0x3C );
-	EPD_Dat( 0x02 );
+	EPD_Dat( 0x80 );
 
 	EPD_Cmd( 0x22 );
 	EPD_Dat( 0xC0 );
@@ -287,8 +287,8 @@ void EPD_PartialDisplay(uint8_t *image)
 	EPD_SetWindows(0, 0, EPD_WIDTH-1, EPD_HEIGHT-1);
 	EPD_SetCursor(0, 0);
 
+//传送显示数据，不需要传送0x26
 	EPD_Cmd(0x24);
-	
     DC_HIGH;
 	CS_LOW;
 	SPI0_MasterDMATrans(image,4000);
