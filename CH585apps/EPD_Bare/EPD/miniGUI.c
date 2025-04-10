@@ -130,8 +130,7 @@ void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t 
 
 }
 
-//快速画方框，注意会清空中间的部分，且不检查参数顺序是否合理,输入的End必须大于
-//start。
+//快速画方框，注意不检查参数顺序是否合理,输入的End必须大于start。
 void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color)
 {	
 	uint16_t xblock = xEnd-xStart;
@@ -143,7 +142,7 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 	int8_t mask1 = color ? 0x80 >> ((xEnd)&7) : ~(0x80>>((xEnd)&7));
 	int8_t mask2 = color ? 0x80 >> ((xStart)&7) : ~(0x80)>>((xStart)&7);
 
-	//覆盖对应的位置，先覆盖头尾。
+	//覆盖对应的位置
     for( uint16_t i = yStart; i <= (yEnd); i++ )
     {	
 		index = (xStart>>3) + (i<<4);
@@ -161,6 +160,7 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 			image[(xEnd>>3)+(i<<4)] = color ?
 			                          (tmp | ~(0xFF>>(xEnd&7))) :
 			                          (tmp & (0xFF>>(xEnd&7))); 
+			                          
 	    	for (uint16_t j = xStart+8; j < xEnd; j += 8 )
 	    	{
 	    		index = (j>>3) + (i<<4);
@@ -168,7 +168,8 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 	    		
 			}
 			
-		}				
+		}	
+					
 		index = (xEnd>>3) + (i<<4);
 		tmp = image[index];
 		image[index] = color ? ( tmp | mask1 ) : ( tmp & mask1 );
@@ -206,12 +207,15 @@ void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const 
 {
 	if (FONT_GETHEIGHT(font) == 0x08)
 	{
-		int i = 0;
+		uint16_t y = yStart;
+		uint16_t x = xStart;
 		int width = FONT_GETWIDTH(font);
 		for( ; *stringToPrint; stringToPrint++)
-		{
-		    i++;
-			fastDrawChar(xStart,yStart-i*7,*stringToPrint,font8);	
+		{	
+			x = y>=width? x : x+FONT_GETHEIGHT(font);
+			y = y>=width? y-width : yStart-width;
+			fastDrawChar(x,y,*stringToPrint,font);
+
 		}	
 	}
 }
@@ -237,12 +241,15 @@ void drawChar(uint16_t xStart, uint16_t yStart, char charToPrint, const char *fo
 //正常画字符串
 void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *font, uint8_t color)
 {
-	int i = 0;
+	int x = xStart;
+	int y = yStart;
 	int width = FONT_GETWIDTH(font);
 	for( ; *stringToPrint; stringToPrint++)
 	{
-	    i++;
-		drawChar(xStart,yStart-i*width,*stringToPrint,font8,color);	
+		x = y>=width? x : x+FONT_GETHEIGHT(font);
+		y = y>=width? y-width : yStart-width;
+		drawChar(x,y,*stringToPrint,font,color);	
+
 	}	
 	
 }

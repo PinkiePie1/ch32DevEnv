@@ -47,6 +47,7 @@ void EPD_Hal_Init(void)
    GPIOA_ModeCfg(EPD_BUSY_PIN, GPIO_ModeIN_PU);
 
    SPI0_MasterDefInit();//默认的SPI初始化，三线全双工。后续需要改
+   SPI0_CLKCfg(2); //2分频
    CS_HIGH;
    RES_HIGH;
    DC_HIGH;
@@ -86,15 +87,13 @@ static void EPD_HardReset(void)
 static void EPD_LUT(const uint8_t *lutPtr)
 {
 	EPD_Cmd(0x32);
+	
 	for(uint16_t i=0; i<153; i++)
 	{
 		EPD_Dat( lutPtr[i] );
 	}
+	
 	WAIT_BUSY;
-/*    DC_HIGH;
-	CS_LOW;
-	SPI0_MasterDMATrans(lutPtr,153);
-	CS_HIGH;*/
 	EPD_Cmd( 0x3F );
 	EPD_Dat( lutPtr[153] );
 	EPD_Cmd( 0x03 );
@@ -214,15 +213,21 @@ void EPD_Clear(void)
 void EPD_SendDisplay(uint8_t *image)
 {
 	EPD_Cmd(0x24);
-	for(uint32_t i=0; i < 4736; i++)
-	{
-		EPD_Dat(image[i]);
-	}
+	
+    DC_HIGH;
+	CS_LOW;
+	SPI0_MasterDMATrans(image,4000);
+	SPI0_MasterDMATrans(image+4000,736);
+	CS_HIGH;
+
 	EPD_Cmd(0x26);
-	for(uint32_t i=0; i < 4736; i++)
-	{
-		EPD_Dat(image[i]);
-	}
+	
+    DC_HIGH;
+	CS_LOW;
+	SPI0_MasterDMATrans(image,4000);
+	SPI0_MasterDMATrans(image+4000,736);
+	CS_HIGH;
+
 	EPD_Update();
 }
 

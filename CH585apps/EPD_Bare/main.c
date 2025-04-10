@@ -32,24 +32,20 @@ void main(void)
 	
 	paint_SetImageCache(imageCache);
 
-	//显示图片,100us左右
+	//快速显示图片,100us左右
 	FastImg(147,295,gImage_full+16*10);
 
-	//需要setpixel的画图，3-4毫秒
-//	drawLine(0,147,127,147,BLACK);
-	drawRect(0,0,127,295,BLACK);
-	drawRect(10,10,50,50,BLACK);
+	//需要setpixel的画图
+	drawLine(0,147,127,147,BLACK);
+//	drawRect(0,0,127,295,BLACK);
+//	drawRect(10,10,50,50,BLACK);
 
-	//快速画图与快速显示字符串，900us
+	//快速画图与快速显示字符串
 	fastFill(10,52,40,40,BLACK);
 	fastFill(23,64,2,2,WHITE);
-//	fastRect(0,0,127,295,BLACK);
-//	fastRect(10,10,50,50,BLACK);
-	fastDrawChar(80,10,'7',font8);
-	fastDrawChar(80,17,'=',font8);
-	fastDrawChar(80,24,'s',font8);
-	fastDrawChar(80,31,'x',font8);
-	fastDrawString(88,81,"12345abc",font8);
+	fastRect(0,0,127,295,BLACK);
+	fastRect(10,10,50,50,BLACK);
+	fastDrawString(80,90,"1234567890abcdefghijklmnopqrstuvwxyz,./?;:!@#$%^&*()",font8);
 
 	//需要setpixel的显示字符串，几个毫秒
 //	drawChar(77,50,'y',font8,WHITE);
@@ -57,6 +53,8 @@ void main(void)
 //	drawChar(77,50,'y',font8,WHITE);
 //	drawChar(77,50,'y',font8,WHITE);
 //	drawStr(60,81,"12345abc",font8,WHITE);
+
+//	drawStr(60,145,"This is EPD test program.",font8,WHITE);
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
 	EPD_Init();	
