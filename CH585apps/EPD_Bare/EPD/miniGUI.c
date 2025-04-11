@@ -225,11 +225,12 @@ void drawChar(uint16_t xStart, uint16_t yStart, char charToPrint, const char *fo
 {
 	uint8_t height = FONT_GETHEIGHT(font);
 	uint8_t width = FONT_GETWIDTH(font);
+	int8_t shift = ((FONT_GETHEIGHT(font)-1)>>3)+1;
 	for (int i = 0; i<width; i++)
 	{
 		for(int j = 0; j<height; j++)
 		{
-			if(font[width*(charToPrint-' '+1)+i] & 0x80>>j)
+			if(font[width*shift*(charToPrint-' '+1)+i*shift+(j>>3)] & (0x80>>(j&7)))
 				{setPixel(xStart+j,yStart+i,color);}
 			else
 				{setPixel(xStart+j,yStart+i,~color);}

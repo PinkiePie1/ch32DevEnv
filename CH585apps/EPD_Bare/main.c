@@ -41,15 +41,19 @@ void main(void)
 //	drawRect(10,10,50,50,BLACK);
 
 	//快速画图与快速显示字符串
-	fastFill(10,52,40,40,BLACK);
+	fastFill(5,52,40,40,BLACK);
 	fastFill(23,64,2,2,WHITE);
 	fastRect(0,0,127,295,BLACK);
-	fastRect(10,10,50,50,BLACK);
+	fastRect(5,10,50,50,BLACK);
 	fastDrawString(80,90,"1234567890abcdefghijklmnopqrstuvwxyz,./?;:!@#$%^&*()",font8);
+
+	
+
+
 
 	//需要setpixel的显示字符
 //	drawChar(77,50,'y',font8,WHITE);
-//	drawStr(60,81,"12345abc",font8,WHITE);
+//	drawStr(60,81,"12345abc",font14,WHITE);
 
 	
 	GPIOB_ResetBits(GPIO_Pin_6);
@@ -58,10 +62,13 @@ void main(void)
 	EPD_Sleep();
 	tickDelayMs(3000);
 	//局刷
-	drawStr(60,145,"This is EPD test program.",font8,WHITE);
+	drawStr(51,145,"This is EPD test program.",font14,WHITE);
+	drawStr(66,80,"font8",font8,BLACK);
+
+	
 	for(int i=0;i<9;i++)
 	{
-	drawChar(80,138,i+'1',font8,BLACK);
+	drawChar(100,110,i+'1',font14,BLACK);
 	EPD_PartialDisplay(imageCache);
 	EPD_Sleep();
 	tickDelayMs(1000);
