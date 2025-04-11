@@ -109,11 +109,6 @@ LDFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\
 --specs=nano.specs --specs=nosys.specs\
 
-#移除clangd不喜欢的flag
-
-
-
-
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
@@ -133,20 +128,20 @@ vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	@echo "CC $<"
-	$(CC) $(CFLAGS) -c -o "$@" "$<"
+	@$(CC) $(CFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	@echo "AS $<"
-	$(AS) $(ASFLAGS) -c -o "$@" "$<"
+	@$(AS) $(ASFLAGS) -c -o "$@" "$<"
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@echo "LD $@"
-	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
+	@$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS)
 	@echo "OD $@"
-	$(OD) --all-headers --demangle --disassemble -M xw $(BUILD_DIR)/$(TARGET).elf > $(BUILD_DIR)/$(TARGET).lst 
+	@$(OD) --all-headers --demangle --disassemble -M xw $(BUILD_DIR)/$(TARGET).elf > $(BUILD_DIR)/$(TARGET).lst 
 	@echo "SZ $@"
-	$(SZ) $@
-#需要移除clangd不喜欢的flag
+	@$(SZ) $@
+
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	
