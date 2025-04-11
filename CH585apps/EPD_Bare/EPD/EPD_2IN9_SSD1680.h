@@ -28,6 +28,11 @@
 #define EPD_WIDTH 128
 #define EPD_HEIGHT 296
 
+//这个宏定义控制EPD是正着显示还是反着显示。
+//正着显示可以用DMA发送会更快，如果应用层面允许
+//尽量使用REVERSED 0
+#define REVERSED 0
+
 void EPD_Hal_Init(void);
 void EPD_Init(void);
 void EPD_Update(void);

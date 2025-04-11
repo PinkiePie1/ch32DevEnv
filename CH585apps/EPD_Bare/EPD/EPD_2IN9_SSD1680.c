@@ -235,8 +235,29 @@ void EPD_Clear(void)
 	
 }
 
+
 void EPD_SendDisplay(uint8_t *image)
 {
+#if(defined(REVERSED)) && (REVERSED == 1)
+
+	EPD_Cmd(0x24);
+	
+    R8_SPI0_CTRL_CFG |= RB_SPI_BIT_ORDER;
+	for (int i=4735;i>=0;i--){
+	EPD_Dat(image[i]);
+	}
+	R8_SPI0_CTRL_CFG &= ~(RB_SPI_BIT_ORDER);
+	
+	EPD_Cmd(0x26);
+	
+	R8_SPI0_CTRL_CFG |= RB_SPI_BIT_ORDER;
+	for (int i=4735;i>=0;i--){
+	EPD_Dat(image[i]);
+	}
+	R8_SPI0_CTRL_CFG &= ~(RB_SPI_BIT_ORDER);
+
+	
+#else
 	EPD_Cmd(0x24);
 	
     DC_HIGH;
@@ -252,7 +273,7 @@ void EPD_SendDisplay(uint8_t *image)
 	SPI0_MasterDMATrans(image,4000);
 	SPI0_MasterDMATrans(image+4000,736);
 	CS_HIGH;
-
+#endif
 	EPD_Update();
 }
 
@@ -293,12 +314,19 @@ void EPD_PartialDisplay(uint8_t *image)
 
 //传送显示数据，不需要传送0x26
 	EPD_Cmd(0x24);
+#if(defined(REVERSED)) && (REVERSED == 1)
+    R8_SPI0_CTRL_CFG |= RB_SPI_BIT_ORDER;
+	for (int i=4735;i>=0;i--){
+	EPD_Dat(image[i]);
+	}
+	R8_SPI0_CTRL_CFG &= ~(RB_SPI_BIT_ORDER);
+#else
     DC_HIGH;
 	CS_LOW;
 	SPI0_MasterDMATrans(image,4000);
 	SPI0_MasterDMATrans(image+4000,736);
 	CS_HIGH;
-
+#endif
 	EPD_PartialUpdate();
 }
 
