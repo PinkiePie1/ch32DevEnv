@@ -4,6 +4,8 @@
 
 #include "CH58x_common.h"
 #include "fonts.h"
+#include <stdarg.h>
+#include <stdio.h>
 
 #define BLACK 0xFF//黑色
 #define WHITE 0x00//白色
@@ -19,5 +21,6 @@ void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const 
 void drawChar(uint16_t xStart, uint16_t yStart, char charToPrint, const char *font, uint8_t color);
 void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *font, uint8_t color);
 void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);
+void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, uint8_t color, const char *format, ...);
 
 #endif

@@ -104,18 +104,20 @@ void fillRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t color)
 {
 	uint16_t index;
-	uint8_t tmp;
 	//这是边缘的像素块，需要相应的移位到正确的地方
-	//同时需要利用-1移位是补1不是补0
-	int8_t mask1 = color ? ~(0xFF >> ((x+xblock+1)&7)) : (0xFF >> ((x+xblock+1)&7));
-	int8_t mask2 = color ?  (0xFF>>(x&7)) : ~(0xFF>>(x&7));
+	uint8_t mask1 = color ? ~(0xFF >> ((x+xblock+1)&7)) : (0xFF >> ((x+xblock+1)&7));
+	uint8_t mask2 = color ?  (0xFF>>(x&7)) : ~(0xFF>>(x&7));
+	uint8_t tmp1;
+	uint8_t tmp2;
 
 	//覆盖对应的位置，先覆盖头，再覆盖中间，最后覆盖尾。
     for( uint16_t i = y; i <= (y+yblock); i++ )
     {	
 		index = (x>>3) + (i<<4);
-		tmp = image[index];
-		image[index] = color ? ( tmp | mask2 ) : ( tmp & mask2 );
+		tmp1 = image[(x>>3) + (i<<4)];
+		tmp2 = image[((x+xblock)>>3) + (i<<4)];
+		
+		image[index] = color ? ( tmp1 | mask2 ) : ( tmp1 & mask2 );
 		
     	for (uint16_t j = x+8; j < ( x + xblock ); j += 8 )
     	{
@@ -124,8 +126,7 @@ void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t 
 		}
 				
 		index = ((x+xblock)>>3) + (i<<4);
-		tmp = image[index];
-		image[index] = color ? ( tmp | mask1 ) : ( tmp & mask1 );
+		image[index] = color ? ( tmp2 | mask1 ) : ( tmp2 & mask1 );
     }	
 
 }
@@ -191,7 +192,7 @@ void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 //快速画单个字，x轴只支持字节对齐，也就是只有16行,
 void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
 {	
-	if (FONT_GETHEIGHT(font) == 0x08)
+	if (FONT_GETHEIGHT(font) == 0x08 && chara>=' ')
 	{
 		int width = FONT_GETWIDTH(font);
 	    for (uint8_t i=0; i<width; i++)
@@ -203,7 +204,7 @@ void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *f
 }
 
 //快速画字符串。
-void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const uint8_t *font)
+void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const uint8_t *font)
 {
 	if (FONT_GETHEIGHT(font) == 0x08)
 	{
@@ -212,8 +213,9 @@ void fastDrawString(uint16_t xStart, uint16_t yStart,char *stringToPrint, const 
 		int width = FONT_GETWIDTH(font);
 		for( ; *stringToPrint; stringToPrint++)
 		{	
-			x = y>=width? x : x+FONT_GETHEIGHT(font);
-			y = y>=width? y-width : yStart-width;
+			x = (y>=width)&&(*stringToPrint!='\n')? x : x+FONT_GETHEIGHT(font);
+			y = (y>=width)? y-width : yStart-width;
+			y = (*stringToPrint=='\n')? yStart:y;
 			fastDrawChar(x,y,*stringToPrint,font);
 
 		}	
@@ -247,10 +249,21 @@ void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *f
 	int width = FONT_GETWIDTH(font);
 	for( ; *stringToPrint; stringToPrint++)
 	{
-		x = y>=width? x : x+FONT_GETHEIGHT(font);
-		y = y>=width? y-width : yStart-width;
+		x = (y>=width)&&(*stringToPrint!='\n')? x : x+FONT_GETHEIGHT(font);
+		y = (y>=width)? y-width : yStart-width;
+		y = (*stringToPrint=='\n')? yStart:y;
 		drawChar(x,y,*stringToPrint,font,color);	
 
 	}	
 	
+}
+
+void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, uint8_t color, const char *format, ...)
+{
+	va_list args;
+	va_start(args,format);
+	char buffer[40];
+	vsnprintf(buffer,40, format, args);
+	va_end(args);
+	drawStr(xStart,yStart,buffer,font,color);
 }

@@ -7,6 +7,7 @@
  *********************************************************************************/
 #include "CH58x_common.h"
 #include "main.h"
+#include <stdio.h>
 __attribute__((aligned(4))) uint8_t imageCache[4736] = {0};//显存，为了提高memcpy的速度需要四字节对齐。
 
 //和memset
@@ -41,28 +42,24 @@ void main(void)
 //	drawRect(10,10,50,50,BLACK);
 
 	//快速画图与快速显示字符串
-	fastFill(5,52,40,40,BLACK);
-	fastFill(23,64,2,2,WHITE);
+	fastFill(80,95,40,40,BLACK);
+	fastFill(89,115,2,2,WHITE);
 	fastRect(0,0,127,295,BLACK);
-	fastRect(5,10,50,50,BLACK);
+	fastRect(78,93,122,137,BLACK);
+	
 	fastDrawString(80,90,"1234567890abcdefghijklmnopqrstuvwxyz,./?;:!@#$%^&*()",font8);
+    //printf功能
+	EPD_Printf(10,145,font14,WHITE,"Start @ChipID=%02X",R8_CHIP_ID);
+	EPD_Printf(24,145,font14,BLACK,"SysClock:%ld",GetSysClock());
 
-	
-
-
-
-	//需要setpixel的显示字符
-//	drawChar(77,50,'y',font8,WHITE);
-//	drawStr(60,81,"12345abc",font14,WHITE);
-
-	
 	GPIOB_ResetBits(GPIO_Pin_6);
+
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
-	tickDelayMs(3000);
+	tickDelayMs(5000);
 	//局刷
-	drawStr(51,145,"This is EPD test program.",font14,WHITE);
+	drawStr(51,145,"Partial update.",font14,WHITE);
 	drawStr(66,80,"font8",font8,BLACK);
 
 	
