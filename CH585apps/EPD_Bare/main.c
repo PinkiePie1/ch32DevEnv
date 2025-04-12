@@ -57,18 +57,18 @@ void main(void)
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
-	tickDelayMs(5000);
+	tickDelayMs(3000);
 	//局刷
 	drawStr(51,145,"Partial update.",font14,WHITE);
 	drawStr(66,80,"font8",font8,BLACK);
 
 	
-	for(int i=0;i<9;i++)
+	for(int i=19;i<29;i++)
 	{
-	drawChar(100,110,i+'1',font14,BLACK);
-	EPD_PartialDisplay(imageCache);
-	EPD_Sleep();
-	tickDelayMs(1000);
+		EPD_Printf(100,132,font14,WHITE,"|%d|",i);
+		EPD_PartialDisplay(imageCache);
+		EPD_Sleep();
+		tickDelayMs(1000);
 	}
 	//EPD_SendDisplay( (unsigned char *)gImage_full );//显示大图像，直接从flash读取
 
