@@ -40,7 +40,7 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         1600
+#define DEFAULT_ADVERTISING_INTERVAL         160
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
@@ -82,7 +82,7 @@
  */
 static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
 
-// GAP - SCAN RSP data (max size = 31 bytes)
+/* GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
     // complete name
     // connection interval range
@@ -92,12 +92,12 @@ static uint8_t scanRspData[] = {
     HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
     LO_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL), // 1s
     HI_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
-
     // Tx power level
     0x02, // length of this data
     GAP_ADTYPE_POWER_LEVEL,
     0 // 0dBm
 };
+*/
 
 // GAP - Advertisement data (max size = 31 bytes, though this is
 // best kept short to conserve power while advertising)
@@ -201,7 +201,7 @@ void Peripheral_Init()
 
         // Set the GAP Role Parameters
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
-        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
+//        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
         GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
         GAPRole_SetParameter(GAPROLE_MIN_CONN_INTERVAL, sizeof(uint16_t), &desired_min_interval);
         GAPRole_SetParameter(GAPROLE_MAX_CONN_INTERVAL, sizeof(uint16_t), &desired_max_interval);
