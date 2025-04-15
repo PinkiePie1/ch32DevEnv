@@ -110,7 +110,7 @@ static uint8_t advertData[] = {
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
     0x0E, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'M', 'y', 'p', 'e', 'r', 'i', 'p', 'h', 'e', 'r', 'i', 'a', 'l', 
+    'E', 'P', 'D', '_', 'C', 'H', '5', '8', '5', 'n', 'o', 'd', 'e', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
@@ -124,7 +124,7 @@ static uint8_t advertData[] = {
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Myperipheral";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "EPD_CH585node";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
@@ -220,7 +220,7 @@ void Peripheral_Init()
 
     // Setup the GAP Bond Manager
     {
-        uint32_t passkey = 0; // passkey "000000"
+        uint32_t passkey = 777888; // passkey "000000"
         uint8_t  pairMode = GAPBOND_PAIRING_MODE_WAIT_FOR_REQ;
         uint8_t  mitm = TRUE;
         uint8_t  bonding = TRUE;
@@ -245,13 +245,13 @@ void Peripheral_Init()
     {
         uint8_t charValue1[SIMPLEPROFILE_CHAR1_LEN] = {1};
         uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {2};
-        uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {3};
+        uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {0};
         uint8_t charValue4[SIMPLEPROFILE_CHAR4_LEN] = {4};
         uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = {1, 2, 3, 4, 5};
 
         SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, SIMPLEPROFILE_CHAR1_LEN, charValue1);
         SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, SIMPLEPROFILE_CHAR2_LEN, charValue2);
-        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, SIMPLEPROFILE_CHAR3_LEN, charValue3);
+        SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, SIMPLEPROFILE_CHAR3_LEN, 0);
         SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, SIMPLEPROFILE_CHAR4_LEN, charValue4);
         SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN, charValue5);
     }
@@ -471,11 +471,13 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         peripheralConnList.connSlaveLatency = event->connLatency;
         peripheralConnList.connTimeout = event->connTimeout;
         peripheralMTU = ATT_MTU_SIZE;
-        //启用周期事件
+		/*
+        //启用周期事件，周期从char4上报0x88，假装自己是个心率计。
         tmos_start_task(Peripheral_TaskID, 
         				SBP_PERIODIC_EVT, 
         				SBP_PERIODIC_EVT_PERIOD);
-
+		*/
+		
         //设置连接间隔更新事件。
         //连接上主机后，一般来说主机会先用高连接间隔
         //以发现设备的所有服务，随后会协商到设备喜欢的
@@ -488,16 +490,19 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         				SBP_PARAM_UPDATE_EVT, 
         				SBP_PARAM_UPDATE_DELAY);
 
-        // Start read rssi
+        /* Start read rssi
         tmos_start_task(Peripheral_TaskID, 
         				SBP_READ_RSSI_EVT, 
         				SBP_READ_RSSI_EVT_PERIOD);
+        */
+        
 		//接下来这几行代码给EPD程序发送一个消息
 		//让EPD程序显示已连接的界面。
-        uint8_t *msg = tmos_msg_allocate(1);
+        uint8_t *msg = tmos_msg_allocate(1+B_ADDR_LEN);
         if(msg != NULL)
         {
 			msg[0] = 0x22;//意思是已连接。
+            tmos_memcpy(msg+1, event->devAddr, B_ADDR_LEN);//把地址也传过去。
         	tmos_msg_send(EPD_taskID,msg);
         }
 

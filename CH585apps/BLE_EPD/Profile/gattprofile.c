@@ -81,7 +81,7 @@ static uint8_t simpleProfileChar3Props = GATT_PROP_WRITE;
 static uint8_t simpleProfileChar3[SIMPLEPROFILE_CHAR3_LEN] = {0};
 
 // Simple Profile Characteristic 3 User Description
-static uint8_t simpleProfileChar3UserDesp[] = "Characteristic 3\0";
+static uint8_t simpleProfileChar3UserDesp[] = "Write to screen.\0";
 
 // Simple Profile Characteristic 4 Properties
 static uint8_t simpleProfileChar4Props = GATT_PROP_NOTIFY;
@@ -630,10 +630,9 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                     uint8_t *msg = tmos_msg_allocate(30);
 			        if(msg != NULL)
 			        {
-			        	uint8_t i = 55;
-						msg[0] = 0x11;//意思是打印接下来的信息。
-						char str[28] = {0};
-						snprintf(str, 28, "you wrote to char 1: %02X.", *pValue);
+						msg[0] = 0x11;//0x11意思是打印接下来的信息。
+						char str[32] = {0};
+						snprintf(str, 32, "you wrote 0x%02X to Character 1.", *pValue);
 						tmos_memcpy(msg+1,str,28);
 			        	tmos_msg_send(EPD_taskID,msg);
 			        }
@@ -645,7 +644,7 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                 // Make sure it's not a blob oper
                 if(offset == 0)
                 {
-                    if(len > SIMPLEPROFILE_CHAR3_LEN)
+                    if(len > EPD_MAXIMUM_MSG_LENGTH)
                     {
                         status = ATT_ERR_INVALID_VALUE_SIZE;
                     }
@@ -655,11 +654,20 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                     status = ATT_ERR_ATTR_NOT_LONG;
                 }
 
-                //Write the value
+                //这里并不会真的写入Char3，因为存储其内容是没有必要的。
                 if(status == SUCCESS)
                 {
-                    tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR3_LEN);
-                    notifyApp = SIMPLEPROFILE_CHAR3;
+                    //notifyApp = SIMPLEPROFILE_CHAR3;
+                    //接下来几行给墨水屏发送信息。
+                    uint8_t *msg = tmos_msg_allocate(len+2);
+                    if (msg != NULL)
+                    {
+                    	msg[0] = 0x11;//意思是显示接下来的信息
+                    	msg[len+1] = 0;//字符串终止符
+                    	tmos_memcpy(msg+1,pValue,len);//把需要显示的内容放进去
+                    	tmos_msg_send(EPD_taskID,msg);
+                    }
+                    
                 }
                 break;
 

@@ -59,7 +59,6 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
             else if (MsgToDisplay[0] == 0x22)
             {
             	tmos_set_event(EPD_taskID, EPD_SHOWCONNECT_EVT);
-            	tmos_msg_deallocate(MsgToDisplay);
             }
         }
         return (events ^ SYS_EVENT_MSG);
@@ -91,9 +90,11 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     if(events & EPD_SHOWCONNECT_EVT)
     {
     	INIT_CACHE;
-    	EPD_Printf(38,145,font14,BLACK,"Connected.");
-    	EPD_Printf(10,145,font14,WHITE,"Start @ChipID=%02X",R8_CHIP_ID);
-		EPD_Printf(24,145,font14,BLACK,"SysClock:%ld",GetSysClock());
+    	EPD_Printf(38,260,font14,BLACK,"Connected.");
+    	EPD_Printf(10,260,font14,WHITE,"Start @ChipID=%02X",R8_CHIP_ID);
+		EPD_Printf(24,260,font14,BLACK,"SysClock:%ld",GetSysClock());
+		EPD_Printf(52,260,font14,BLACK,"Host Addr:%02X:%02X:%02X:%02X:%02X:%02X",MsgToDisplay[1],MsgToDisplay[2],MsgToDisplay[3],MsgToDisplay[4],MsgToDisplay[5],MsgToDisplay[6]);
+		tmos_msg_deallocate(MsgToDisplay);
 		EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWCONNECT_EVT;
     }

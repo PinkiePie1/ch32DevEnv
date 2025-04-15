@@ -1,4 +1,4 @@
-TARGET := Peripheral_DCDC
+TARGET := Peripheral_BLE
 C_DEFS := \
 -D CLK_OSC32K=0 \
 -D DISCARD_LOWRAM_SLEEP=1 \
