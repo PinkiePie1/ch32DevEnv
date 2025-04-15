@@ -82,6 +82,7 @@
  */
 static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
 
+//不知道为什么，加入扫描反馈数据会导致部分手机搜不到
 /* GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
     // complete name
@@ -342,8 +343,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
         // 注意协商会在下一次连接时发生
         // 所以调用函数之后不会立刻生效
         // 协商失败也不是通过返回值判断
-        // 目前能想到的是判断协商的方式
-        // 就是在数个连接间隔之后重新判断。
+        // 可调用蓝牙API查询当前间隔。
         GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
                                              DEFAULT_DESIRED_MIN_CONN_INTERVAL,
                                              DEFAULT_DESIRED_MAX_CONN_INTERVAL,

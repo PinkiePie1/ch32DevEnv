@@ -1,17 +1,4 @@
-/********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.1
- * Date               : 2020/08/06
- * Description        : ����ӻ�Ӧ��������������ϵͳ��ʼ��
- *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
- *******************************************************************************/
 
-/******************************************************************************/
-/* ͷ�ļ����� */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "gattprofile.h"
@@ -31,7 +18,7 @@ const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 /*********************************************************************
  * @fn      Main_Circulation
  *
- * @brief   ��ѭ��
+ * @brief   TMOS主程序
  *
  * @return  none
  */
@@ -48,7 +35,7 @@ void Main_Circulation()
 /*********************************************************************
  * @fn      main
  *
- * @brief   ������
+ * @brief  主函数
  *
  * @return  none
  */
@@ -64,10 +51,7 @@ int main(void)
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
 #ifdef DEBUG
-    GPIOA_SetBits(GPIO_Pin_14);
-    GPIOPinRemap(ENABLE, RB_PIN_UART0);
-    GPIOA_ModeCfg(GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
-    UART0_DefInit();
+    //需要换个口，待实现
 #endif
     PRINT("%s\n", VER_LIB);
     CH58x_BLEInit();
