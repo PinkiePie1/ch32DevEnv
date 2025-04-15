@@ -3,10 +3,7 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2018/12/10
- * Description        : Peripheral slave multi-connection application, initialize 
- *                      broadcast connection parameters, then broadcast, after 
- *                      connecting to the host, request to update connection parameters, 
- *                      and transmit data through custom services
+ * Description        : 应用层程序主要部分
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -17,11 +14,10 @@
  * INCLUDES
  */
 #include "CONFIG.h"
-#include <stdio.h>
+#include "EPD_process.h"
 #include "devinfoservice.h"
 #include "gattprofile.h"
 #include "peripheral.h"
-#include "EPD_PROCESSEVENT.h"
 
 /*********************************************************************
  * MACROS
@@ -31,41 +27,40 @@
  * CONSTANTS
  */
 
-// How often to perform periodic event
+//多久进行一次周期时间（例程中是周期上报特征4的值）
 #define SBP_PERIODIC_EVT_PERIOD              1600
 
-// How often to perform read rssi event
+//多久进行一次RSSI事件
 #define SBP_READ_RSSI_EVT_PERIOD             3200
 
 // Parameter update delay
-#define SBP_PARAM_UPDATE_DELAY               1800
+#define SBP_PARAM_UPDATE_DELAY               6400
 
 // PHY update delay
-#define SBP_PHY_UPDATE_DELAY                 500
+#define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         8000
+#define DEFAULT_ADVERTISING_INTERVAL         1600
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
 #define DEFAULT_DISCOVERABLE_MODE            GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 6=7.5ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    3000
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    400
 
 // Maximum connection interval (units of 1.25ms, 100=125ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    3200
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    500
 
 // Slave latency to use parameter update
-#define DEFAULT_DESIRED_SLAVE_LATENCY        0
+#define DEFAULT_DESIRED_SLAVE_LATENCY        4
 
 // Supervision timeout value (units of 10ms, 100=1s)
-#define DEFAULT_DESIRED_CONN_TIMEOUT         1200
+#define DEFAULT_DESIRED_CONN_TIMEOUT         800
 
 // Company Identifier: WCH
 #define WCH_COMPANY_ID                       0x07D7
 
-#define CONN_INTEVAL_START_VALUE             DEFAULT_DESIRED_MIN_CONN_INTERVAL
 /*********************************************************************
  * TYPEDEFS
  */
@@ -73,7 +68,6 @@
 /*********************************************************************
  * GLOBAL VARIABLES
  */
-uint32_t mininterval = CONN_INTEVAL_START_VALUE;
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -90,9 +84,9 @@ static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task
 
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
-
+    // complete name
     // connection interval range
-    0x05, // length of this data
+    0x06, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
     LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
     HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
@@ -114,6 +108,9 @@ static uint8_t advertData[] = {
     0x02, // length of this data
     GAP_ADTYPE_FLAGS,
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
+    0x0E, // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'M', 'y', 'p', 'e', 'r', 'i', 'p', 'h', 'e', 'r', 'i', 'a', 'l', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
@@ -121,18 +118,18 @@ static uint8_t advertData[] = {
     GAP_ADTYPE_16BIT_MORE, // some of the UUID's, but not all
     LO_UINT16(SIMPLEPROFILE_SERV_UUID),
     HI_UINT16(SIMPLEPROFILE_SERV_UUID),
-    0x0A, // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'e','p','d','S','c','r','e', 'e','n'
+
+  
+    
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "epdScreen";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Myperipheral";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
 
-static uint8_t peripheralMTU = ATT_MTU_SIZE;
+static uint16_t peripheralMTU = ATT_MTU_SIZE;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -166,7 +163,7 @@ static gapRolesBroadcasterCBs_t Broadcaster_BroadcasterCBs = {
 // GAP Bond Manager Callbacks
 static gapBondCBs_t Peripheral_BondMgrCBs = {
     NULL, // Passcode callback (not used by application)
-    NULL, // Pairing / Bonding state Callback (not used by application)
+    NULL,  // Pairing / Bonding state Callback (not used by application)
     NULL  // oob callback
 };
 
@@ -217,13 +214,13 @@ void Peripheral_Init()
         GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, advInt);
         GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, advInt);
 
-        // disable scan req notify
-        GAP_SetParamValue(TGAP_ADV_SCAN_REQ_NOTIFY, DISABLE);
+        // Enable scan req notify
+        GAP_SetParamValue(TGAP_ADV_SCAN_REQ_NOTIFY, ENABLE);
     }
 
     // Setup the GAP Bond Manager
     {
-        uint32_t passkey = 777666; // passkey "000000"
+        uint32_t passkey = 0; // passkey "000000"
         uint8_t  pairMode = GAPBOND_PAIRING_MODE_WAIT_FOR_REQ;
         uint8_t  mitm = TRUE;
         uint8_t  bonding = TRUE;
@@ -242,12 +239,12 @@ void Peripheral_Init()
     SimpleProfile_AddService(GATT_ALL_SERVICES); // Simple GATT Profile
 
     // Set the GAP Characteristics
-    GGS_SetParameter(GGS_DEVICE_NAME_ATT, sizeof(attDeviceName), attDeviceName);
+    GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, attDeviceName);
 
     // Setup the SimpleProfile Characteristic Values
     {
         uint8_t charValue1[SIMPLEPROFILE_CHAR1_LEN] = {1};
-        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {0};
+        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {2};
         uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {3};
         uint8_t charValue4[SIMPLEPROFILE_CHAR4_LEN] = {4};
         uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = {1, 2, 3, 4, 5};
@@ -327,7 +324,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
         return (events ^ SBP_START_DEVICE_EVT);
     }
 
-/*    if(events & SBP_PERIODIC_EVT)
+    if(events & SBP_PERIODIC_EVT)
     {
         // Restart timer
         if(SBP_PERIODIC_EVT_PERIOD)
@@ -338,65 +335,30 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
         performPeriodicTask();
         return (events ^ SBP_PERIODIC_EVT);
     }
-*/
 
     if(events & SBP_PARAM_UPDATE_EVT)
     {
-        // Send connect param update request
+        // 与主机协商连接间隔。
+        // 注意协商会在下一次连接时发生
+        // 所以调用函数之后不会立刻生效
+        // 协商失败也不是通过返回值判断
+        // 目前能想到的是判断协商的方式
+        // 就是在数个连接间隔之后重新判断。
         GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
                                              DEFAULT_DESIRED_MIN_CONN_INTERVAL,
                                              DEFAULT_DESIRED_MAX_CONN_INTERVAL,
                                              DEFAULT_DESIRED_SLAVE_LATENCY,
                                              DEFAULT_DESIRED_CONN_TIMEOUT,
                                              Peripheral_TaskID);
-        
-        tmos_start_task(Peripheral_TaskID, SBP_PARAM_UPDATE_EVT_LESS, DEFAULT_DESIRED_MAX_CONN_INTERVAL*4+1);
-
 
         return (events ^ SBP_PARAM_UPDATE_EVT);
-    }
-
-    if(events & SBP_PARAM_UPDATE_EVT_LESS)
-    {
-        // Send connect param update request
-        if (peripheralConnList.connInterval<mininterval-1)
-        {
-            GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
-                                                 mininterval,
-                                                 mininterval+40,
-                                                 DEFAULT_DESIRED_SLAVE_LATENCY,
-                                                 DEFAULT_DESIRED_CONN_TIMEOUT,
-                                                 Peripheral_TaskID);
-
-            tmos_start_task(Peripheral_TaskID,SBP_PARAM_UPDATE_EVT_LESS,DEFAULT_DESIRED_MAX_CONN_INTERVAL*4+1);
-        }
-
-       if (peripheralConnList.connInterval<mininterval-1)
-       {
-
-           mininterval-=100;
-           if(mininterval>CONN_INTEVAL_START_VALUE)
-           {
-                mininterval = CONN_INTEVAL_START_VALUE;
-                tmos_stop_task(Peripheral_TaskID, SBP_PARAM_UPDATE_EVT_LESS);
-                uint8_t *msg = tmos_msg_allocate(20);
-                if(msg!= NULL)
-                {
-                    tmos_memcpy(msg, (char *)"interval fail.", 20);//������Ϣ��
-                    tmos_msg_send(epd_taskID, msg);
-                }
-
-           }
-       }
-
-        return (events ^ SBP_PARAM_UPDATE_EVT_LESS);
     }
 
     if(events & SBP_PHY_UPDATE_EVT)
     {
         // start phy update
         PRINT("PHY Update %x...\n", GAPRole_UpdatePHY(peripheralConnList.connHandle, 0, 
-                    GAP_PHY_BIT_LE_2M, GAP_PHY_BIT_LE_2M, GAP_PHY_OPTIONS_NOPRE));
+                    GAP_PHY_BIT_LE_2M, GAP_PHY_BIT_LE_2M, 0));
 
         return (events ^ SBP_PHY_UPDATE_EVT);
     }
@@ -489,6 +451,8 @@ static void Peripheral_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
  * @param   pEvent - event to process
  *
  * @return  none
+ *
+ * @note 连接建立回调函数。建立蓝牙连接的时候会协议栈会调用一次这个函数
  */
 static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
 {
@@ -507,25 +471,37 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         peripheralConnList.connSlaveLatency = event->connLatency;
         peripheralConnList.connTimeout = event->connTimeout;
         peripheralMTU = ATT_MTU_SIZE;
-        // Set timer for periodic event
-        //tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, SBP_PERIODIC_EVT_PERIOD);
+        //启用周期事件
+        tmos_start_task(Peripheral_TaskID, 
+        				SBP_PERIODIC_EVT, 
+        				SBP_PERIODIC_EVT_PERIOD);
 
-        // Set timer for param update event
-        tmos_start_task(Peripheral_TaskID, SBP_PARAM_UPDATE_EVT, SBP_PARAM_UPDATE_DELAY);
+        //设置连接间隔更新事件。
+        //连接上主机后，一般来说主机会先用高连接间隔
+        //以发现设备的所有服务，随后会协商到设备喜欢的
+        //连接间隔。所以从机的协商应该在连上之后等一会
+        //再发出。虽然几乎市面上所有的电脑和手机
+        //会尊重从机的选择，但其实连接间隔是由主机最终
+        //决定的，这意味着主机可以改变连接间隔，而从机
+        //应该选择遵守。
+        tmos_start_task(Peripheral_TaskID,
+        				SBP_PARAM_UPDATE_EVT, 
+        				SBP_PARAM_UPDATE_DELAY);
 
         // Start read rssi
-        //tmos_start_task(Peripheral_TaskID, SBP_READ_RSSI_EVT, SBP_READ_RSSI_EVT_PERIOD);
-
-
+        tmos_start_task(Peripheral_TaskID, 
+        				SBP_READ_RSSI_EVT, 
+        				SBP_READ_RSSI_EVT_PERIOD);
+		//接下来这几行代码给EPD程序发送一个消息
+		//让EPD程序显示已连接的界面。
+        uint8_t *msg = tmos_msg_allocate(1);
+        if(msg != NULL)
+        {
+			msg[0] = 0x22;//意思是已连接。
+        	tmos_msg_send(EPD_taskID,msg);
+        }
 
         PRINT("Conn %x - Int %x \n", event->connectionHandle, event->connInterval);
-
-        uint8_t *msg = tmos_msg_allocate(20);
-        if(msg!= NULL){
-            char str[20];
-            tmos_memcpy(msg, (char *)"Connected!", 20);//������Ϣ��
-            tmos_msg_send(epd_taskID, msg);
-        }
     }
 }
 
@@ -550,7 +526,7 @@ static void Peripheral_LinkTerminated(gapRoleEvent_t *pEvent)
         peripheralConnList.connTimeout = 0;
         tmos_stop_task(Peripheral_TaskID, SBP_PERIODIC_EVT);
         tmos_stop_task(Peripheral_TaskID, SBP_READ_RSSI_EVT);
-        mininterval = CONN_INTEVAL_START_VALUE;
+
         // Restart advertising
         {
             uint8_t advertising_enable = TRUE;
@@ -600,7 +576,6 @@ static void peripheralParamUpdateCB(uint16_t connHandle, uint16_t connInterval,
         peripheralConnList.connTimeout = connTimeout;
 
         PRINT("Update %x - Int %x \n", connHandle, connInterval);
-
     }
     else
     {

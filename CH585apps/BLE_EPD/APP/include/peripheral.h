@@ -31,7 +31,6 @@ extern "C" {
 #define SBP_READ_RSSI_EVT       0x0004
 #define SBP_PARAM_UPDATE_EVT    0x0008
 #define SBP_PHY_UPDATE_EVT      0x0010
-#define SBP_PARAM_UPDATE_EVT_LESS 0x0020
 
 /*********************************************************************
  * MACROS
