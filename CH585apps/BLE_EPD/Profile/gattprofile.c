@@ -627,13 +627,13 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                     tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR1_LEN);
                     notifyApp = SIMPLEPROFILE_CHAR1;
                     //给墨水屏发消息显示。
-                    uint8_t *msg = tmos_msg_allocate(30);
+                    uint8_t *msg = tmos_msg_allocate(34);
 			        if(msg != NULL)
 			        {
 						msg[0] = 0x11;//0x11意思是打印接下来的信息。
 						char str[32] = {0};
 						snprintf(str, 32, "you wrote 0x%02X to Character 1.", *pValue);
-						tmos_memcpy(msg+1,str,28);
+						tmos_memcpy(msg+1,str,32);
 			        	tmos_msg_send(EPD_taskID,msg);
 			        }
                 }
