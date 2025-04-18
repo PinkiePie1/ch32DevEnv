@@ -201,6 +201,10 @@ void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *f
 	    	image[index] = font[width*(chara-' '+1)+i];
 	    }	
 	}
+	else if (FONT_GETHEIGHT(font) == 14)
+	{
+		;//待实现
+	}
 }
 
 //快速画字符串。
@@ -219,6 +223,10 @@ void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const
 			fastDrawChar(x,y,*stringToPrint,font);
 
 		}	
+	}
+	else if (FONT_GETHEIGHT(font) == 14)
+	{
+		;//待实现
 	}
 }
 

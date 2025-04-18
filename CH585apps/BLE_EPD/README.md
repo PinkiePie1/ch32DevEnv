@@ -8,3 +8,7 @@ make -j999 flash
 ## 程序结构
 
 蓝牙部分的自定义详见蓝牙从机例程。墨水屏相关代码在APP/EPD_process.c中
+
+## TODO
+
+minigui里实现14字号的快速驱动，UPC格式的条形码生成
