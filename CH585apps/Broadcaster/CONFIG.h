@@ -25,6 +25,9 @@
 
 #include "CH58x_common.h"
 
+
+#define BLE_BUFF_MAX_LEN 200 
+//想要广播包更长，就得要更大的buffer
 /*********************************************************************
  【MAC】
  BLE_MAC                                    - 是否自定义蓝牙Mac地址 ( 默认:FALSE - 使用芯片Mac地址 )，需要在main.c修改Mac地址定义

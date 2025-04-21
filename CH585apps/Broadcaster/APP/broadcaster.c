@@ -58,24 +58,30 @@ static uint8_t Broadcaster_TaskID; // Task ID for internal task/event processing
 
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
-    // complete name
-    0x0c,                                 // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE, 0x42, // 'B'
-    0x72,                                 // 'r'
-    0x6f,                                 // 'o'
-    0x61,                                 // 'a'
-    0x64,                                 // 'd'
-    0x63,                                 // 'c'
-    0x61,                                 // 'a'
-    0x73,                                 // 's'
-    0x74,                                 // 't'
-    0x65,                                 // 'e'
-    0x72,                                 // 'r'
-
     // Tx power level
     0x02,                     // length of this data
     GAP_ADTYPE_POWER_LEVEL, 0 // 0dBm
 };
+
+static uint8_t ibeaconData[] = 
+{
+    0x02, // length of this data
+    GAP_ADTYPE_FLAGS,
+    GAP_ADTYPE_FLAGS_GENERAL | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
+
+    0x1A,
+    GAP_ADTYPE_MANUFACTURER_SPECIFIC,
+
+    0x4c,0x00,
+    0x02,0x15,
+
+    0xE2,0xC5,0x6D,0xB5,0xDF,0xFB,0x48,0xD2,0xB0,0x60,0xD0,0xF5,0xA7,0x10,0x96,0xE0,
+
+    0x00,0x00,
+    0x00,0x17,
+    0xC4             
+};
+
 
 // GAP - Advertisement data (max size = 31 bytes, though this is
 // best kept short to conserve power while advertisting)
@@ -88,11 +94,6 @@ static uint8_t advertData[] = {
     GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
 
     // Broadcast of the data
-    0x04,                             // length of this data including the data type byte
-    GAP_ADTYPE_MANUFACTURER_SPECIFIC, // manufacturer specific advertisement data type
-    'b', 'l', 'e', 0x04,
-    GAP_ADTYPE_LOCAL_NAME_SHORT,
-    'a', 'b', 'c',
     0x0c,                                 // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE, 
     'm',                                 // 'B'
@@ -152,8 +153,8 @@ void Broadcaster_Init()
         // Set the GAP Role Parameters
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
         GAPRole_SetParameter(GAPROLE_ADV_EVENT_TYPE, sizeof(uint8_t), &initial_adv_event_type);
-        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
-        GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
+       // GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
+        GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(ibeaconData), ibeaconData);
     }
 
     // Set advertising interval
