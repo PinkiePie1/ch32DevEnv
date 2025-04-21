@@ -204,7 +204,7 @@ void EPD_Update(void)
     EPD_Cmd( 0x22 );
     EPD_Dat( 0xC7 );
     EPD_Cmd( 0x20 );
-    tmos_set_event(EPD_taskID, EPD_WAITBUSY);
+    tmos_start_task(EPD_taskID, EPD_WAITBUSY,1400);//在大约0.8秒之后开始不断判忙
 //    WAIT_BUSY;	
     
 }
@@ -216,7 +216,7 @@ void EPD_PartialUpdate(void)
     EPD_Cmd( 0x22 );
     EPD_Dat( 0xCF );
     EPD_Cmd( 0x20 );
-    tmos_set_event(EPD_taskID, EPD_WAITBUSY);
+    tmos_start_task(EPD_taskID, EPD_WAITBUSY,600);//在大约0.4秒之后开始不断判忙
 //  WAIT_BUSY;	
     
 }
