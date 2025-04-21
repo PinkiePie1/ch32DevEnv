@@ -9,6 +9,7 @@
 #include "EPD_process.h"
 #include "miniGUI.h"
 #include "CONFIG.h"
+#include "imageData.h"
 
 #define INIT_CACHE tmos_memset(imageCache,0x00,4736)
 
@@ -70,7 +71,7 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     	INIT_CACHE; //醒来时EPD的RAM重新上电是随机的，需要清空。
     	fastRect(0,0,127,295,BLACK);
     	drawStr(10,290,"Received Msg:",font14,WHITE);
-	fastDrawString(24,290,MsgToDisplay+1,font14);
+    	fastDrawString(24,290,MsgToDisplay+1,font14);
         tmos_msg_deallocate(MsgToDisplay); // 释放消息内存。
         EPD_UpdateScreen(imageCache);
         return (events ^ EPD_SHOWMSG_EVT);
@@ -98,6 +99,17 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
 		tmos_msg_deallocate(MsgToDisplay);
 		EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWCONNECT_EVT;
+    }
+
+    if(events & EPD_SHOWIMG_EVT)
+    {
+    	INIT_CACHE;
+		FastImg(147,295,gImage_full+16*10);
+		drawLine(0,147,127,147,BLACK);
+		fastRect(0,0,127,295,BLACK);
+		fastDrawString(10,145,"You wrote 0x1A to Char1, showing    image at left.",font14);
+    	EPD_UpdateScreen(imageCache);
+    	return events ^ EPD_SHOWIMG_EVT;
     }
 
 

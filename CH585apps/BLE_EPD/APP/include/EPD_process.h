@@ -14,6 +14,7 @@
 #define EPD_UPDATE_EVT         1UL<<1
 #define EPD_WAITBUSY           1UL<<2
 #define EPD_SHOWCONNECT_EVT    1UL<<3
+#define EPD_SHOWIMG_EVT        1UL<<4
 
 //EPD任务进程的ID
 extern uint8_t EPD_taskID;

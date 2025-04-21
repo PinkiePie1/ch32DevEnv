@@ -1,3 +1,4 @@
+
 /****************************************************************
  * File Name          : Main.c
  * Author             : JCQ
@@ -33,12 +34,6 @@ void main(void)
 	
 	paint_SetImageCache(imageCache);
 
-	fastDrawString(60,150,"123442346al;kjsdfhglksdjhflasnkdgoshifgln",font14);
-	drawStr(14,150,"123442346al;kjsdfhglksdjhflasnkdgoshifgln",font14,BLACK);
-	EPD_Init();	
-	EPD_SendDisplay(imageCache);
-	EPD_Sleep();
-	while(1);
 
 	//快速显示图片,100us左右
 	FastImg(147,295,gImage_full+16*10);

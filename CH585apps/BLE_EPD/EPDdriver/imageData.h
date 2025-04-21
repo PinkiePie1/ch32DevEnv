@@ -1,6 +1,6 @@
-//#ifndef __IMAGE_DATA_H_
-//#define __IMAGE_DATA_H_
-#pragma once
+#ifndef __IMAGE_DATA_H_
+#define __IMAGE_DATA_H_
+
 //这里包含保护用pragma，如果编译出错就把第一第二行和最后一行的注释取消。
 //注意要点上垂直扫描
 
@@ -308,4 +308,4 @@ __attribute__((aligned(4))) const unsigned char gImage_full[4736] = { /* 0X81,0X
 
 
 
-//#endif
+#endif
