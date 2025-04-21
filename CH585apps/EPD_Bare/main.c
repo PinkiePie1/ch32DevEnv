@@ -16,8 +16,8 @@ static inline void mymemset(void *dest, int c, size_t n) { unsigned char *s = de
 static void GPIOInit(void)
 {
 	EPD_Hal_Init();
-	GPIOB_ModeCfg(GPIO_Pin_6,GPIO_ModeOut_PP_5mA);
-	GPIOB_SetBits(GPIO_Pin_6);
+	GPIOB_ModeCfg(GPIO_Pin_3,GPIO_ModeOut_PP_5mA);
+	GPIOB_SetBits(GPIO_Pin_3);
 }
 
 void main(void)
@@ -27,11 +27,18 @@ void main(void)
 	tickDelayInit();
 	GPIOInit();
 
-	GPIOB_SetBits(GPIO_Pin_6);
+	GPIOB_ResetBits(GPIO_Pin_3);
 	//由于LUT反向，不再需要初始化，0x00对应白色
 	//memset(imageCache,0xFF,4736);
 	
 	paint_SetImageCache(imageCache);
+
+	fastDrawString(60,150,"123442346al;kjsdfhglksdjhflasnkdgoshifgln",font14);
+	drawStr(14,150,"123442346al;kjsdfhglksdjhflasnkdgoshifgln",font14,BLACK);
+	EPD_Init();	
+	EPD_SendDisplay(imageCache);
+	EPD_Sleep();
+	while(1);
 
 	//快速显示图片,100us左右
 	FastImg(147,295,gImage_full+16*10);

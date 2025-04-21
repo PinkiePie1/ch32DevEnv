@@ -192,21 +192,35 @@ void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 //快速画单个字，x轴只支持字节对齐，也就是只有16行,
 void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
 {	
-	if (FONT_GETHEIGHT(font) == 0x08 && chara>=' ')
+	if (FONT_GETHEIGHT(font) == 0x08)
 	{
-		int width = FONT_GETWIDTH(font);
+		uint8_t width = FONT_GETWIDTH(font);
 	    for (uint8_t i=0; i<width; i++)
 	    {
 	    	uint16_t index = (xStart>>3)+((yStart+i)<<4);
 	    	image[index] = font[width*(chara-' '+1)+i];
 	    }	
 	}
+	else if (FONT_GETHEIGHT(font) == 14)
+	{
+		uint8_t width = FONT_GETWIDTH(font);
+		uint8_t offset = xStart&7;
+		for (uint8_t i=0; i<width; i++)
+		{
+			uint16_t index = (xStart>>3) + ((yStart+i)<<4);
+			uint16_t fontIndex = width*2*(chara-' '+1)+i*2;
+			image[index] |= font[fontIndex]>>offset;
+			image[index+1] |= font[fontIndex]<<(8-offset);
+			image[index+1] |= font[fontIndex+1]>>offset;
+			image[index+2] |= font[fontIndex+1]<<(8-offset);
+		}
+	}
 }
 
 //快速画字符串。
 void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const uint8_t *font)
 {
-	if (FONT_GETHEIGHT(font) == 0x08)
+	if (FONT_GETHEIGHT(font) == 0x08 || FONT_GETHEIGHT(font) == 14)
 	{
 		uint16_t y = yStart;
 		uint16_t x = xStart;
@@ -220,6 +234,7 @@ void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const
 
 		}	
 	}
+	
 }
 
 //正常画单个字符，可支持12、18等非8字节对齐的字符大小和任意位置，可指定颜色
