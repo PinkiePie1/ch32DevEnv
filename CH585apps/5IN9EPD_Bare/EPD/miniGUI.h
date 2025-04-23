@@ -7,8 +7,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define BLACK 0xFF//黑色
-#define WHITE 0x00//白色
+#define BLACK 0x00//黑色
+#define WHITE 0xFF//白色
 
 void paint_SetImageCache(uint8_t *imagePtr);
 void drawLine(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, uint8_t color);

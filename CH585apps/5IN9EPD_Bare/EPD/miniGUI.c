@@ -20,18 +20,12 @@ void paint_SetImageCache(uint8_t *imagePtr)
 	image = imagePtr;
 }
 
-//设定某个像素的值，x范围0-127，y范围0-295
+//设定某个像素的值，x范围0-791，y范围0-271
 __HIGH_CODE
 static inline void setPixel(uint16_t x, uint16_t y, uint8_t color)
 {
-//    x = x>128?128:x; 
-//    y = y>295?295:y; 
-      //这两行可以避免越界访问
-      //但太占地方了,指令多了将近一半
-      //所以我们把不越界的责任交给用户。
-      //如果希望安全，用户可以把数组弄大一点
-      //比如5000个byte，这样即使越界也很难碰到别的东西。
-    uint16_t index = (x>>3) + (y<<4); 
+	//反正有硬件乘法，y*99就乘99吧
+    uint16_t index = (x>>3) + (y*99); 
     //像素所对应的字节的位置
     if( color )
     {

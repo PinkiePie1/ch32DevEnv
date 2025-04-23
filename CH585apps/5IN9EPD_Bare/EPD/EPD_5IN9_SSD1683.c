@@ -147,7 +147,6 @@ void EPD_Init(void)
 {
 	//硬重置
 	EPD_HardReset();
-	devDelay( 100 );
 	WAIT_BUSY;
 	
 	//软重置
@@ -196,37 +195,29 @@ void EPD_PartialUpdate(void)
 //刷白屏。
 void EPD_Clear(void)
 {
-
-
 	EPD_Cmd(0x24);
-	EPD_Dat(0x00);
-	for(uint32_t i = 1; i < 13600; i++)
+	for(uint32_t i = 0; i < 13600; i++)
 	{
 		EPD_Dat(0xFF);
 	}
 	
-	SetMCur();
 	EPD_Cmd(0x26);
 	for(uint32_t i = 0; i < 13600; i++)
 	{
 		EPD_Dat(0x00);
 	}
 
-
 	EPD_Cmd(0xA4);
-	EPD_Dat(0x00);
-	for(uint32_t i = 1; i < 13600; i++)
+	for(uint32_t i = 0; i < 13600; i++)
 	{
 		EPD_Dat(0xFF);
 	}
-
 
 	EPD_Cmd(0xA6);
 	for(uint32_t i = 0; i < 13600; i++)
 	{
 		EPD_Dat(0x00);
 	}
-
 
 	EPD_Update();
 	
@@ -235,7 +226,37 @@ void EPD_Clear(void)
 
 void EPD_SendDisplay(uint8_t *image)
 {
-   //发送部分需要重写
+
+	EPD_Cmd(0x24);
+    DC_HIGH;
+	CS_LOW;
+	for (uint32_t i=0; i < 272; i++)
+	{
+		SPI0_MasterDMATrans(image+i*99,50);
+	}
+	CS_HIGH;
+
+	EPD_Cmd(0xA4);
+    DC_HIGH;
+	CS_LOW;
+	for (uint32_t i=0; i < 272; i++)
+	{
+		SPI0_MasterDMATrans(image+49+i*99,50);
+	}
+	CS_HIGH;
+
+	EPD_Cmd(0xA6);
+	for(uint32_t i = 0; i < 13600; i++)
+	{
+		EPD_Dat(0x00);
+	}
+
+	EPD_Cmd(0x26);
+	for(uint32_t i = 0; i < 13600; i++)
+	{
+		EPD_Dat(0x00);
+	}
+	
 	EPD_Update();
 }
 

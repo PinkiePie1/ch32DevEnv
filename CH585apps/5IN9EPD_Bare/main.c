@@ -9,10 +9,9 @@
 #include "CH58x_common.h"
 #include "main.h"
 #include <stdio.h>
-__attribute__((aligned(4))) uint8_t imageCache[4736] = {0};//显存，为了提高memcpy的速度需要四字节对齐。
 
-//和memset
-static inline void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s+=4) *s = c; }
+//显存，为了提高memcpy的速度需要四字节对齐。
+__attribute__((aligned(4))) uint8_t imageCache[26928] = {0};
 
 static void GPIOInit(void)
 {
@@ -29,16 +28,24 @@ void main(void)
 	GPIOInit();
 
 	GPIOB_ResetBits(GPIO_Pin_3);
-	//由于LUT反向，不再需要初始化，0x00对应白色
-	//memset(imageCache,0xFF,4736);
+	memset(imageCache,0xFF,26928);
 	
 	paint_SetImageCache(imageCache);
 
+	drawStr(120,150,"this is where I am",font14,BLACK);
+	drawStr(500,150,"this is where I am",font14,WHITE);
 
 	EPD_Init();	
-	EPD_Clear();
+	EPD_SendDisplay(imageCache);
     EPD_Sleep();
     GPIOB_SetBits(GPIO_Pin_3);
+
+ 
+
+    
+
+	
+    
 	while(1);
 	
 }
