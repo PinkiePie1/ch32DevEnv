@@ -24,8 +24,8 @@ void paint_SetImageCache(uint8_t *imagePtr)
 __HIGH_CODE
 static inline void setPixel(uint16_t x, uint16_t y, uint8_t color)
 {
-	//反正有硬件乘法，y*99就乘99吧
-    uint16_t index = (x>>3) + (y*99); 
+	//硬件除法给我的底气
+    uint16_t index = ((x>>3)*272) + (y%272); 
     //像素所对应的字节的位置
     if( color )
     {

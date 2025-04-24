@@ -25,13 +25,7 @@
 #define devDelay(n) tickDelayMs(n)
 #define WAIT_BUSY while(IS_BUSY)
 
-#define EPD_WIDTH 128
-#define EPD_HEIGHT 296
 
-//这个宏定义控制EPD是正着显示还是反着显示。
-//正着显示可以用DMA发送会更快，如果应用层面允许
-//尽量使用REVERSED 0
-#define REVERSED 0
 
 void EPD_Hal_Init(void);
 void EPD_Init(void);
@@ -41,4 +35,5 @@ void EPD_Clear(void);
 void EPD_Sleep(void);
 void EPD_SendDisplay(uint8_t *image);
 void EPD_PartialDisplay(uint8_t *image);
+void EPD_PreparePartial(uint8_t *image);
 #endif
