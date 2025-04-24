@@ -32,20 +32,26 @@ void main(void)
 	
 	paint_SetImageCache(imageCache);
 
-	drawStr(120,150,"this is where I am",font14,BLACK);
-	drawStr(500,150,"this is where I am",font14,WHITE);
+	drawStr(500,50,"This is EPD test.",font14,BLACK);
+	drawStr(790,270,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font14,BLACK);
+
+	drawLine(0,70,791,70,BLACK);
+	drawRect(10,10,50,50,BLACK);
+	fillRect(791-10,10,791-50,50,BLACK);
+	drawRect(0,0,791,271,BLACK);
+
+	GPIOB_SetBits(GPIO_Pin_3);
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
     EPD_Sleep();
+
     GPIOB_SetBits(GPIO_Pin_3);
-
- 
-
     
-
-	
-    
-	while(1);
+	while( 1 )
+	{
+		GPIOB_InverseBits(GPIO_Pin_3);
+		DelayMs(500);
+	}
 	
 }

@@ -232,6 +232,7 @@ void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const
 }
 
 //正常画单个字符，可支持12、18等非8字节对齐的字符大小和任意位置，可指定颜色
+__HIGH_CODE
 void drawChar(uint16_t xStart, uint16_t yStart, char charToPrint, const char *font, uint8_t color)
 {
 	uint8_t height = FONT_GETHEIGHT(font);
@@ -242,9 +243,9 @@ void drawChar(uint16_t xStart, uint16_t yStart, char charToPrint, const char *fo
 		for(int j = 0; j<height; j++)
 		{
 			if(font[width*shift*(charToPrint-' '+1)+i*shift+(j>>3)] & (0x80>>(j&7)))
-				{setPixel(xStart+j,yStart+i,color);}
+				{setPixel(xStart+i,yStart-j,color);}
 			else
-				{setPixel(xStart+j,yStart+i,~color);}
+				{setPixel(xStart+i,yStart-j,~color);}
 		}
 	}
 
@@ -256,11 +257,11 @@ void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *f
 	int x = xStart;
 	int y = yStart;
 	int width = FONT_GETWIDTH(font);
+	int height = FONT_GETHEIGHT(font);
 	for( ; *stringToPrint; stringToPrint++)
 	{
-		x = (y>=width)&&(*stringToPrint!='\n')? x : x+FONT_GETHEIGHT(font);
-		y = (y>=width)? y-width : yStart-width;
-		y = (*stringToPrint=='\n')? yStart:y;
+		y = (x>=width) ? y        : y-height ;
+		x = (x>=width) ? x-width  : xStart;		
 		drawChar(x,y,*stringToPrint,font,color);	
 
 	}	
