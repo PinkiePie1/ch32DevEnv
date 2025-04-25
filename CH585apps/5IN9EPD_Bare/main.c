@@ -36,7 +36,7 @@ void main(void)
 	
 	paint_SetImageCache(imageCache);
 
-	drawStr(500,50,"This is EPD test.",font14,BLACK);
+	drawStr(500,50,"Full refresh test.",font14,BLACK);
 	drawStr(790,270,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font14,BLACK);
 
 	drawLine(0,70,791,70,BLACK);
@@ -53,10 +53,10 @@ void main(void)
 
     GPIOB_SetBits(GPIO_Pin_3);
 
-    uint8_t refresh = 0;
+    uint8_t refresh = 1;
     DelayMs(3500);
     drawStr(500,30,"Partial test.",font14,BLACK);
-    while(refresh<10)
+    while(refresh<11)
     {
 	    DelayMs(500);
 
@@ -68,12 +68,12 @@ void main(void)
 	    refresh++;
     }
 
-/*
+
     DelayMs(10000);
     EPD_Init();
     EPD_Clear();
     EPD_Sleep();
-*/  
+  
 	while( 1 )
 	{
 		GPIOB_InverseBits(GPIO_Pin_3);
