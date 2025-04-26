@@ -173,40 +173,41 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 }
 
 
-//快速显示图像，图像的的宽度必须是128，两个参数指定了图像
+//快速显示图像，图像的的宽度必须是272，两个参数指定了图像
 //在屏幕上的起点和终点。
 void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 {
-	uint32_t length = (xEnd-xStart) << 4;
-	memcpy( (void *)( (uint32_t)image+ (xStart<<4)), 
+	uint32_t length = ((xEnd-xStart)>>3) *272;
+	memcpy( (void *)( (uint32_t)image+ (xStart>>3)*272), 
 	imgDat, 
 	length);
 }
 
-//快速画单个字，x轴只支持字节对齐，也就是只有16行,
+//快速画单个字,字节对齐的情况下
 void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
 {	
-	if (FONT_GETHEIGHT(font) == 0x08)
-	{
-		uint8_t width = FONT_GETWIDTH(font);
-	    for (uint8_t i=0; i<width; i++)
-	    {
-	    	uint16_t index = (xStart>>3)+((yStart+i)<<4);
-	    	image[index] = font[width*(chara-' '+1)+i];
-	    }	
+	if (FONT_GETHEIGHT(font) == 16)
+	{	
+    	uint16_t index = ((xStart>>3)*272) + yStart;
+    	memcpy( image+index , font+(chara-' '+2)*16 ,16);
 	}
-	else if (FONT_GETHEIGHT(font) == 14)
-	{
-		uint8_t width = FONT_GETWIDTH(font);
-		uint8_t offset = xStart&7;
-		for (uint8_t i=0; i<width; i++)
+
+}
+
+//快速画单个字，支持任意位置。
+static void fastShiftedChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
+{
+	if (FONT_GETHEIGHT(font) == 16)
+	{	
+		uint8_t offset = xStart&7UL;
+		uint16_t index = ((xStart>>3)*272) + yStart;
+		for(uint8_t i = 0; i< 16; i++)
 		{
-			uint16_t index = (xStart>>3) + ((yStart+i)<<4);
-			uint16_t fontIndex = width*2*(chara-' '+1)+i*2;
-			image[index] |= font[fontIndex]>>offset;
-			image[index+1] |= font[fontIndex]<<(8-offset);
-			image[index+1] |= font[fontIndex+1]>>offset;
-			image[index+2] |= font[fontIndex+1]<<(8-offset);
+			uint8_t temp = font[(chara-' '+2)*16+i];
+			image[index+i] &= ~(0xFF>>offset);
+			image[index+i] |= (temp>>offset);
+			image[index+272+i] &= ~(0xFF<<(8-offset));
+			image[index+272+i] |= (temp<<(8-offset));
 		}
 	}
 }
@@ -214,18 +215,27 @@ void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *f
 //快速画字符串。
 void fastDrawString(uint16_t xStart, uint16_t yStart, char *stringToPrint, const uint8_t *font)
 {
-	if (FONT_GETHEIGHT(font) == 0x08 || FONT_GETHEIGHT(font) == 14)
+	if (FONT_GETHEIGHT(font) == 16)
 	{
 		uint16_t y = yStart;
 		uint16_t x = xStart;
-		int width = FONT_GETWIDTH(font);
-		for( ; *stringToPrint; stringToPrint++)
+		if( (xStart&7UL) == 0 ) //如果起点能被8整除，则每次只需要memcpy即可
 		{	
-			x = (y>=width)&&(*stringToPrint!='\n')? x : x+FONT_GETHEIGHT(font);
-			y = (y>=width)? y-width : yStart-width;
-			y = (*stringToPrint=='\n')? yStart:y;
-			fastDrawChar(x,y,*stringToPrint,font);
-
+			for( ; *stringToPrint; stringToPrint++)
+			{	
+				y = (x>=8) ? y        : y-16 ;
+				x = (x>=8) ? x-8  : xStart;		
+				fastDrawChar(x,y,*stringToPrint,font);
+			}
+		}
+		else
+		{
+			for( ; *stringToPrint; stringToPrint++)
+			{	
+				y = (x>=8) ? y        : y-16 ;
+				x = (x>=8) ? x-8  : xStart;		
+				fastShiftedChar(x,y,*stringToPrint,font);
+			}	
 		}	
 	}
 	
