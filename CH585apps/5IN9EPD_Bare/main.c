@@ -41,10 +41,10 @@ void main(void)
 	fastDrawString(500,50,"Full refresh test.",font16);
 	 fastDrawString(792,271-16,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font16);
 
-	//drawLine(0,70,791,70,BLACK);
-	//drawRect(10,10,50,50,BLACK);
-	//fillRect(791-10,10,791-50,50,BLACK);
-	//drawRect(0,0,791,271,BLACK);
+	drawLine(0,70,791,70,BLACK);
+	drawRect(10,10,50,50,BLACK);
+	fillRect(791-10,10,791-50,50,BLACK);
+	drawRect(0,0,791,271,BLACK);
 	GPIOB_ResetBits(GPIO_Pin_0);
 	GPIOB_SetBits(GPIO_Pin_3);
 
