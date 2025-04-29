@@ -18,11 +18,17 @@ __HIGH_CODE
 void PM_LowPower_Sleep(void);
 
 static void GPIOInit(void)
-{
+{	
+	GPIOA_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PD);//所有引脚上拉减少睡眠电流
+    GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PD);
 	EPD_Hal_Init();
 	GPIOB_ResetBits(GPIO_Pin_0);
 	GPIOB_ModeCfg(GPIO_Pin_3|GPIO_Pin_0,GPIO_ModeOut_PP_5mA);
 	GPIOB_SetBits(GPIO_Pin_3);
+    GPIOA_ModeCfg(GPIO_Pin_8, GPIO_ModeIN_PU);
+    GPIOA_ITModeCfg(GPIO_Pin_8, GPIO_ITMode_FallEdge); // 下降沿唤醒
+    PFIC_EnableIRQ(GPIO_A_IRQn);
+    PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay); 
 }
 
 void main(void)
@@ -31,9 +37,6 @@ void main(void)
 	//所以在这里初始化时钟是不必要的。	
 	tickDelayInit();
 	GPIOInit();
-
-	GPIOB_ResetBits(GPIO_Pin_3);
-	GPIOB_SetBits(GPIO_Pin_0);
 	
 	paint_SetImageCache(imageCache);
 
@@ -41,19 +44,25 @@ void main(void)
 	fastDrawString(500,50,"Full refresh test.",font16);
 	 fastDrawString(792,271-16,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font16);
 
-	drawLine(0,70,791,70,BLACK);
-	drawRect(10,10,50,50,BLACK);
-	fillRect(791-10,10,791-50,50,BLACK);
-	drawRect(0,0,791,271,BLACK);
-	GPIOB_ResetBits(GPIO_Pin_0);
-	GPIOB_SetBits(GPIO_Pin_3);
+//	drawLine(0,70,791,70,BLACK);
+//	drawRect(10,10,50,50,BLACK);
+//	fillRect(791-10,10,791-50,50,BLACK);
+//	drawRect(0,0,791,271,BLACK);
+
+
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
-	EPD_PreparePartial(imageCache);
+	PFIC_EnableIRQ(GPIO_A_IRQn);
+	PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
+	LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);	
+//	EPD_PreparePartial(imageCache);
     EPD_Sleep();
+	PFIC_DisableIRQ(GPIO_A_IRQn);
 
-    GPIOB_SetBits(GPIO_Pin_3);
+    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);
+
+
 
     uint8_t refresh = 1;
     DelayMs(3500);
@@ -74,6 +83,7 @@ void main(void)
     EPD_Init();
     EPD_Clear();
     EPD_Sleep();
+    
   
 	while( 1 )
 	{
@@ -103,7 +113,7 @@ void PM_LowPower_Sleep(void)
     R8_HFCK_PWR_CTRL |= RB_CLK_RC16M_PON;
     R16_CLK_SYS_CFG &= ~RB_OSC32M_SEL;
     sys_safe_access_disable();
-    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_EXTEND |RB_XT_PRE_EN); //只保留96+32K SRAM 供电
+    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K | RB_PWR_EXTEND |RB_XT_PRE_EN); //只保留96+32K SRAM 供电
     // 此时外部时钟不稳定，且flash未准备好，只能运行RAM中代码
     SYS_DisableAllIrq(&irq_status);
     wake_ctrl = R8_SLP_WAKE_CTRL;
@@ -140,3 +150,12 @@ void PM_LowPower_Sleep(void)
     SYS_RecoverIrq(irq_status);
 
 }
+
+
+__INTERRUPT
+__HIGH_CODE
+void GPIOA_IRQHandler(void)
+{
+    GPIOA_ClearITFlagBit(GPIO_Pin_8);
+}
+

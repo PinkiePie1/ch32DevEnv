@@ -292,8 +292,8 @@ void EPD_Update(void)
     EPD_Cmd( 0x22 );
     EPD_Dat( 0xCF );
     EPD_Cmd( 0x20 );
-//    devDelay(5);
-    WAIT_BUSY;	
+    devDelay(5);
+//    WAIT_BUSY;	
     
 }
 

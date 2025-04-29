@@ -22,7 +22,7 @@
 
 //读取busy脚,注意只会返回0或者非0值，所以不可用==1
 #define IS_BUSY GPIOA_ReadPortPin(EPD_BUSY_PIN)
-#define devDelay(n) tickDelayMs(n)
+#define devDelay(n) DelayMs(n)
 #define WAIT_BUSY while(IS_BUSY)
 
 
