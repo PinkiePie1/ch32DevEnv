@@ -9,7 +9,7 @@
 #include "CH58x_common.h"
 #include "main.h"
 #include <stdio.h>
-__attribute__((aligned(4))) uint8_t imageCache[4736] = {0};//显存，为了提高memcpy的速度需要四字节对齐。
+__attribute__((aligned(4))) uint8_t imageCache[2888] = {0};//显存，为了提高memcpy的速度需要四字节对齐。
 
 //和memset
 static inline void mymemset(void *dest, int c, size_t n) { unsigned char *s = dest; for (; n; n--, s+=4) *s = c; }
@@ -28,59 +28,19 @@ void main(void)
 	tickDelayInit();
 	GPIOInit();
 
-	EPD_Init();
-	EPD_Clear();
-	EPD_Sleep();
-	while(1);
 
 	GPIOB_ResetBits(GPIO_Pin_3);
 	//由于LUT反向，不再需要初始化，0x00对应白色
 	//memset(imageCache,0xFF,4736);
 	
 	paint_SetImageCache(imageCache);
-
-
-	//快速显示图片,100us左右
-	FastImg(147,295,gImage_full+16*10);
-
-	//需要setpixel的画图
-	drawLine(0,147,127,147,BLACK);
-//	drawRect(0,0,127,295,BLACK);
-//	drawRect(10,10,50,50,BLACK);
-
-	//快速画图与快速显示字符串
-	fastFill(80,95,40,40,BLACK);
-	fastFill(89,115,2,2,WHITE);
-	fastRect(0,0,127,295,BLACK);
-	fastRect(78,93,122,137,BLACK);
-	
-	fastDrawString(80,90,"1234567890abcdefghijklmnopqrstuvwxyz,./?;:!@#$%^&*()",font8);
-    //printf功能
-	EPD_Printf(10,145,font14,WHITE,"Start @ChipID=%02X",R8_CHIP_ID);
-	EPD_Printf(24,145,font14,BLACK,"SysClock:%ld",GetSysClock());
-
+	drawStr(50,150,"This is 1.54 inch EDP test program.",font14,WHITE);
 	GPIOB_ResetBits(GPIO_Pin_6);
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
-	tickDelayMs(3000);
-	//局刷
-	drawStr(51,145,"Partial update.",font14,WHITE);
-	drawStr(66,80,"font8",font8,BLACK);
 
-	
-	for(int i=19;i<29;i++)
-	{
-		EPD_Printf(100,132,font14,WHITE,"|%d|",i);
-		EPD_PartialDisplay(imageCache);
-		EPD_Sleep();
-		tickDelayMs(1000);
-	}
-	//EPD_SendDisplay( (unsigned char *)gImage_full );//显示大图像，直接从flash读取
-
-	
-//	EPD_Sleep();
 	while(1)
 	{
 		GPIOB_SetBits(GPIO_Pin_3);

@@ -31,7 +31,7 @@ static inline void setPixel(uint16_t x, uint16_t y, uint8_t color)
       //所以我们把不越界的责任交给用户。
       //如果希望安全，用户可以把数组弄大一点
       //比如5000个byte，这样即使越界也很难碰到别的东西。
-    uint16_t index = (x>>3) + (y<<4); 
+    uint16_t index = (x>>3) + y*19; 
     //像素所对应的字节的位置
     if( color )
     {
