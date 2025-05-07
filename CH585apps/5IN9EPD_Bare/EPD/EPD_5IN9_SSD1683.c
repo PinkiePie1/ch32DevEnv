@@ -293,7 +293,7 @@ void EPD_Update(void)
     EPD_Dat( 0xCF );
     EPD_Cmd( 0x20 );
     devDelay(5);
-//    WAIT_BUSY;	
+    WAIT_BUSY;	
     
 }
 

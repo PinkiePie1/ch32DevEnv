@@ -28,6 +28,11 @@ void main(void)
 	tickDelayInit();
 	GPIOInit();
 
+	EPD_Init();
+	EPD_Clear();
+	EPD_Sleep();
+	while(1);
+
 	GPIOB_ResetBits(GPIO_Pin_3);
 	//由于LUT反向，不再需要初始化，0x00对应白色
 	//memset(imageCache,0xFF,4736);

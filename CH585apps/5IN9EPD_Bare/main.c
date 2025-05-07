@@ -53,14 +53,14 @@ void main(void)
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
-	PFIC_EnableIRQ(GPIO_A_IRQn);
-	PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
-	LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);	
-//	EPD_PreparePartial(imageCache);
+//	PFIC_EnableIRQ(GPIO_A_IRQn);
+//	PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
+//	LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);	
+	EPD_PreparePartial(imageCache);
     EPD_Sleep();
-	PFIC_DisableIRQ(GPIO_A_IRQn);
+//	PFIC_DisableIRQ(GPIO_A_IRQn);
 
-    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);
+//    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);
 
 
 
