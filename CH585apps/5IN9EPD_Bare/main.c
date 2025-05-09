@@ -44,46 +44,51 @@ void main(void)
 	fastDrawString(500,50,"Full refresh test.",font16);
 	 fastDrawString(792,271-16,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font16);
 
-//	drawLine(0,70,791,70,BLACK);
-//	drawRect(10,10,50,50,BLACK);
-//	fillRect(791-10,10,791-50,50,BLACK);
-//	drawRect(0,0,791,271,BLACK);
-
-
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
-//	PFIC_EnableIRQ(GPIO_A_IRQn);
-//	PWR_PeriphWakeUpCfg(ENABLE, RB_SLP_GPIO_WAKE, Long_Delay);
-//	LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);	
 	EPD_PreparePartial(imageCache);
     EPD_Sleep();
-//	PFIC_DisableIRQ(GPIO_A_IRQn);
-
-//    LowPower_Sleep(RB_PWR_RAM32K | RB_PWR_RAM96K);
-
-
 
     uint8_t refresh = 1;
     DelayMs(3500);
     fastDrawString(500,30,"Partial test.",font16);
-    while(refresh<11)
+    while(refresh<3)
     {
 	    DelayMs(500);
 		fastDrawString(791-refresh*8,271-16,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font16);
-	    
-
 	    EPD_PartialDisplay(imageCache);
 	    EPD_Sleep();
 	    refresh++;
     }
 
 
-    DelayMs(10000);
+    DelayMs(3000);
     EPD_Init();
     EPD_Clear();
     EPD_Sleep();
-    
+
+	uint32_t i=0;
+	while(i<4294967290)
+	{
+		i++;
+		memset(imageCache,0,26928);
+		fastDrawString(792/2,271/2,"This counter goes up every half minute.",font16);
+		char buffer[30];
+		snprintf(buffer,30,"%ld",i);
+		buffer[29] = 0;
+		fastDrawString(792/2,271/2-20,buffer,font16);
+		if (i%8==0){
+			EPD_Init();	
+			EPD_SendDisplay(imageCache);
+			EPD_PreparePartial(imageCache);
+		} else {
+			EPD_PartialDisplay(imageCache);
+		}
+		EPD_Sleep();
+		DelayMs(30000);
+    	
+    }
   
 	while( 1 )
 	{
