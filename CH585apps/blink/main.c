@@ -11,8 +11,7 @@
 
 static void GPIOInit(void)
 {
-	GPIOB_ModeCfg(GPIO_Pin_3,GPIO_ModeOut_PP_5mA);
-	GPIOB_SetBits(GPIO_Pin_3);
+	GPIOA_ModeCfg(GPIO_Pin_8,GPIO_ModeOut_PP_5mA);
 }
 
 void main(void)
@@ -24,9 +23,9 @@ void main(void)
 
 	while( 1 )
         {
-            GPIOB_SetBits(GPIO_Pin_3);
+            GPIOA_SetBits(GPIO_Pin_8);
             tickDelayMs(900);
-            GPIOB_ResetBits(GPIO_Pin_3);
+            GPIOA_ResetBits(GPIO_Pin_8);
            tickDelayMs(900);
         }
 
