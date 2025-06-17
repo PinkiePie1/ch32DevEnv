@@ -93,7 +93,7 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
         
     }
 
-	//判忙，这里是轮询，可以做到功耗比较低。
+	//判忙，这里是轮询。TMOS中断不好用
     if(events & EPD_WAITBUSY)
     {
     	if(IS_BUSY)
@@ -113,19 +113,22 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     	EPD_Printf(790,271-16,font16,"Connected.");
     	EPD_Printf(760,271-16*2,font16,"Start @ChipID=%02X",R8_CHIP_ID);
 		EPD_Printf(760,271-16*3,font16,"SysClock:%ld",GetSysClock());
-		EPD_Printf(760,271-16*4,font16,"Host Addr:%02X:%02X:%02X:%02X:%02X:%02X",MsgToDisplay[1],MsgToDisplay[2],MsgToDisplay[3],MsgToDisplay[4],MsgToDisplay[5],MsgToDisplay[6]);
+		EPD_Printf(
+			760,271-16*4,font16,
+			"Host Addr:%02X:%02X:%02X:%02X:%02X:%02X",
+			MsgToDisplay[1],MsgToDisplay[2],MsgToDisplay[3],
+			MsgToDisplay[4],MsgToDisplay[5],MsgToDisplay[6]
+		);
+		
 		tmos_msg_deallocate(MsgToDisplay);
 		EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWCONNECT_EVT;
     }
 
-	//显示图像。
+	//显示图像，未实现。
     if(events & EPD_SHOWIMG_EVT)
     {
     	INIT_CACHE;
-		//FastImg(147,295,gImage_full+16*10);
-//		drawLine(0,147,127,147,BLACK);
-//		fastRect(0,0,127,295,BLACK);
 		fastDrawString(10,145,"You wrote 0x1A to Char1, showing    image at left.",font16);
     	EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWIMG_EVT;
