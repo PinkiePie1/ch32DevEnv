@@ -19,9 +19,9 @@ extern uint32_t _vector_base[];
 /*********************************************************************
  * @fn      SetSysClock
  *
- * @brief   ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+ * @brief   ÅäÖÃÏµÍ³ÔËÐÐÊ±ÖÓ
  *
- * @param   sc      - ÏµÍ³Ê±ï¿½ï¿½Ô´Ñ¡ï¿½ï¿½ refer to SYS_CLKTypeDef
+ * @param   sc      - ÏµÍ³Ê±ÖÓÔ´Ñ¡Ôñ refer to SYS_CLKTypeDef
  *
  * @return  none
  */
@@ -124,7 +124,7 @@ void SetSysClock(SYS_CLKTypeDef sc)
 /*********************************************************************
  * @fn      highcode_init
  *
- * @brief   ï¿½ï¿½ï¿½ï¿½highcodeï¿½ï¿½ï¿½ï¿½
+ * @brief   °áÔËhighcode´úÂë
  *
  * @param   none
  *
@@ -151,7 +151,7 @@ void highcode_init(void)
 /*********************************************************************
  * @fn      MachineMode_Call_IRQ
  *
- * @brief   ï¿½ï¿½ÐµÄ£Ê½ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½Ð¶ï¿½
+ * @brief   »úÐµÄ£Ê½µ÷ÓÃº¯ÊýÊ¹ÓÃµÄÖÐ¶Ï
  *
  * @param   none
  *
@@ -171,9 +171,9 @@ void MachineMode_Call_IRQ(void)
 /*********************************************************************
  * @fn      MachineMode_Call
  *
- * @brief   ×¢ï¿½ï¿½ï¿½ÐµÄ£Ê½Ö´ï¿½Ðºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ÐµÄ£Ê½ï¿½Âµï¿½ï¿½ï¿½
+ * @brief   ×¢²á»úÐµÄ£Ê½Ö´ÐÐº¯Êý£¬²¢ÔÚ»úÐµÄ£Ê½ÏÂµ÷ÓÃ
  *
- * @param   func    -   ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ÐµÄ£Ê½ï¿½ï¿½Ö´ï¿½ÐµÄºï¿½ï¿½ï¿½
+ * @param   func    -   ÓÃÓÚÔÚ»úÐµÄ£Ê½ÏÂÖ´ÐÐµÄº¯Êý
  *
  * @return  none
  */
@@ -184,17 +184,17 @@ void MachineMode_Call(MachineMode_Call_func func)
     uint32_t sw_vtf, sw_irqtable;
     uint32_t irqv;
 
-    /* ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ */
+    /* ÕâÀï¹Ø±ÕËùÓÐÖÐ¶Ï */
     irqv = (PFIC->ISR[0] >> 8) | (PFIC->ISR[1] << 24);
     PFIC->IRER[0] = 0xffffffff;
     PFIC->IRER[1] = 0xffffffff;
 
-    /* ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½SWï¿½Ð¶Ïµï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÈ¡ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ */
+    /* Èç¹ûÓÃ»§Ê¹ÓÃÁËSWÖÐ¶ÏµÄÃâ±íÖÐ¶Ï£¬ÔòÐèÒªÈ¡Ïû´Ëº¯ÊýËùÓÐ×¢ÊÍ */
 //    for(i = 0; i < 4; i++)
 //    {
 //        if(PFIC->VTFIDR[i] == SWI_IRQn)
 //        {
-//            /* ï¿½Òµï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ô¼ï¿½Ê¹ï¿½Ãµï¿½SWï¿½Ð¶Ï£ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ */
+//            /* ÕÒµ½ÁËÓÃ»§×Ô¼ºÊ¹ÓÃµÄSWÖÐ¶Ï£¬¹Ø±ÕËü */
 //            sw_vtf = PFIC->VTFADDR[i];
 //            PFIC->VTFADDR[i] = (sw_vtf & 0xFFFFFFFE);
 //            break;
@@ -205,12 +205,12 @@ void MachineMode_Call(MachineMode_Call_func func)
     _vector_base[SWI_IRQn] = (uint32_t)MachineMode_Call_IRQ;
     gs_machine_mode_func = func;
 
-    /* Ö»ï¿½ï¿½SWI_IRQn */
+    /* Ö»´ò¿ªSWI_IRQn */
     PFIC_EnableIRQ(SWI_IRQn);
-    /* ï¿½ï¿½ï¿½ï¿½SWI_IRQnï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    /* ½øÈëSWI_IRQnÖÐ¶Ï´¦Àíº¯Êý */
     PFIC_SetPendingIRQ(SWI_IRQn);
 
-    /* ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    /* µÈ´ý´¦Àí½áÊø */
     while(gs_machine_mode_func != NULL);
 
     PFIC_DisableIRQ(SWI_IRQn);
@@ -219,11 +219,11 @@ void MachineMode_Call(MachineMode_Call_func func)
 
 //    if(i != 4)
 //    {
-//        /* ï¿½Ö¸ï¿½Ô­ï¿½ï¿½ï¿½ï¿½SWï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ */
+//        /* »Ö¸´Ô­±¾µÄSWÃâ±íÖÐ¶Ï */
 //        PFIC->VTFADDR[i] = sw_vtf;
 //    }
 
-    /* ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    /* ÕâÀï»Ö¸´Ô­À´µÄÖÐ¶ÏÊ¹ÄÜÅäÖÃ */
     PFIC->IENR[0] = (irqv << 8);
     PFIC->IENR[1] = (irqv >> 24);
 }
@@ -231,7 +231,7 @@ void MachineMode_Call(MachineMode_Call_func func)
 /*********************************************************************
  * @fn      SetPI_func
  *
- * @brief   ï¿½ï¿½ï¿½Ú»ï¿½ÐµÄ£Ê½ï¿½ï¿½ï¿½Ãµï¿½Ê¹ï¿½ï¿½Ô¤È¡Ö¸ï¿½îº¯ï¿½ï¿½
+ * @brief   ÓÃÓÚ»úÐµÄ£Ê½µ÷ÓÃµÄÊ¹ÄÜÔ¤È¡Ö¸Áîº¯Êý
  *
  * @param   none
  *
@@ -244,7 +244,7 @@ void MachineMode_Call(MachineMode_Call_func func)
 /*********************************************************************
  * @fn      SYS_EnablePI
  *
- * @brief   Ê¹ï¿½ï¿½Ô¤È¡Ö¸ï¿½î¹¦ï¿½ï¿½
+ * @brief   Ê¹ÄÜÔ¤È¡Ö¸Áî¹¦ÄÜ
  *
  * @param   none
  *
@@ -258,7 +258,7 @@ void SYS_EnablePI()
 /*********************************************************************
  * @fn      GetSysClock
  *
- * @brief   ï¿½ï¿½È¡ï¿½ï¿½Ç°ÏµÍ³Ê±ï¿½ï¿½
+ * @brief   »ñÈ¡µ±Ç°ÏµÍ³Ê±ÖÓ
  *
  * @param   none
  *
@@ -267,7 +267,7 @@ void SYS_EnablePI()
 uint32_t GetSysClock(void)
 {
     if((R16_CLK_SYS_CFG & RB_CLK_SYS_MOD) == RB_CLK_SYS_MOD)
-    { // 32Kï¿½ï¿½ï¿½ï¿½Æµ
+    { // 32K×öÖ÷Æµ
         return (CAB_LSIFQ);
     }
     else if(R16_CLK_SYS_CFG & RB_XROM_SCLK_SEL)
@@ -277,16 +277,16 @@ uint32_t GetSysClock(void)
             return ((R16_CLK_SYS_CFG & RB_OSC32M_SEL)?32000000:16000000);
         }
         else
-        {   // PLLï¿½ï¿½ï¿½Ð·ï¿½Æµ
+        {   // PLL½øÐÐ·ÖÆµ
             return (312000000 / (R16_CLK_SYS_CFG & 0x1f));
         }
     }
     else if(R16_CLK_SYS_CFG & RB_OSC32M_SEL)
-    { // 32Mï¿½ï¿½ï¿½Ð·ï¿½Æµ
+    { // 32M½øÐÐ·ÖÆµ
         return (32000000 / (R16_CLK_SYS_CFG & 0x1f));
     }
     else
-    { // 16Mï¿½ï¿½ï¿½Ð·ï¿½Æµ
+    { // 16M½øÐÐ·ÖÆµ
         return (16000000 / (R16_CLK_SYS_CFG & 0x1f));
     }
 }
@@ -294,11 +294,11 @@ uint32_t GetSysClock(void)
 /*********************************************************************
  * @fn      SYS_GetInfoSta
  *
- * @brief   ï¿½ï¿½È¡ï¿½ï¿½Ç°ÏµÍ³ï¿½ï¿½Ï¢×´Ì¬
+ * @brief   »ñÈ¡µ±Ç°ÏµÍ³ÐÅÏ¢×´Ì¬
  *
  * @param   i       - refer to SYS_InfoStaTypeDef
  *
- * @return  ï¿½Ç·ï¿½ï¿½ï¿½
+ * @return  ÊÇ·ñ¿ªÆô
  */
 uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i)
 {
@@ -315,7 +315,7 @@ uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i)
 /*********************************************************************
  * @fn      SYS_ResetExecute
  *
- * @brief   Ö´ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
+ * @brief   Ö´ÐÐÏµÍ³Èí¼þ¸´Î»
  *
  * @param   none
  *
@@ -324,7 +324,7 @@ uint8_t SYS_GetInfoSta(SYS_InfoStaTypeDef i)
 __HIGH_CODE
 void SYS_ResetExecute(void)
 {
-    FLASH_ROM_SW_RESET();//æœ‰éœ€è¦å¯ä»¥æ³¨é‡ŠæŽ‰è¿™ä¸ªå‡½æ•°ï¼Œèƒ½çœä¸‹2kå·¦å³çš„RAMã€‚
+    FLASH_ROM_SW_RESET();
     sys_safe_access_enable();
     R8_RST_WDOG_CTRL |= RB_SOFTWARE_RESET;
     sys_safe_access_disable();
@@ -333,9 +333,9 @@ void SYS_ResetExecute(void)
 /*********************************************************************
  * @fn      SYS_DisableAllIrq
  *
- * @brief   ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ð¶ï¿½Öµ
+ * @brief   ¹Ø±ÕËùÓÐÖÐ¶Ï£¬²¢±£Áôµ±Ç°ÖÐ¶ÏÖµ
  *
- * @param   pirqv   - ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Öµ
+ * @param   pirqv   - µ±Ç°±£ÁôÖÐ¶ÏÖµ
  *
  * @return  none
  */
@@ -345,15 +345,14 @@ void SYS_DisableAllIrq(uint32_t *pirqv)
     *pirqv = (PFIC->ISR[0] >> 8) | (PFIC->ISR[1] << 24);
     PFIC->IRER[0] = 0xffffffff;
     PFIC->IRER[1] = 0xffffffff;
-    asm volatile("fence.i");
 }
 
 /*********************************************************************
  * @fn      SYS_RecoverIrq
  *
- * @brief   ï¿½Ö¸ï¿½Ö®Ç°ï¿½Ø±Õµï¿½ï¿½Ð¶ï¿½Öµ
+ * @brief   »Ö¸´Ö®Ç°¹Ø±ÕµÄÖÐ¶ÏÖµ
  *
- * @param   irq_status  - ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Öµ
+ * @param   irq_status  - µ±Ç°±£ÁôÖÐ¶ÏÖµ
  *
  * @return  none
  */
@@ -367,11 +366,11 @@ void SYS_RecoverIrq(uint32_t irq_status)
 /*********************************************************************
  * @fn      SYS_GetSysTickCnt
  *
- * @brief   ï¿½ï¿½È¡ï¿½ï¿½Ç°ÏµÍ³(SYSTICK)ï¿½ï¿½ï¿½ï¿½Öµ
+ * @brief   »ñÈ¡µ±Ç°ÏµÍ³(SYSTICK)¼ÆÊýÖµ
  *
  * @param   none
  *
- * @return  ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Öµ
+ * @return  µ±Ç°¼ÆÊýÖµ
  */
 uint32_t SYS_GetSysTickCnt(void)
 {
@@ -381,9 +380,9 @@ uint32_t SYS_GetSysTickCnt(void)
 /*********************************************************************
  * @fn      WWDG_ITCfg
  *
- * @brief   ï¿½ï¿½ï¿½Å¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
+ * @brief   ¿´ÃÅ¹·¶¨Ê±Æ÷Òç³öÖÐ¶ÏÊ¹ÄÜ
  *
- * @param   s       - ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð¶ï¿½
+ * @param   s       - Òç³öÊÇ·ñÖÐ¶Ï
  *
  * @return  none
  */
@@ -408,9 +407,9 @@ void WWDG_ITCfg(FunctionalState s)
 /*********************************************************************
  * @fn      WWDG_ResetCfg
  *
- * @brief   ï¿½ï¿½ï¿½Å¹ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
+ * @brief   ¿´ÃÅ¹·¶¨Ê±Æ÷¸´Î»¹¦ÄÜ
  *
- * @param   s       - ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Î»
+ * @param   s       - Òç³öÊÇ·ñ¸´Î»
  *
  * @return  none
  */
@@ -435,7 +434,7 @@ void WWDG_ResetCfg(FunctionalState s)
 /*********************************************************************
  * @fn      WWDG_ClearFlag
  *
- * @brief   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¹ï¿½ï¿½Ð¶Ï±ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ÖµÒ²ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @brief   Çå³ý¿´ÃÅ¹·ÖÐ¶Ï±êÖ¾£¬ÖØÐÂ¼ÓÔØ¼ÆÊýÖµÒ²¿ÉÇå³ý
  *
  * @param   none
  *
@@ -451,7 +450,7 @@ void WWDG_ClearFlag(void)
 /*********************************************************************
  * @fn      HardFault_Handler
  *
- * @brief   Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð¸ï¿½Î»ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Îªï¿½Ïµç¸´Î»
+ * @brief   Ó²¼þ´íÎóÖÐ¶Ï£¬½øÈëºóÖ´ÐÐ¸´Î»£¬¸´Î»ÀàÐÍÎªÉÏµç¸´Î»
  *
  * @param   none
  *
@@ -462,7 +461,7 @@ __HIGH_CODE
 __attribute__((weak))
 void HardFault_Handler(void)
 {
-    FLASH_ROM_SW_RESET();//æœ‰éœ€è¦å¯ä»¥æ³¨é‡ŠæŽ‰è¿™ä¸ªå‡½æ•°ï¼Œèƒ½çœä¸‹2kå·¦å³çš„RAMã€‚
+    FLASH_ROM_SW_RESET();
     sys_safe_access_enable();
     R16_INT32K_TUNE = 0xFFFF;
     sys_safe_access_disable();
@@ -472,57 +471,12 @@ void HardFault_Handler(void)
     while(1);
 }
 
-/*****
- * åˆå§‹åŒ–ä½¿ç”¨systickçš„å»¶æ—¶ã€‚
- *
- *
- *
- */
-uint32_t nus = 8;
-uint32_t nms = 7800;
-void tickDelayInit(void)
-{
-	//å‘ä¸‹è®¡æ•°ï¼ŒHCLK/8ä½œä¸ºæ—¶é’ŸåŸºå‡†ï¼Œä¸å¼€ä¸­æ–­ã€‚
-	SysTick->SR = 0;
-	SysTick->CTLR = (1UL<<0);
-	nus = GetSysClock()/8000000;//ä¸€ä¸ªusæœ‰è¿™ä¹ˆå¤štickã€‚
-	nms = GetSysClock()/8000;
-}
-
-/*****
- * ä½¿ç”¨systickå»¶æ—¶nå¾®ç§’ã€‚
- * æ³¨æ„é»˜é¢‘ä¸‹æœ€å¤§ä¸å¯è¶…è¿‡536ç§’
- *
- *
- */
-void tickDelayUs(uint32_t n)
-{
-    n *= nus;
-    SysTick->CNTL = 0;
-    uint32_t   d =  SysTick->CNTL;
-    d += n;
-    while(SysTick->CNTL <= d);
-}
-
-void tickDelayMs(uint32_t n)
-{
-	n *= nms;
-    SysTick->CNTL = 0;
-    uint32_t   d = SysTick->CNTL;
-    d += n;
-    while(SysTick->CNTL <= d);
-}
-
-//ä½¿ç”¨systickå»¶æ—¶næ¯«ç§’
-
-
-
 /*********************************************************************
  * @fn      mDelayuS
  *
- * @brief   uS ï¿½ï¿½Ê±
+ * @brief   uS ÑÓÊ±
  *
- * @param   t       - Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param   t       - Ê±¼ä²ÎÊý
  *
  * @return  none
  */
@@ -580,9 +534,9 @@ void mDelayuS(uint16_t t)
 /*********************************************************************
  * @fn      mDelaymS
  *
- * @brief   mS ï¿½ï¿½Ê±
+ * @brief   mS ÑÓÊ±
  *
- * @param   t       - Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param   t       - Ê±¼ä²ÎÊý
  *
  * @return  none
  */
@@ -602,17 +556,17 @@ int _write(int fd, char *buf, int size)
     for(i = 0; i < size; i++)
     {
 #if DEBUG == Debug_UART0
-        while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* ï¿½È´ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ */
-        R8_UART0_THR = *buf++; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* µÈ´ýÊý¾Ý·¢ËÍ */
+        R8_UART0_THR = *buf++; /* ·¢ËÍÊý¾Ý */
 #elif DEBUG == Debug_UART1
-        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* ï¿½È´ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ */
-        R8_UART1_THR = *buf++; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        while(R8_UART1_TFC == UART_FIFO_SIZE);                  /* µÈ´ýÊý¾Ý·¢ËÍ */
+        R8_UART1_THR = *buf++; /* ·¢ËÍÊý¾Ý */
 #elif DEBUG == Debug_UART2
-        while(R8_UART2_TFC == UART_FIFO_SIZE);                  /* ï¿½È´ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ */
-        R8_UART2_THR = *buf++; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        while(R8_UART2_TFC == UART_FIFO_SIZE);                  /* µÈ´ýÊý¾Ý·¢ËÍ */
+        R8_UART2_THR = *buf++; /* ·¢ËÍÊý¾Ý */
 #elif DEBUG == Debug_UART3       
-        while(R8_UART3_TFC == UART_FIFO_SIZE);                  /* ï¿½È´ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ */
-        R8_UART3_THR = *buf++; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        while(R8_UART3_TFC == UART_FIFO_SIZE);                  /* µÈ´ýÊý¾Ý·¢ËÍ */
+        R8_UART3_THR = *buf++; /* ·¢ËÍÊý¾Ý */
 #endif
     }
     return size;
@@ -657,9 +611,9 @@ void *__wrap_memcpy(void *dst, void *src, size_t size)
 /*********************************************************************
  * @fn      IWDG_KR_Set
  *
- * @brief   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¹ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/Î¹ï¿½ï¿½/ï¿½ï¿½×°ï¿½Ø¼ï¿½ï¿½ï¿½Öµ
+ * @brief   Æô¶¯¿´ÃÅ¹·/½â³ý¶Á±£»¤/Î¹¹·/ÖØ×°ÔØ¼ÆÊýÖµ
  *
- * @param   pr     - IWDG_PR
+ * @param   kr     - IWDG_PR
  *
  * @return  none
  */
@@ -671,31 +625,110 @@ void IWDG_KR_Set(IWDG_KR_Key kr)
 /*********************************************************************
  * @fn      IWDG_PR_Set
  *
- * @brief   ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Æµï¿½ï¿½ï¿½Ø±ï¿½Ð´ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ð§
+ * @brief   ÅäÖÃÔ¤·ÖÆµ£¬¹Ø±ÕÐ´±£»¤Î»ÉúÐ§
  *
  * @param   pr
  *
  * @return  none
  */
-void IWDG_PR_Set(IWDG_32K_PR pr)
+uint8_t IWDG_PR_Set(IWDG_32K_PR pr)
 {
-    R32_IWDG_CFG |= (pr << 12);
+    if(IWDG_WR_Protect())   return 1;
+    else
+    {
+        R32_IWDG_CFG |= (pr << 12);
+    }
+    return 0;
 }
 
 /*********************************************************************
  * @fn      IWDG_RLR_Set
  *
- * @brief   ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½Öµï¿½ï¿½ï¿½Ø±ï¿½Ð´ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ð§
+ * @brief   ÅäÖÃ¼ÆÊýÆ÷ÖØ×°ÔØÖµ£¬¹Ø±ÕÐ´±£»¤Î»ÉúÐ§
  *
  * @param   rlr
  *
  * @return  none
  */
-void IWDG_RLR_Set(uint16_t rlr)
+uint8_t IWDG_RLR_Set(uint16_t rlr)
 {
     uint32_t cfg;
 
-    cfg = R32_IWDG_CFG;
-    cfg = (R32_IWDG_CFG & ~0xFFF) | (rlr & 0xFFF);
-    R32_IWDG_CFG = cfg;
+    if(IWDG_WR_Protect())   return 1;
+    else
+    {
+        cfg = R32_IWDG_CFG;
+        cfg = (R32_IWDG_CFG & ~0xFFF) | (rlr & 0xFFF);
+        R32_IWDG_CFG = cfg;
+    }
+    return 0;
 }
+
+/*********************************************************************
+ * @fn      IWDG_FollowCoreStop
+ *
+ * @brief   ¶ÀÁ¢¿´ÃÅ¹·¼ÆÊý¸úËæÄÚºËÍ£Ö¹Ê¹ÄÜ£¬½öÔÚµ÷ÊÔÄ£Ê½ÏÂÉúÐ§
+ *
+ * @param   s       - ÊÇ·ñÊ¹ÄÜ
+ *
+ * @return  none
+ */
+uint8_t IWDG_FollowCoreStop(FunctionalState s)
+{
+    if(IWDG_WR_Protect())   return 1;
+    else
+    {
+        if(s == DISABLE)
+        {
+            R32_IWDG_CFG &= ~(1<<29);
+        }
+        else
+        {
+            R32_IWDG_CFG |= (1<<29);
+        }
+    }
+    return 0;
+}
+
+/*********************************************************************
+ * @fn      IWDG_Enable
+ *
+ * @brief   ¶ÀÁ¢¿´ÃÅ¹·Ê¹ÄÜ
+ *
+ * @param   pr     - Ô¤·ÖÆµ
+ *          rlr    - ¼ÆÊýÆ÷ÖØ×°ÔØÖµ£¬×î´óÖµÎª0xFFF
+ *
+ * @return  none
+ */
+uint8_t IWDG_Enable(IWDG_32K_PR pr, uint16_t rlr)
+{
+    uint8_t state;
+
+    sys_safe_access_enable();
+    R8_SAFE_LRST_CTRL |= RB_IWDG_RST_EN;  //¿´ÃÅ¹·¸´Î»ÎªÉÏµç¸´Î»¡£Èô¸ÄÎªÈ«¾Ö¸´Î»£¬Ðè±£Ö¤LSI²»±»¹Ø±Õ
+    sys_safe_access_disable();
+
+    IWDG_KR_Set(KEY_START_IWDG);
+    IWDG_KR_Set(KEY_UNPROTECT);
+    state = IWDG_PR_Set(pr);
+    if(state)  return 1;
+    state = IWDG_RLR_Set(rlr);
+    if(state)  return 1;
+
+    return 0;
+}
+
+/*********************************************************************
+ * @fn      IWDG_Feed
+ *
+ * @brief   ÏµÍ³±ØÐë¶¨ÆÚÖØ×°ÔØ¿´ÃÅ¹·¼ÆÊýÖµÒÔ·ÀÖ¹¸´Î»
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void IWDG_Feed(void)
+{
+    IWDG_KR_Set(KEY_RELOADING_COUNT);
+}
+

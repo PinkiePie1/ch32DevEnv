@@ -17,7 +17,6 @@
 extern "C" {
 #endif
 
-
 typedef void (*MachineMode_Call_func)(void);
 
 /**
@@ -193,12 +192,6 @@ void WWDG_ResetCfg(FunctionalState s);
  */
 void WWDG_ClearFlag(void);
 
-//使用Systick延时。
-void tickDelayInit(void);
-void tickDelayUs(uint32_t n);
-void tickDelayMs(uint32_t n);
-
-
 /**
  * @brief   uS 延时
  *
@@ -246,14 +239,36 @@ void IWDG_KR_Set(IWDG_KR_Key kr);
  *
  * @param   pr       - 分频系数
  */
-void IWDG_PR_Set(IWDG_32K_PR pr);
+uint8_t IWDG_PR_Set(IWDG_32K_PR pr);
 
 /**
  * @brief   配置计数器重装载值，关闭写保护位生效
  *
  * @param   rlr       - 计数器重装载值
  */
-void IWDG_RLR_Set(uint16_t rlr);
+uint8_t IWDG_RLR_Set(uint16_t rlr);
+
+/**
+ * @brief   独立看门狗计数跟随内核停止使能，仅在调试模式下生效
+ *
+ * @param   s       - 是否使能
+ */
+uint8_t IWDG_FollowCoreStop(FunctionalState s);
+
+/**
+ * @brief   独立看门狗使能
+ *
+ * @param   pr     - 预分频
+ *          rlr    - 计数器重装载值
+ */
+uint8_t IWDG_Enable(IWDG_32K_PR pr, uint16_t rlr);
+
+/**
+ * @brief   系统必须定期重装载看门狗计数值以防止复位
+ *
+ * @param   none
+ */
+void IWDG_Feed(void);
 
 /**
  * @brief Enter safe access mode.

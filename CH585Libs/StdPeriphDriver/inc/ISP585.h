@@ -1,8 +1,8 @@
 /* CH585 Flash-ROM & Data-Flash  */
 /* Website:  http://wch.cn       */
 /* Email:    tech@wch.cn         */
-/* Author:   W.ch 2020.06        */
-/* V1.0 FlashROM library for USER/BOOT */
+/* Author:   W.ch 2025.05        */
+/* V1.1 FlashROM library for USER/BOOT */
 /* for the target in USER code area on the chip divided into USER code area and BOOT area */
 /* 用于具有用户代码区和引导区的芯片、操作目标为用户代码区的情况，
    可以在用户代码中被调用（IAP，擦写自身），也可以在引导代码中被调用（更新用户代码） */
@@ -53,6 +53,8 @@
 #endif
 
 #define ROM_CFG_MAC_ADDR	0x7F018			// address for MAC address information
+#define ROM_CFG_CHIP_ID     0x7F024
+#define DEF_CHIP_ID_CH584X  0x08
 #define ROM_CFG_BOOT_INFO	0x7DFF8			// address for BOOT information
 
 /**
@@ -60,8 +62,8 @@
  *
  * @param   cmd         - CMD_* for caller from FlashROM or RAM.
  * @param   StartAddr   - Address of the data to be process.
-
- * @param   Buffer      - Pointer to the buffer where data should be process, Must in RAM and be aligned to 4 bytes. * @param   Length      - Size of data to be process, in bytes.
+ * @param   Buffer      - Pointer to the buffer where data should be process, Must in RAM and be aligned to 4 bytes.
+ * @param   Length      - Size of data to be process, in bytes.
  *
  * @return  0-SUCCESS  (!0)-FAILURE
  */
@@ -131,7 +133,17 @@ extern uint32_t FLASH_EEPROM_CMD( uint8_t cmd, uint32_t StartAddr, void *Buffer,
  *
  * @return  0-SUCCESS  (!0)-FAILURE
  */
-#define EEPROM_ERASE(StartAddr,Length)              FLASH_EEPROM_CMD( CMD_EEPROM_ERASE, StartAddr, NULL, Length )
+__attribute__((always_inline)) RV_STATIC_INLINE uint32_t EEPROM_ERASE(uint32_t StartAddr, uint32_t Length)
+{
+    if((*((uint32_t*)0x7F024)&0x0F) == 0x08 )
+    {
+        if(Length%EEPROM_BLOCK_SIZE)
+        {
+            while(1);
+        }
+    }
+    return FLASH_EEPROM_CMD( CMD_EEPROM_ERASE, StartAddr, NULL, Length );
+}
 
 /**
  * @brief   write Data-Flash data block

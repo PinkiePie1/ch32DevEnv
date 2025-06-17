@@ -651,7 +651,7 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                 // Make sure it's not a blob oper
                 if(offset == 0)
                 {
-                    if(len > EPD_MAXIMUM_MSG_LENGTH)
+                    if(len > 128)
                     {
                         status = ATT_ERR_INVALID_VALUE_SIZE;
                     }

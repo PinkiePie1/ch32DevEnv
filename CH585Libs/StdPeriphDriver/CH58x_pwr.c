@@ -116,7 +116,7 @@ void PWR_SafeClkCfg(FunctionalState s, uint16_t perph)
 /*********************************************************************
  * @fn      PWR_PeriphClkCfg
  *
- * @brief   外设时钟控制位
+ * @brief   外设时钟控制位，注意：如果要关闭外设时钟，必须要先关闭对应外设的中断
  *
  * @param   s       - 是否打开对应外设时钟
  * @param   perph   - please refer to Peripher CLK control bit define
@@ -314,6 +314,7 @@ void LowPower_Halt(void)
     else//使用内部16M
     {
       sys_safe_access_enable();
+      R8_SLP_POWER_CTRL |= 0x40;
       R8_FLASH_CFG = 0X57;
       R8_FLASH_SCK = R8_FLASH_SCK & (~(1<<4));
       R16_CLK_SYS_CFG = CLK_SOURCE_HSI_4MHz;
@@ -409,6 +410,7 @@ void LowPower_Sleep(uint16_t rm)
     else//使用内部16M
     {
       sys_safe_access_enable();
+      R8_SLP_POWER_CTRL |= 0x40;
       R8_FLASH_CFG = 0X57;
       R8_FLASH_SCK = R8_FLASH_SCK & (~(1<<4));
       R16_CLK_SYS_CFG = CLK_SOURCE_HSI_4MHz;
@@ -421,6 +423,7 @@ void LowPower_Sleep(uint16_t rm)
 
     if(rm & RB_PWR_EXTEND)
     {
+        // 注意：如果使用了高速USB，且睡眠使能RB_PWR_EXTEND，唤醒后需要将所有高速USB寄存器复位
         R32_U2H_BC_CTRL = 0;
         (*((PUINT32V)0x4000C254)) = 0;
     }
@@ -488,8 +491,8 @@ void LowPower_Shutdown(uint16_t rm)
     __WFI();
     __nop();
     __nop();
-    FLASH_ROM_SW_RESET();
     sys_safe_access_enable();
+    R16_INT32K_TUNE = 0xFFFF;
     R8_RST_WDOG_CTRL |= RB_SOFTWARE_RESET;
     sys_safe_access_disable();
 }

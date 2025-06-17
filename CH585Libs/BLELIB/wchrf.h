@@ -149,7 +149,7 @@ typedef struct
     uint32_t rxDMA;               //!< Rx DMA address
     uint8_t  whiteChannel;        //!< white channel(properties bit2 = 1)
     uint16_t rxMaxLen;            //!< Maximum length of Rx data
-    uint16_t timeOut;             //!< Rx wait timeout,0:No timeout others: N*0.5us
+    uint16_t timeOut;             //!< Rx wait timeout,0:No timeout others: N*1us
 } rfipRx_t;
 
 typedef struct
