@@ -68,7 +68,7 @@ void EPD_Hal_Init(void)
                    EPD_RES_PIN |
                    EPD_DC_PIN |
                    EPD_CS_PIN, GPIO_ModeOut_PP_5mA );
-   GPIOA_ModeCfg(EPD_BUSY_PIN, GPIO_ModeIN_PU);
+   GPIOA_ModeCfg(EPD_BUSY_PIN, GPIO_ModeIN_Floating);
 
    SPI0_MasterDefInit();//默认的SPI初始化，三线全双工。后续需要改
    SPI0_CLKCfg(2); //2分频

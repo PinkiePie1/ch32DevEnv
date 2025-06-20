@@ -40,7 +40,7 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         160
+#define DEFAULT_ADVERTISING_INTERVAL         1600
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
@@ -53,10 +53,10 @@
 #define DEFAULT_DESIRED_MAX_CONN_INTERVAL    500
 
 // Slave latency to use parameter update
-#define DEFAULT_DESIRED_SLAVE_LATENCY        4
+#define DEFAULT_DESIRED_SLAVE_LATENCY        0
 
 // Supervision timeout value (units of 10ms, 100=1s)
-#define DEFAULT_DESIRED_CONN_TIMEOUT         800
+#define DEFAULT_DESIRED_CONN_TIMEOUT         500
 
 // Company Identifier: WCH
 #define WCH_COMPANY_ID                       0x07D7

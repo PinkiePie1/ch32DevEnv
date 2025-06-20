@@ -55,6 +55,10 @@ void EPDTask_Init(void)
 	EPD_Sleep();
 	paint_SetImageCache(imageCache);
 
+#if 1
+	GPIOB_ModeCfg(GPIO_Pin_3,GPIO_ModeOut_PP_5mA);
+	tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+#endif
 }
 
 //EPD相关人物处理主函数。
@@ -132,6 +136,13 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
 		fastDrawString(10,145,"You wrote 0x1A to Char1, showing    image at left.",font14);
     	EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWIMG_EVT;
+    }
+
+    if(events & EPD_BLINK)
+    {
+    	GPIOB_InverseBits(GPIO_Pin_3);
+		tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+    	return events ^ EPD_BLINK;
     }
 
 
