@@ -1,6 +1,7 @@
 #include "CONFIG.h"
 #include "gattprofile.h"
 #include "EPD_process.h"
+#include "peripheral.h"
 
 #define SIMPLEPROFILE_CHAR4_VALUE_POS    11
 
@@ -66,13 +67,13 @@ static uint8_t simpleProfileChar1[SIMPLEPROFILE_CHAR1_LEN] = {0};
 static uint8_t simpleProfileChar1UserDesp[] = "Characteristic 1\0";
 
 // Simple Profile Characteristic 2 Properties
-static uint8_t simpleProfileChar2Props = GATT_PROP_READ;
+static uint8_t simpleProfileChar2Props = GATT_PROP_READ|GATT_PROP_WRITE;
 
 // Characteristic 2 Value
 static uint8_t simpleProfileChar2[SIMPLEPROFILE_CHAR2_LEN] = {0};
 
 // Simple Profile Characteristic 2 User Description
-static uint8_t simpleProfileChar2UserDesp[] = "Characteristic 2\0";
+static uint8_t simpleProfileChar2UserDesp[] = "time offset.\0";
 
 // Simple Profile Characteristic 3 Properties
 static uint8_t simpleProfileChar3Props = GATT_PROP_WRITE;
@@ -151,7 +152,7 @@ static gattAttribute_t simpleProfileAttrTbl[] = {
     // Characteristic Value 2
     {
         {ATT_BT_UUID_SIZE, simpleProfilechar2UUID},
-        GATT_PERMIT_READ,
+        GATT_PERMIT_READ|GATT_PERMIT_WRITE,
         0,
         simpleProfileChar2},
 
@@ -645,6 +646,32 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
 			        }
                 }
                 break;
+            case SIMPLEPROFILE_CHAR2_UUID:
+            
+                if(offset == 0)
+                {
+                    if(len > SIMPLEPROFILE_CHAR2_LEN)
+                    {
+                        status = ATT_ERR_INVALID_VALUE_SIZE;
+                    }
+                }
+                else
+                {
+                    status = ATT_ERR_ATTR_NOT_LONG;
+                }
+
+                if(status == SUCCESS)
+                {
+                	tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR2_LEN);
+                	notifyApp = SIMPLEPROFILE_CHAR2;
+                	month = pValue[0];
+                	date = pValue[1];
+                	hour = pValue[2];
+                	minute = pValue[3];
+                	second = pValue[4];
+                }
+
+            	break;
 
             case SIMPLEPROFILE_CHAR3_UUID:
                 //Validate the value

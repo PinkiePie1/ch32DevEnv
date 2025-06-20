@@ -85,7 +85,7 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     if(events & EPD_SHOWMSG_EVT)
     {
     	INIT_CACHE; //醒来时EPD的RAM重新上电是随机的，需要清空。
-    	fastDrawString(400,300-16,"Received Msg:",font16);
+    	fastDrawString(400,300-16,"---",font16);
     	fastDrawString(400,300-32,MsgToDisplay+1,font16);
         tmos_msg_deallocate(MsgToDisplay); // 释放消息内存。
         EPD_UpdateScreen(imageCache);

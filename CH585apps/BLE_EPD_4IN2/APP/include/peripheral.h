@@ -57,6 +57,12 @@ extern void Peripheral_Init(void);
  */
 extern uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events);
 
+extern uint16_t month;
+extern uint16_t date;
+extern uint16_t hour;
+extern uint16_t minute;
+extern uint16_t second;
+
 /*********************************************************************
 *********************************************************************/
 

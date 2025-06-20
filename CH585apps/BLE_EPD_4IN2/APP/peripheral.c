@@ -82,24 +82,6 @@
  */
 static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
 
-//不知道为什么，加入扫描反馈数据会导致部分手机搜不到
-/* GAP - SCAN RSP data (max size = 31 bytes)
-static uint8_t scanRspData[] = {
-    // complete name
-    // connection interval range
-    0x06, // length of this data
-    GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
-    LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
-    HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
-    LO_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL), // 1s
-    HI_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
-    // Tx power level
-    0x02, // length of this data
-    GAP_ADTYPE_POWER_LEVEL,
-    0 // 0dBm
-};
-*/
-
 // GAP - Advertisement data (max size = 31 bytes, though this is
 // best kept short to conserve power while advertising)
 static uint8_t advertData[] = {
@@ -119,8 +101,6 @@ static uint8_t advertData[] = {
     GAP_ADTYPE_16BIT_MORE, // some of the UUID's, but not all
     LO_UINT16(SIMPLEPROFILE_SERV_UUID),
     HI_UINT16(SIMPLEPROFILE_SERV_UUID),
-
-  
     
 };
 
@@ -131,12 +111,22 @@ static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "EPD_CH585node";
 static peripheralConnItem_t peripheralConnList;
 
 static uint16_t peripheralMTU = ATT_MTU_SIZE;
+
+//和时间有关的变量，这里只能用offset，因为wch的库并没有
+//明文存储时间，只是从rtc换算，而TMOS依赖于RTC运转不能改。
+uint16_t month=0;
+uint16_t date=0;
+uint16_t hour=0;
+uint16_t minute=0;
+uint16_t second=0;
+
+
+
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
 static void Peripheral_ProcessTMOSMsg(tmos_event_hdr_t *pMsg);
 static void peripheralStateNotificationCB(gapRole_States_t newState, gapRoleEvent_t *pEvent);
-static void performPeriodicTask(void);
 static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len);
 static void peripheralParamUpdateCB(uint16_t connHandle, uint16_t connInterval,
                                     uint16_t connSlaveLatency, uint16_t connTimeout);
@@ -245,7 +235,7 @@ void Peripheral_Init()
     // Setup the SimpleProfile Characteristic Values
     {
         uint8_t charValue1[SIMPLEPROFILE_CHAR1_LEN] = {1};
-        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {2};
+        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {0, 0, 0, 0, 0};
         uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {0};
         uint8_t charValue4[SIMPLEPROFILE_CHAR4_LEN] = {4};
         uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = {1, 2, 3, 4, 5};
@@ -268,6 +258,7 @@ void Peripheral_Init()
 
     // Setup a delayed profile startup
     tmos_set_event(Peripheral_TaskID, SBP_START_DEVICE_EVT);
+    tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, 500);
 }
 
 /*********************************************************************
@@ -327,13 +318,35 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PERIODIC_EVT)
     {
-        // Restart timer
-        if(SBP_PERIODIC_EVT_PERIOD)
+		//暂时是1分钟后重设，应该根据ps确定时间。
+        
+        
+        //显示时间
+		
+        uint8_t *msg = tmos_msg_allocate(1+10);
+        if(msg != NULL)
         {
-            tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, SBP_PERIODIC_EVT_PERIOD);
+			msg[0] = 0x11;//显示内容
+			uint16_t pmon = 0;
+			uint16_t pd = 0;
+			uint16_t ph = 0;
+			uint16_t pm = 0;
+			uint16_t ps = 0;
+			RTC_GetTime(NULL, &pmon, &pd, &ph, &pm, &ps);
+			pmon+=month;
+			pd+=date;
+			ph+=hour;
+			pm+=minute;
+			ps+=second;
+			
+			//取出时间信息并加上offset。
+			uint32_t nextInterval = (60-ps)*1000000/625;
+			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
+			
+			snprintf(msg+1,10,"%02d:%02d",ph%24,pm%60);
+        	tmos_msg_send(EPD_taskID,msg);
         }
-        // Perform periodic application task
-        performPeriodicTask();
+        
         return (events ^ SBP_PERIODIC_EVT);
     }
 
@@ -471,12 +484,6 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         peripheralConnList.connSlaveLatency = event->connLatency;
         peripheralConnList.connTimeout = event->connTimeout;
         peripheralMTU = ATT_MTU_SIZE;
-		/*
-        //启用周期事件，周期从char4上报0x88，假装自己是个心率计。
-        tmos_start_task(Peripheral_TaskID, 
-        				SBP_PERIODIC_EVT, 
-        				SBP_PERIODIC_EVT_PERIOD);
-		*/
 		
         //设置连接间隔更新事件。
         //连接上主机后，一般来说主机会先用高连接间隔
@@ -529,7 +536,6 @@ static void Peripheral_LinkTerminated(gapRoleEvent_t *pEvent)
         peripheralConnList.connInterval = 0;
         peripheralConnList.connSlaveLatency = 0;
         peripheralConnList.connTimeout = 0;
-        tmos_stop_task(Peripheral_TaskID, SBP_PERIODIC_EVT);
         tmos_stop_task(Peripheral_TaskID, SBP_READ_RSSI_EVT);
 
         // Restart advertising
@@ -669,25 +675,7 @@ static void peripheralStateNotificationCB(gapRole_States_t newState, gapRoleEven
     }
 }
 
-/*********************************************************************
- * @fn      performPeriodicTask
- *
- * @brief   Perform a periodic application task. This function gets
- *          called every five seconds as a result of the SBP_PERIODIC_EVT
- *          TMOS event. In this example, the value of the third
- *          characteristic in the SimpleGATTProfile service is retrieved
- *          from the profile, and then copied into the value of the
- *          the fourth characteristic.
- *
- * @param   none
- *
- * @return  none
- */
-static void performPeriodicTask(void)
-{
-    uint8_t notiData[SIMPLEPROFILE_CHAR4_LEN] = {0x88};
-    peripheralChar4Notify(notiData, SIMPLEPROFILE_CHAR4_LEN);
-}
+
 
 /*********************************************************************
  * @fn      peripheralChar4Notify
@@ -741,6 +729,14 @@ static void simpleProfileChangeCB(uint8_t paramID, uint8_t *pValue, uint16_t len
             PRINT("profile ChangeCB CHAR1.. \n");
             break;
         }
+
+        case SIMPLEPROFILE_CHAR2:
+        {
+            uint8_t newValue[SIMPLEPROFILE_CHAR2_LEN];
+            tmos_memcpy(newValue, pValue, len);
+        	break;
+        }
+        
 
         case SIMPLEPROFILE_CHAR3:
         {
