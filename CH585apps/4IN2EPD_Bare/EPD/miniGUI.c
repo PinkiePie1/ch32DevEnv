@@ -14,7 +14,7 @@
 uint8_t *image;//指向显存的指针
 
 //指定显存位置。用户应该在主函数中调用这个函数
-//并为它准备好一个4736的数组作为显存。
+//并为它准备好一个15000的数组作为显存。
 void paint_SetImageCache(uint8_t *imagePtr)
 {
 	image = imagePtr;
@@ -25,7 +25,7 @@ __HIGH_CODE
 static inline void setPixel(uint16_t x, uint16_t y, uint8_t color)
 {
 	//单周期乘法给我的底气
-    uint16_t index = ((x>>3)*272) + y; 
+    uint16_t index = ((x>>3)*300) + y; 
     //像素所对应的字节的位置
     if( color )
     {
@@ -107,15 +107,15 @@ void fastFill(uint16_t x, uint16_t y, uint16_t xblock, uint16_t yblock, uint8_t 
 	//覆盖对应的位置，先覆盖头，再覆盖中间，最后覆盖尾。
     for( uint16_t i = y; i <= (y+yblock); i++ )
     {	
-		index = (x>>3) + (i<<4);
-		tmp1 = image[(x>>3) + (i<<4)];
-		tmp2 = image[((x+xblock)>>3) + (i<<4)];
+		index = (x>>3)*300 + i;
+		tmp1 = image[(x>>3)*300 + i];
+		tmp2 = image[((x+xblock)>>3)*300 + i];
 		
 		image[index] = color ? ( tmp1 | mask2 ) : ( tmp1 & mask2 );
 		
     	for (uint16_t j = x+8; j < ( x + xblock ); j += 8 )
     	{
-    		index = (j>>3) + (i<<4);
+    		index = (j>>3)*300 + i<<4;
     		image[index] = color;
 		}
 				
@@ -173,12 +173,12 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 }
 
 
-//快速显示图像，图像的的宽度必须是272，两个参数指定了图像
+//快速显示图像，图像的的宽度必须是300，两个参数指定了图像
 //在屏幕上的起点和终点。
 void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 {
-	uint32_t length = ((xEnd-xStart)>>3) *272;
-	memcpy( (void *)( (uint32_t)image+ (xStart>>3)*272), 
+	uint32_t length = ((xEnd-xStart)>>3) *300;
+	memcpy( (void *)( (uint32_t)image+ (xStart>>3)*300), 
 	imgDat, 
 	length);
 }
@@ -188,7 +188,7 @@ void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *f
 {	
 	if (FONT_GETHEIGHT(font) == 16)
 	{	
-    	uint16_t index = ((xStart>>3)*272) + yStart;
+    	uint16_t index = ((xStart>>3)*300) + yStart;
     	memcpy( image+index , font+(chara-' '+2)*16 ,16);
 	}
 
@@ -200,14 +200,14 @@ static void fastShiftedChar(uint16_t xStart, uint16_t yStart, char chara, const 
 	if (FONT_GETHEIGHT(font) == 16)
 	{	
 		uint8_t offset = xStart&7UL;
-		uint16_t index = ((xStart>>3)*272) + yStart;
+		uint16_t index = ((xStart>>3)*300) + yStart;
 		for(uint8_t i = 0; i< 16; i++)
 		{
 			uint8_t temp = font[(chara-' '+2)*16+i];
 			image[index+i] &= ~(0xFF>>offset);
 			image[index+i] |= (temp>>offset);
-			image[index+272+i] &= ~(0xFF<<(8-offset));
-			image[index+272+i] |= (temp<<(8-offset));
+			image[index+300+i] &= ~(0xFF<<(8-offset));
+			image[index+300+i] |= (temp<<(8-offset));
 		}
 	}
 }
@@ -278,12 +278,12 @@ void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *f
 	
 }
 
-void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, uint8_t color, const char *format, ...)
+void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, const char *format, ...)
 {
 	va_list args;
 	va_start(args,format);
-	char buffer[40];
-	vsnprintf(buffer,40, format, args);
+	char buffer[80];
+	vsnprintf(buffer,80, format, args);
 	va_end(args);
-	drawStr(xStart,yStart,buffer,font,color);
+	fastDrawString(xStart,yStart,buffer,font);
 }

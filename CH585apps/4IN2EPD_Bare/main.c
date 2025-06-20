@@ -39,50 +39,43 @@ void main(void)
 	
 	paint_SetImageCache(imageCache);
 
-	for(uint32_t i = 0;i<15000;i++)
-	{
-		imageCache[i] = i&0x01 ? 0x00 : 0xFF;
-	}
+	drawLine(1,1,50,1,BLACK);
+	drawRect(90,90,200,200,BLACK);
 
-	imageCache[0] = 0x0F;
-
-//	fastDrawString(500,50,"Full refresh test.",font16);
+	fastDrawString(400-20,300-20,"Normal Test.",font16);
 	 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_PreparePartial(imageCache);
     EPD_Sleep();
 
-    while(1);
-
-    uint8_t refresh = 1;
-    DelayMs(3500);
-    fastDrawString(500,30,"Partial test.",font16);
-    while(refresh<3)
-    {
-	    DelayMs(500);
-		fastDrawString(791-refresh*8,271-16,"~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM~.1234567890!@#$%^&*()-=_+qwertyuiop[]{}|asdfghjklzxcvbnm,.?<>:QWERTYUIOPASDFGHJKLZXCVBNM",font16);
-	    EPD_PartialDisplay(imageCache);
-	    EPD_Sleep();
-	    refresh++;
-    }
-
-
     DelayMs(3000);
+
+	int num = 0;
+	do
+	{
+		num++;
+		EPD_Printf(200,150,font16,"partial update #%d",num);
+    	EPD_PartialDisplay(imageCache);
+    	EPD_Sleep();
+    	DelayMs(1000);
+	} while (num < 5);
+
+	DelayMs(3000);
+    
     EPD_Init();
     EPD_Clear();
     EPD_Sleep();
+
+    DelayMs(5000);
 
 	uint32_t i=0;
 	while(i<4294967290)
 	{
 		i++;
-		memset(imageCache,0,26928);
-		fastDrawString(792/2,271/2,"This counter goes up every half minute.",font16);
-		char buffer[30];
-		snprintf(buffer,30,"%ld",i);
-		buffer[29] = 0;
-		fastDrawString(792/2,271/2-20,buffer,font16);
+		memset(imageCache,0,15000);
+		EPD_Printf(400-50,200,font16,"This counter goes up every half minute.");
+		EPD_Printf(400-50,200-16,font16,"%ld",i);
 		if (i%8==0){
 			EPD_Init();	
 			EPD_SendDisplay(imageCache);
@@ -92,7 +85,6 @@ void main(void)
 		}
 		EPD_Sleep();
 		DelayMs(30000);
-    	
     }
   
 	while( 1 )
