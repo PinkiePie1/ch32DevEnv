@@ -26,21 +26,16 @@ void main(void)
 	//在sys.c里已经写了highcode_init，并且会放到startup之后
 	//所以在这里初始化时钟是不必要的。	
 	GPIOInit();
-
-
-	GPIOB_ResetBits(GPIO_Pin_3);
-	//由于LUT反向，不再需要初始化，0x00对应白色
-	//memset(imageCache,0xFF,4736);
 	
 	paint_SetImageCache(imageCache);
-	drawStr(50,150,"This is 1.54 inch EDP test program.",font14,WHITE);
-	GPIOB_ResetBits(GPIO_Pin_6);
+	drawStr(50,150,"test 1",font14,WHITE);
+	fastDrawString(70,150,"fast",font14);
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
 
-	DelayMs(3000);
+	DelayMs(30000);
 	memset(imageCache,0,2888);
 
 	EPD_Init();	

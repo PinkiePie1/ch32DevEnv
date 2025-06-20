@@ -273,12 +273,12 @@ void drawStr(uint16_t xStart, uint16_t yStart,char *stringToPrint, const char *f
 	
 }
 
-void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, uint8_t color, const char *format, ...)
+void EPD_Printf(uint16_t xStart, uint16_t yStart, const char *font, const char *format, ...)
 {
 	va_list args;
 	va_start(args,format);
 	char buffer[40];
 	vsnprintf(buffer,40, format, args);
 	va_end(args);
-	drawStr(xStart,yStart,buffer,font,color);
+	drawStr(xStart,yStart,buffer,font,WHITE);
 }
