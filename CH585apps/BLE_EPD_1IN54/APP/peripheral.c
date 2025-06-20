@@ -318,9 +318,6 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PERIODIC_EVT)
     {
-		//暂时是1分钟后重设，应该根据ps确定时间。
-        
-        
         //显示时间
 		
         uint8_t *msg = tmos_msg_allocate(1+10);
@@ -338,6 +335,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			ph+=hour;
 			pm+=minute;
 			ps+=second;
+            ph+=minute/60;
 			
 			//取出时间信息并加上offset。
 			uint32_t nextInterval = (60-ps)*1000000/625;
