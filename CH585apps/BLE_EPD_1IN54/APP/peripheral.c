@@ -192,10 +192,10 @@ void Peripheral_Init()
 
         // Set the GAP Role Parameters
         GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &initial_advertising_enable);
-//        GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
         GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
         GAPRole_SetParameter(GAPROLE_MIN_CONN_INTERVAL, sizeof(uint16_t), &desired_min_interval);
         GAPRole_SetParameter(GAPROLE_MAX_CONN_INTERVAL, sizeof(uint16_t), &desired_max_interval);
+        
     }
 
     {
@@ -205,8 +205,9 @@ void Peripheral_Init()
         GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, advInt);
         GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, advInt);
 
-        // Enable scan req notify
-        GAP_SetParamValue(TGAP_ADV_SCAN_REQ_NOTIFY, ENABLE);
+        // Disable scan req notify
+
+        GAP_SetParamValue(TGAP_ADV_SCAN_REQ_NOTIFY, DISABLE);
     }
 
     // Setup the GAP Bond Manager
@@ -335,10 +336,10 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			ph+=hour;
 			pm+=minute;
 			ps+=second;
-            ph+=minute/60;
+            ph+=pm/60;
 			
 			//取出时间信息并加上offset。
-			uint32_t nextInterval = (60-ps)*1000000/625;
+			uint32_t nextInterval = (60-ps%60)*1000000/625;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
 			
 			snprintf(msg+1,10,"%02d:%02d",ph%24,pm%60);
