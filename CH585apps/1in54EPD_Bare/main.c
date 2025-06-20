@@ -25,7 +25,6 @@ void main(void)
 {
 	//在sys.c里已经写了highcode_init，并且会放到startup之后
 	//所以在这里初始化时钟是不必要的。	
-	tickDelayInit();
 	GPIOInit();
 
 
@@ -41,12 +40,19 @@ void main(void)
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
 
+	DelayMs(3000);
+	memset(imageCache,0,2888);
+
+	EPD_Init();	
+	EPD_SendDisplay(imageCache);
+	EPD_Sleep();
+
 	while(1)
 	{
 		GPIOB_SetBits(GPIO_Pin_3);
-		tickDelayMs(500);
+		DelayMs(500);
 		GPIOB_ResetBits(GPIO_Pin_3);
-		tickDelayMs(500);
+		DelayMs(500);
 	}
 	
 	
