@@ -63,6 +63,7 @@ extern uint16_t hour;
 extern uint16_t minute;
 extern uint16_t second;
 
+extern uint8_t Peripheral_TaskID;
 /*********************************************************************
 *********************************************************************/
 

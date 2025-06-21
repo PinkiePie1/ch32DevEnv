@@ -80,7 +80,7 @@
 /*********************************************************************
  * LOCAL VARIABLES
  */
-static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
+uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
 
 // GAP - Advertisement data (max size = 31 bytes, though this is
 // best kept short to conserve power while advertising)
