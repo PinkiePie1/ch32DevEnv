@@ -163,6 +163,7 @@ void HAL_TimeInit(void)
 {
     bleClockConfig_t conf;
 #if(CLK_OSC32K)
+    GPIOA_ModeCfg(GPIO_Pin_11|GPIO_Pin_10,GPIO_ModeIN_Floating);
     sys_safe_access_enable();
     R8_CK32K_CONFIG &= ~(RB_CLK_OSC32K_XT | RB_CLK_XT32K_PON);
     sys_safe_access_disable();
