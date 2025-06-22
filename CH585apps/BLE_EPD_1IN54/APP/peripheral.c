@@ -18,6 +18,7 @@
 #include "devinfoservice.h"
 #include "gattprofile.h"
 #include "peripheral.h"
+#include "miniRTC.h"
 
 /*********************************************************************
  * MACROS
@@ -236,7 +237,7 @@ void Peripheral_Init()
     // Setup the SimpleProfile Characteristic Values
     {
         uint8_t charValue1[SIMPLEPROFILE_CHAR1_LEN] = {1};
-        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {0, 0, 0, 0, 0};
+        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {0};
         uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {0};
         uint8_t charValue4[SIMPLEPROFILE_CHAR4_LEN] = {4};
         uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = {1, 2, 3, 4, 5};
@@ -321,28 +322,23 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
     {
         //显示时间
 		
-        uint8_t *msg = tmos_msg_allocate(1+10);
+        uint8_t *msg = tmos_msg_allocate(1+20);
         if(msg != NULL)
         {
 			msg[0] = 0x11;//显示内容
+			uint16_t py = 0;
 			uint16_t pmon = 0;
 			uint16_t pd = 0;
 			uint16_t ph = 0;
 			uint16_t pm = 0;
 			uint16_t ps = 0;
-			RTC_GetTime(NULL, &pmon, &pd, &ph, &pm, &ps);
-			pmon+=month;
-			pd+=date;
-			ph+=hour;
-			pm+=minute;
-			ps+=second;
-            ph+=pm/60;
+			miniRTC_GetTime(&py, &pmon, &pd, &ph, &pm, &ps);
 			
 			//取出时间信息并加上offset。
 			uint32_t nextInterval = (60-ps%60)*1000000/625;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
 			
-			snprintf(msg+1,10,"%02d:%02d",ph%24,pm%60);
+			snprintf(msg+1,20,"%04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);
         	tmos_msg_send(EPD_taskID,msg);
         }
         

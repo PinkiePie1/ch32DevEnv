@@ -341,7 +341,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			ph+=pm/60;
 			
 			//取出时间信息并加上offset。
-			uint32_t nextInterval = (60-ps)*1000000/625;
+			uint32_t nextInterval = (60-ps%60)*1000000/625;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
 			
 			snprintf(msg+1,10,"%02d:%02d",ph%24,pm%60);

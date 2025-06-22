@@ -20,7 +20,11 @@ $(wildcard ./APP/*.c) \
 $(wildcard ./Profile/*.c) \
 $(wildcard ../../CH585Libs/HAL/*.c) \
 $(wildcard ../../CH585Libs/BLELIB/*.c) \
-$(wildcard ./EPDdriver/*.c)
+$(wildcard ./EPDdriver/*.c) 
+
+C_SOURCES += $(wildcard ./miniRTC/*.c)
+C_INCLUDES += -I"./miniRTC"
+
 
 #还是BLE相关的库
 ASM_SOURCES := ../../CH585Libs/BLELIB/ble_task_scheduler.S
