@@ -54,6 +54,8 @@ void EPDTask_Init(void)
 	EPD_Init();
 	EPD_Sleep();
 	paint_SetImageCache(imageCache);
+	GPIOB_ModeCfg(GPIO_Pin_3, GPIO_ModeOut_PP_5mA); //PB3作为LED指示灯
+	tmos_start_task(EPD_taskID, EPD_BLINK, 500);
 
 }
 
@@ -132,6 +134,13 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
 		fastDrawString(10,145,"You wrote 0x1A to Char1, showing    image at left.",font16);
     	EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWIMG_EVT;
+    }
+
+	if(events & EPD_BLINK)
+    {
+    	GPIOB_InverseBits(GPIO_Pin_3);
+		tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+    	return events ^ EPD_BLINK;
     }
 
 

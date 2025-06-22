@@ -40,7 +40,7 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         160
+#define DEFAULT_ADVERTISING_INTERVAL         1600
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
@@ -338,6 +338,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			ph+=hour;
 			pm+=minute;
 			ps+=second;
+			ph+=pm/60;
 			
 			//取出时间信息并加上offset。
 			uint32_t nextInterval = (60-ps)*1000000/625;

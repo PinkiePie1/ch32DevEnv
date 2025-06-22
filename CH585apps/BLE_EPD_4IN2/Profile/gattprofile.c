@@ -629,6 +629,16 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                     {
                     	tmos_set_event(EPD_taskID,EPD_SHOWIMG_EVT);//如果是0x1A则显示图片。
                     }
+                    else if(*pValue == 0xAA)
+                    {
+                        tmos_stop_task(EPD_taskID, EPD_BLINK);
+                        tmos_start_task(EPD_taskID, EPD_BLINK, 500);
+                    }
+                    else if(*pValue == 0xAB)
+                    {
+                        GPIOB_SetBits(GPIO_Pin_3);
+                        tmos_stop_task(EPD_taskID, EPD_BLINK);
+                    }
                     else
                     {   //否则则将写入的数据告诉用户。
 	                    tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR1_LEN);
