@@ -12,7 +12,8 @@ C_INCLUDES := \
 -I"../../CH585Libs/HAL/include" \
 -I"./APP/include"\
 -I"./Profile/include"\
--I"./EPDdriver"
+-I"./EPDdriver" \
+-I"./miniRTC"
 
 #BLE相关的库
 C_SOURCES := \
@@ -21,6 +22,8 @@ $(wildcard ./Profile/*.c) \
 $(wildcard ../../CH585Libs/HAL/*.c) \
 $(wildcard ../../CH585Libs/BLELIB/*.c) \
 $(wildcard ./EPDdriver/*.c)
+
+C_SOURCES += $(wildcard ./miniRTC/*.c)
 
 #还是BLE相关的库
 ASM_SOURCES := ../../CH585Libs/BLELIB/ble_task_scheduler.S

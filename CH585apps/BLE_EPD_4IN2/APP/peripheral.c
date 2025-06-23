@@ -112,15 +112,6 @@ static peripheralConnItem_t peripheralConnList;
 
 static uint16_t peripheralMTU = ATT_MTU_SIZE;
 
-//和时间有关的变量，这里只能用offset，因为wch的库并没有
-//明文存储时间，只是从rtc换算，而TMOS依赖于RTC运转不能改。
-uint16_t month=0;
-uint16_t date=0;
-uint16_t hour=0;
-uint16_t minute=0;
-uint16_t second=0;
-
-
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -318,36 +309,25 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PERIODIC_EVT)
     {
-		//暂时是1分钟后重设，应该根据ps确定时间。
-        
-        
+
         //显示时间
-		
-        uint8_t *msg = tmos_msg_allocate(1+10);
+        uint8_t *msg = tmos_msg_allocate(1+20);
         if(msg != NULL)
         {
 			msg[0] = 0x11;//显示内容
+			uint16_t py = 0;
 			uint16_t pmon = 0;
 			uint16_t pd = 0;
 			uint16_t ph = 0;
 			uint16_t pm = 0;
 			uint16_t ps = 0;
-			RTC_GetTime(NULL, &pmon, &pd, &ph, &pm, &ps);
-			pmon+=month;
-			pd+=date;
-			ph+=hour;
-			pm+=minute;
-			ps+=second;
-			ph+=pm/60;
-			
-			//取出时间信息并加上offset。
-			uint32_t nextInterval = (60-ps%60)*1000000/625;
+			miniRTC_GetTime(&py, &pmon, &pd, &ph, &pm, &ps);
+
+			uint32_t nextInterval = (60-ps)*1000000/625;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
-			
-			snprintf(msg+1,10,"%02d:%02d",ph%24,pm%60);
-        	tmos_msg_send(EPD_taskID,msg);
+			snprintf(msg+1,20,"%04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);
+			tmos_msg_send(EPD_taskID,msg);
         }
-        
         return (events ^ SBP_PERIODIC_EVT);
     }
 

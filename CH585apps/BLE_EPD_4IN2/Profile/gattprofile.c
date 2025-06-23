@@ -674,11 +674,13 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                 {
                 	tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR2_LEN);
                 	notifyApp = SIMPLEPROFILE_CHAR2;
-                	month = pValue[0];
-                	date = pValue[1];
-                	hour = pValue[2];
-                	minute = pValue[3];
-                	second = pValue[4];
+                	uint16_t year = pValue[0]+2000;
+                	uint16_t month = pValue[1];
+                	uint16_t date = pValue[2];
+                	uint16_t hour = pValue[3];
+                	uint16_t minute = pValue[4];
+                	uint16_t second = pValue[5];
+					miniRTC_CalibrateTime(year,month,date,hour,minute,second);
                 }
 
             	break;
