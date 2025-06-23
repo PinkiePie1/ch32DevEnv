@@ -57,7 +57,8 @@ void EPDTask_Init(void)
 
 #if 1
 	GPIOB_ModeCfg(GPIO_Pin_3,GPIO_ModeOut_PP_5mA);
-	tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+	GPIOB_SetBits(GPIO_Pin_3);
+	//tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
 #endif
 }
 
@@ -80,6 +81,13 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
             {
             	tmos_set_event(EPD_taskID, EPD_SHOWCONNECT_EVT);
             }
+            else if (MsgToDisplay[0] == 0x12)
+            {
+	            INIT_CACHE; //显示时间
+		    	fastDrawString(20,151,MsgToDisplay+1,font14);
+		        tmos_msg_deallocate(MsgToDisplay); // 释放消息内存。
+		        EPD_UpdateScreen(imageCache);
+            }
         }
         return (events ^ SYS_EVENT_MSG);
         
@@ -89,7 +97,7 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     if(events & EPD_SHOWMSG_EVT)
     {
     	INIT_CACHE; //醒来时EPD的RAM重新上电是随机的，需要清空。
-    	fastDrawString(0,151,"-->",font14);
+    	fastDrawString(0,151,"Receieved Msg:",font14);
     	fastDrawString(15,151,MsgToDisplay+1,font14);
         tmos_msg_deallocate(MsgToDisplay); // 释放消息内存。
         EPD_UpdateScreen(imageCache);
@@ -133,7 +141,7 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     if(events & EPD_SHOWIMG_EVT)
     {
     	INIT_CACHE;
-		fastDrawString(10,145,"You wrote 0x1A to Char1, showing    image at left.",font14);
+		fastDrawString(10,145,"You wrote 0x1A to Char1, showing image.",font14);
     	EPD_UpdateScreen(imageCache);
     	return events ^ EPD_SHOWIMG_EVT;
     }

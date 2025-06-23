@@ -179,17 +179,17 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 }
 
 
-//快速显示图像，图像的的宽度必须是128，两个参数指定了图像
+//快速显示图像，图像的的宽度必须是152，两个参数指定了图像
 //在屏幕上的起点和终点。
 void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 {
-	uint32_t length = (xEnd-xStart) << 4;
-	memcpy( (void *)( (uint32_t)image+ (xStart<<4)), 
+	uint32_t length = (xEnd-xStart) *19;
+	memcpy( (void *)( (uint32_t)image+ (xStart*19)), 
 	imgDat, 
 	length);
 }
 
-//快速画单个字，x轴只支持字节对齐，也就是只有16行,
+//快速画单个字
 void fastDrawChar(uint16_t xStart, uint16_t yStart, char chara, const uint8_t *font)
 {	
 	if (FONT_GETHEIGHT(font) == 0x08)

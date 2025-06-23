@@ -41,23 +41,23 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         1600
+#define DEFAULT_ADVERTISING_INTERVAL         4800
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
 #define DEFAULT_DISCOVERABLE_MODE            GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 6=7.5ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    400
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    2000
 
 // Maximum connection interval (units of 1.25ms, 100=125ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    500
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    2200
 
 // Slave latency to use parameter update
 #define DEFAULT_DESIRED_SLAVE_LATENCY        0
 
 // Supervision timeout value (units of 10ms, 100=1s)
-#define DEFAULT_DESIRED_CONN_TIMEOUT         500
+#define DEFAULT_DESIRED_CONN_TIMEOUT         800
 
 // Company Identifier: WCH
 #define WCH_COMPANY_ID                       0x07D7
@@ -92,9 +92,9 @@ static uint8_t advertData[] = {
     0x02, // length of this data
     GAP_ADTYPE_FLAGS,
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
-    0x0E, // length of this data
+    0x0D, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'E', 'P', 'D', '_', 'C', 'H', '5', '8', '5', 'n', 'o', 'd', 'e', 
+    'L', 'i', 't', 't', 'l', 'e', '_', 'C', 'l', 'o', 'c', 'k', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
@@ -106,21 +106,12 @@ static uint8_t advertData[] = {
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "EPD_CH585node";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Little_Clock";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
 
 static uint16_t peripheralMTU = ATT_MTU_SIZE;
-
-//和时间有关的变量，这里只能用offset，因为wch的库并没有
-//明文存储时间，只是从rtc换算，而TMOS依赖于RTC运转不能改。
-uint16_t month=0;
-uint16_t date=0;
-uint16_t hour=0;
-uint16_t minute=0;
-uint16_t second=0;
-
 
 
 /*********************************************************************
@@ -325,7 +316,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
         uint8_t *msg = tmos_msg_allocate(1+20);
         if(msg != NULL)
         {
-			msg[0] = 0x11;//显示内容
+			msg[0] = 0x12;//显示时间
 			uint16_t py = 0;
 			uint16_t pmon = 0;
 			uint16_t pd = 0;
