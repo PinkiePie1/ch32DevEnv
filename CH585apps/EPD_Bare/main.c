@@ -25,7 +25,6 @@ void main(void)
 {
 	//在sys.c里已经写了highcode_init，并且会放到startup之后
 	//所以在这里初始化时钟是不必要的。	
-	tickDelayInit();
 	GPIOInit();
 
 	GPIOB_ResetBits(GPIO_Pin_3);
@@ -59,7 +58,7 @@ void main(void)
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
-	tickDelayMs(3000);
+	DelayMs(3000);
 	//局刷
 	drawStr(51,145,"Partial update.",font14,WHITE);
 	drawStr(66,80,"font8",font8,BLACK);
@@ -70,7 +69,7 @@ void main(void)
 		EPD_Printf(100,132,font14,WHITE,"|%d|",i);
 		EPD_PartialDisplay(imageCache);
 		EPD_Sleep();
-		tickDelayMs(1000);
+		DelayMs(1000);
 	}
 	//EPD_SendDisplay( (unsigned char *)gImage_full );//显示大图像，直接从flash读取
 
@@ -79,9 +78,9 @@ void main(void)
 	while(1)
 	{
 		GPIOB_SetBits(GPIO_Pin_3);
-		tickDelayMs(500);
+		DelayMs(500);
 		GPIOB_ResetBits(GPIO_Pin_3);
-		tickDelayMs(500);
+		DelayMs(500);
 	}
 	
 	

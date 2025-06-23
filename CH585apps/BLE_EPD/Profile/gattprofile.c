@@ -1,6 +1,7 @@
 #include "CONFIG.h"
 #include "gattprofile.h"
 #include "EPD_process.h"
+#include "peripheral.h"
 
 #define SIMPLEPROFILE_CHAR4_VALUE_POS    11
 
@@ -66,7 +67,7 @@ static uint8_t simpleProfileChar1[SIMPLEPROFILE_CHAR1_LEN] = {0};
 static uint8_t simpleProfileChar1UserDesp[] = "Characteristic 1\0";
 
 // Simple Profile Characteristic 2 Properties
-static uint8_t simpleProfileChar2Props = GATT_PROP_READ;
+static uint8_t simpleProfileChar2Props = GATT_PROP_READ | GATT_PROP_WRITE;
 
 // Characteristic 2 Value
 static uint8_t simpleProfileChar2[SIMPLEPROFILE_CHAR2_LEN] = {0};
@@ -151,7 +152,7 @@ static gattAttribute_t simpleProfileAttrTbl[] = {
     // Characteristic Value 2
     {
         {ATT_BT_UUID_SIZE, simpleProfilechar2UUID},
-        GATT_PERMIT_READ,
+        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
         0,
         simpleProfileChar2},
 
@@ -628,6 +629,16 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
                     {
                     	tmos_set_event(EPD_taskID,EPD_SHOWIMG_EVT);//如果是0x1A则显示图片。
                     }
+                   else if(*pValue == 0xAA)
+                    {
+                        tmos_stop_task(EPD_taskID, EPD_BLINK);
+                        tmos_start_task(EPD_taskID, EPD_BLINK, 500);
+                    }
+                    else if(*pValue == 0xAB)
+                    {
+                        GPIOB_SetBits(GPIO_Pin_3);
+                        tmos_stop_task(EPD_taskID, EPD_BLINK);
+                    }
                     else
                     {   //否则则将写入的数据告诉用户。
 	                    tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR1_LEN);
@@ -645,6 +656,35 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle, gattAttribute_t 
 			        }
                 }
                 break;
+
+            case SIMPLEPROFILE_CHAR2_UUID:
+
+                if(offset == 0)
+                {
+                    if(len > SIMPLEPROFILE_CHAR2_LEN)
+                    {
+                        status = ATT_ERR_INVALID_VALUE_SIZE;
+                    }
+                }
+                else
+                {
+                    status = ATT_ERR_ATTR_NOT_LONG;
+                }
+
+                if(status == SUCCESS)
+                {
+                	tmos_memcpy(pAttr->pValue, pValue, SIMPLEPROFILE_CHAR2_LEN);
+                	notifyApp = SIMPLEPROFILE_CHAR2;
+                	uint16_t year = pValue[0]+2000;
+                	uint16_t month = pValue[1];
+                	uint16_t date = pValue[2];
+                	uint16_t hour = pValue[3];
+                	uint16_t minute = pValue[4];
+                	uint16_t second = pValue[5];
+					miniRTC_CalibrateTime(year,month,date,hour,minute,second);
+                }
+
+            	break;                
 
             case SIMPLEPROFILE_CHAR3_UUID:
                 //Validate the value

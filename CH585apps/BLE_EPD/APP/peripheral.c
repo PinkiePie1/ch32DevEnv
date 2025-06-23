@@ -40,20 +40,20 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         160
+#define DEFAULT_ADVERTISING_INTERVAL         4800
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
 #define DEFAULT_DISCOVERABLE_MODE            GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 6=7.5ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    400
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    1400
 
 // Maximum connection interval (units of 1.25ms, 100=125ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    500
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    1500
 
 // Slave latency to use parameter update
-#define DEFAULT_DESIRED_SLAVE_LATENCY        4
+#define DEFAULT_DESIRED_SLAVE_LATENCY        2
 
 // Supervision timeout value (units of 10ms, 100=1s)
 #define DEFAULT_DESIRED_CONN_TIMEOUT         800
@@ -245,7 +245,7 @@ void Peripheral_Init()
     // Setup the SimpleProfile Characteristic Values
     {
         uint8_t charValue1[SIMPLEPROFILE_CHAR1_LEN] = {1};
-        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {2};
+        uint8_t charValue2[SIMPLEPROFILE_CHAR2_LEN] = {0, 0, 0, 0, 0,0};
         uint8_t charValue3[SIMPLEPROFILE_CHAR3_LEN] = {0};
         uint8_t charValue4[SIMPLEPROFILE_CHAR4_LEN] = {4};
         uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = {1, 2, 3, 4, 5};
@@ -268,6 +268,7 @@ void Peripheral_Init()
 
     // Setup a delayed profile startup
     tmos_set_event(Peripheral_TaskID, SBP_START_DEVICE_EVT);
+    tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, 600);
 }
 
 /*********************************************************************
@@ -327,13 +328,23 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PERIODIC_EVT)
     {
-        // Restart timer
-        if(SBP_PERIODIC_EVT_PERIOD)
+        uint8_t *msg = tmos_msg_allocate(1+20);
+        if(msg != NULL)
         {
-            tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, SBP_PERIODIC_EVT_PERIOD);
+			msg[0] = 0x11;//显示内容
+			uint16_t py = 0;
+			uint16_t pmon = 0;
+			uint16_t pd = 0;
+			uint16_t ph = 0;
+			uint16_t pm = 0;
+			uint16_t ps = 0;
+			miniRTC_GetTime(&py, &pmon, &pd, &ph, &pm, &ps);
+
+			uint32_t nextInterval = (60-ps)*1000000/625;
+			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
+			snprintf(msg+1,20,"%04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);
+			tmos_msg_send(EPD_taskID,msg);
         }
-        // Perform periodic application task
-        performPeriodicTask();
         return (events ^ SBP_PERIODIC_EVT);
     }
 

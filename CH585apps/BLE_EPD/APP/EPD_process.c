@@ -49,6 +49,10 @@ void EPDTask_Init(void)
 	EPD_Sleep();
 	paint_SetImageCache(imageCache);
 
+	GPIOB_ModeCfg(GPIO_Pin_3, GPIO_ModeOut_PP_5mA); //PB3作为LED指示灯
+	GPIOB_SetBits(GPIO_Pin_3); //PB3高电平，LED灭
+	//tmos_start_task(EPD_taskID, EPD_BLINK, 500);
+
 }
 
 //EPD相关人物处理主函数。
@@ -126,6 +130,12 @@ uint16_t EPD_ProcessEvent(uint8_t task_id, uint16_t events)
     	return events ^ EPD_SHOWIMG_EVT;
     }
 
+	if(events & EPD_BLINK)
+    {
+    	GPIOB_InverseBits(GPIO_Pin_3);
+		tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+    	return events ^ EPD_BLINK;
+    }
 
     return 0;//清零未定义的event id。
 	
