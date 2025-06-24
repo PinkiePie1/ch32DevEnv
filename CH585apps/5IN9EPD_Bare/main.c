@@ -35,7 +35,6 @@ void main(void)
 {
 	//在sys.c里已经写了highcode_init，并且会放到startup之后
 	//所以在这里初始化时钟是不必要的。	
-	tickDelayInit();
 	GPIOInit();
 	
 	paint_SetImageCache(imageCache);

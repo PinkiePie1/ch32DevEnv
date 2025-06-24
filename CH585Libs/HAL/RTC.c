@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.2
  * Date               : 2022/01/18
- * Description        : RTCÅäÖÃ¼°Æä³õÊ¼»¯
+ * Description        : RTCï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* Í·ÎÄ¼þ°üº¬ */
+/* Í·ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ */
 #include "HAL.h"
 
 /*********************************************************************
@@ -31,7 +31,7 @@ volatile uint32_t RTCTigFlag;
 /*********************************************************************
  * @fn      TMR3_IRQHandler
  *
- * @brief   TMR0ÖÐ¶Ïº¯Êý
+ * @brief   TMR0ï¿½Ð¶Ïºï¿½ï¿½ï¿½
  *
  * @return  none
  */
@@ -41,7 +41,7 @@ void TMR3_IRQHandler(void) // TMR3
 {
     uint32_t trig_time;
 
-    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // Çå³ýÖÐ¶Ï±êÖ¾
+    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾
     if( !TMOS_TimerIRQHandler( &trig_time )  )
     {
         if( trig_time )
@@ -91,9 +91,9 @@ static void SYS_SetTignOffest( int32_t val )
 /*******************************************************************************
  * @fn      RTC_SetTignTime
  *
- * @brief   ÅäÖÃRTC´¥·¢Ê±¼ä
+ * @brief   ï¿½ï¿½ï¿½ï¿½RTCï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
  *
- * @param   time    - ´¥·¢Ê±¼ä.
+ * @param   time    - ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½.
  *
  * @return  None.
  */
@@ -109,7 +109,7 @@ void RTC_SetTignTime(uint32_t time)
 /*******************************************************************************
  * @fn      RTC_IRQHandler
  *
- * @brief   RTCÖÐ¶Ï´¦Àí
+ * @brief   RTCï¿½Ð¶Ï´ï¿½ï¿½ï¿½
  *
  * @param   None.
  *
@@ -126,7 +126,7 @@ void RTC_IRQHandler(void)
 /*******************************************************************************
  * @fn      SYS_GetClockValue
  *
- * @brief   »ñÈ¡RTCµ±Ç°¼ÆÊýÖµ
+ * @brief   ï¿½ï¿½È¡RTCï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Öµ
  *
  * @param   None.
  *
@@ -153,7 +153,7 @@ static void SYS_SetPendingIRQ(void)
 /*******************************************************************************
  * @fn      HAL_Time0Init
  *
- * @brief   ÏµÍ³¶¨Ê±Æ÷³õÊ¼»¯
+ * @brief   ÏµÍ³ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
  *
  * @param   None.
  *
@@ -171,7 +171,7 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_INT32K_PON;
     sys_safe_access_disable();
     LSECFG_Current(LSE_RCur_100);
-    LSECFG_Capacitance(LSECap_16p);
+    LSECFG_Capacitance(LSECap_18p);
     Lib_Calibration_LSI();
 #else
     sys_safe_access_enable();
@@ -181,7 +181,7 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_OSC32K_XT | RB_CLK_XT32K_PON;
     sys_safe_access_disable();
 #endif
-    RTC_InitTime(2020, 1, 1, 0, 0, 0); //RTCÊ±ÖÓ³õÊ¼»¯µ±Ç°Ê±¼ä
+    RTC_InitTime(2020, 1, 1, 0, 0, 0); //RTCÊ±ï¿½Ó³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ç°Ê±ï¿½ï¿½
 
     tmos_memset( &conf, 0, sizeof(bleClockConfig_t) );
     conf.ClockAccuracy = CLK_OSC32K ? 1000 : 50;
@@ -191,12 +191,12 @@ void HAL_TimeInit(void)
     conf.SetPendingIRQ = SYS_SetPendingIRQ;
 
 #if RF_8K
-    // rf-8k Í¨ÐÅÊ±¼äÏà¹ØÅäÖÃ
+    // rf-8k Í¨ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     conf.Clock1Frequency = GetSysClock( )/1000;
     conf.getClock1Value = SYS_GetClock1Value;
     conf.SetClock1PendingIRQ = SYS_SetClock1PendingIRQ;
     conf.SetTign = SYS_SetTignOffest;
-    TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // ¿ªÆôÖÐ¶Ï
+    TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
     PFIC_EnableIRQ(TMR3_IRQn);
 #endif
 

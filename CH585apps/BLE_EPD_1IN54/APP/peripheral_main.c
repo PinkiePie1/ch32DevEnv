@@ -44,7 +44,7 @@ int main(void)
 #if(defined(DCDC_ENABLE)) && (DCDC_ENABLE == TRUE)
     PWR_DCDCCfg(ENABLE);
 #endif
-    HSECFG_Capacitance(HSECap_6p);
+    HSECFG_Capacitance(HSECap_10p);
     SetSysClock(CLK_SOURCE_HSE_PLL_62_4MHz);
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     GPIOA_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
