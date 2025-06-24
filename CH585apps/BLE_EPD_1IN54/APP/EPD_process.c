@@ -58,7 +58,7 @@ void EPDTask_Init(void)
 #if 1
 	GPIOB_ModeCfg(GPIO_Pin_3,GPIO_ModeOut_PP_5mA);
 	GPIOB_SetBits(GPIO_Pin_3);
-	//tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
+	tmos_start_task(EPD_taskID, EPD_BLINK, 1000); 
 #endif
 }
 

@@ -3,7 +3,8 @@
  * Author             : WCH
  * Version            : V1.0
  * Date               : 2018/12/10
- * Description        : 应用层程序主要部分
+ * Description        : ����ӻ�������Ӧ�ó��򣬳�ʼ���㲥���Ӳ�����Ȼ��㲥������������
+ *                      ����������Ӳ�����ͨ���Զ������������
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -26,10 +27,10 @@
  * CONSTANTS
  */
 
-//多久进行一次周期时间（例程中是周期上报特征4的值）
+// How often to perform periodic event
 #define SBP_PERIODIC_EVT_PERIOD              1600
 
-//多久进行一次RSSI事件
+// How often to perform read rssi event
 #define SBP_READ_RSSI_EVT_PERIOD             3200
 
 // Parameter update delay
@@ -39,23 +40,23 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         1600
+#define DEFAULT_ADVERTISING_INTERVAL         80
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
 #define DEFAULT_DISCOVERABLE_MODE            GAP_ADTYPE_FLAGS_GENERAL
 
 // Minimum connection interval (units of 1.25ms, 6=7.5ms)
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    400
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL    6
 
 // Maximum connection interval (units of 1.25ms, 100=125ms)
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    500
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL    100
 
 // Slave latency to use parameter update
-#define DEFAULT_DESIRED_SLAVE_LATENCY        4
+#define DEFAULT_DESIRED_SLAVE_LATENCY        0
 
 // Supervision timeout value (units of 10ms, 100=1s)
-#define DEFAULT_DESIRED_CONN_TIMEOUT         800
+#define DEFAULT_DESIRED_CONN_TIMEOUT         100
 
 // Company Identifier: WCH
 #define WCH_COMPANY_ID                       0x07D7
@@ -84,8 +85,27 @@ static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
     // complete name
+    0x12, // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'S',
+    'i',
+    'm',
+    'p',
+    'l',
+    'e',
+    ' ',
+    'P',
+    'e',
+    'r',
+    'i',
+    'p',
+    'h',
+    'e',
+    'r',
+    'a',
+    'l',
     // connection interval range
-    0x06, // length of this data
+    0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
     LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
     HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
@@ -107,23 +127,17 @@ static uint8_t advertData[] = {
     0x02, // length of this data
     GAP_ADTYPE_FLAGS,
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
-    0x0E, // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'M', 'y', 'p', 'e', 'r', 'i', 'p', 'h', 'e', 'r', 'i', 'a', 'l', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
     0x03,                  // length of this data
     GAP_ADTYPE_16BIT_MORE, // some of the UUID's, but not all
     LO_UINT16(SIMPLEPROFILE_SERV_UUID),
-    HI_UINT16(SIMPLEPROFILE_SERV_UUID),
-
-  
-    
+    HI_UINT16(SIMPLEPROFILE_SERV_UUID)
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Myperipheral";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple Peripheral";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
@@ -337,12 +351,8 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & SBP_PARAM_UPDATE_EVT)
     {
-        // 与主机协商连接间隔。
-        // 注意协商会在下一次连接时发生
-        // 所以调用函数之后不会立刻生效
-        // 协商失败也不是通过返回值判断
-        // 目前能想到的是判断协商的方式
-        // 就是在数个连接间隔之后重新判断。
+        // Send connect param update request
+        // When the current connection parameters already meet the requirements for update, return 0x18(InvalidRange)
         GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
                                              DEFAULT_DESIRED_MIN_CONN_INTERVAL,
                                              DEFAULT_DESIRED_MAX_CONN_INTERVAL,
@@ -450,8 +460,6 @@ static void Peripheral_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
  * @param   pEvent - event to process
  *
  * @return  none
- *
- * @note 连接建立回调函数。建立蓝牙连接的时候会协议栈会调用一次这个函数
  */
 static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
 {
@@ -470,27 +478,14 @@ static void Peripheral_LinkEstablished(gapRoleEvent_t *pEvent)
         peripheralConnList.connSlaveLatency = event->connLatency;
         peripheralConnList.connTimeout = event->connTimeout;
         peripheralMTU = ATT_MTU_SIZE;
-        //启用周期事件
-        tmos_start_task(Peripheral_TaskID, 
-        				SBP_PERIODIC_EVT, 
-        				SBP_PERIODIC_EVT_PERIOD);
+        // Set timer for periodic event
+        tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, SBP_PERIODIC_EVT_PERIOD);
 
-        //设置连接间隔更新事件。
-        //连接上主机后，一般来说主机会先用高连接间隔
-        //以发现设备的所有服务，随后会协商到设备喜欢的
-        //连接间隔。所以从机的协商应该在连上之后等一会
-        //再发出。虽然几乎市面上所有的电脑和手机
-        //会尊重从机的选择，但其实连接间隔是由主机最终
-        //决定的，这意味着主机可以改变连接间隔，而从机
-        //应该选择遵守。
-        tmos_start_task(Peripheral_TaskID,
-        				SBP_PARAM_UPDATE_EVT, 
-        				SBP_PARAM_UPDATE_DELAY);
+        // Set timer for param update event
+        tmos_start_task(Peripheral_TaskID, SBP_PARAM_UPDATE_EVT, SBP_PARAM_UPDATE_DELAY);
 
         // Start read rssi
-        tmos_start_task(Peripheral_TaskID, 
-        				SBP_READ_RSSI_EVT, 
-        				SBP_READ_RSSI_EVT_PERIOD);
+        tmos_start_task(Peripheral_TaskID, SBP_READ_RSSI_EVT, SBP_READ_RSSI_EVT_PERIOD);
 
         PRINT("Conn %x - Int %x \n", event->connectionHandle, event->connInterval);
     }

@@ -25,10 +25,12 @@
 
 #include "CH58x_common.h"
 
+
 #define DCDC_ENABLE TRUE
 #define HAL_SLEEP TRUE
 #define BLE_MEMHEAP_SIZE (1024*7) // 7K
 #define BLE_BUFF_MAX_LEN 300 // 这样MTU能很高。最高512-4.
+#define EPD_MAXIMUM_MSG_LENGTH 128 //从char3所能接受的最多字符串长度
 /*********************************************************************
  【MAC】
  BLE_MAC                                    - 是否自定义蓝牙Mac地址 ( 默认:FALSE - 使用芯片Mac地址 )，需要在main.c修改Mac地址定义
@@ -41,9 +43,9 @@
  SLEEP_RTC_MIN_TIME                         - 非空闲模式下睡眠的最小时间（单位：一个RTC周期）
  SLEEP_RTC_MAX_TIME                         - 非空闲模式下睡眠的最大时间（单位：一个RTC周期）
  WAKE_UP_RTC_MAX_TIME                       - 等待32M晶振稳定时间（单位：一个RTC周期）
-                                              根据不同睡眠类型取值可分为： 睡眠模式/下电模式  - 45 (默认)
-                                              暂停模式    - 45
-                                              空闲模式    - 5
+                                                                                                                            根据不同睡眠类型取值可分为： 睡眠模式/下电模式  - 45 (默认)
+                                                                                                                                                                                                  暂停模式    - 45
+                                                                                                                                                                                                  空闲模式    - 5
  【TEMPERATION】
  TEM_SAMPLE                                 - 是否打开根据温度变化校准的功能，单次校准耗时小于10ms( 默认:TRUE )
  
@@ -115,7 +117,7 @@
 #define BLE_SNV                             TRUE
 #endif
 #ifndef BLE_SNV_ADDR
-#define BLE_SNV_ADDR                        0x77E00-FLASH_ROM_MAX_SIZE
+#define BLE_SNV_ADDR                        0x77000-FLASH_ROM_MAX_SIZE
 #endif
 #ifndef BLE_SNV_BLOCK
 #define BLE_SNV_BLOCK                       256
@@ -124,7 +126,7 @@
 #define BLE_SNV_NUM                         1
 #endif
 #ifndef CLK_OSC32K
-#define CLK_OSC32K                          1   // 该项请勿在此修改，必须在工程配置里的预处理中（-D CLK_OSC23K=0）修改，如包含主机角色必须使用外部32K
+#define CLK_OSC32K                          1   // 该项请勿在此修改，必须在工程配置里的预处理中修改，如包含主机角色必须使用外部32K
 #endif
 #ifndef BLE_MEMHEAP_SIZE
 #define BLE_MEMHEAP_SIZE                    (1024*6)

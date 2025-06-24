@@ -28,7 +28,7 @@
 
 #define DCDC_ENABLE TRUE
 #define HAL_SLEEP TRUE
-#define BLE_MEMHEAP_SIZE (1024*7) // 7K
+#define BLE_MEMHEAP_SIZE (1024*6) // 7K
 #define BLE_BUFF_MAX_LEN 200 // 这样MTU能很高。最高512-4.
 #define EPD_MAXIMUM_MSG_LENGTH 128 //从char3所能接受的最多字符串长度
 #define BLE_SNV FALSE

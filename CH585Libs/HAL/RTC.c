@@ -3,7 +3,7 @@
  * Author             : WCH
  * Version            : V1.2
  * Date               : 2022/01/18
- * Description        : RTC���ü����ʼ��
+ * Description        : RTC配置及其初始化
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* ͷ�ļ����� */
+/* 头文件包含 */
 #include "HAL.h"
 
 /*********************************************************************
@@ -31,7 +31,7 @@ volatile uint32_t RTCTigFlag;
 /*********************************************************************
  * @fn      TMR3_IRQHandler
  *
- * @brief   TMR0�жϺ���
+ * @brief   TMR0中断函数
  *
  * @return  none
  */
@@ -41,7 +41,7 @@ void TMR3_IRQHandler(void) // TMR3
 {
     uint32_t trig_time;
 
-    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // ����жϱ�־
+    TMR3_ClearITFlag(TMR0_3_IT_CYC_END); // 清除中断标志
     if( !TMOS_TimerIRQHandler( &trig_time )  )
     {
         if( trig_time )
@@ -91,9 +91,9 @@ static void SYS_SetTignOffest( int32_t val )
 /*******************************************************************************
  * @fn      RTC_SetTignTime
  *
- * @brief   ����RTC����ʱ��
+ * @brief   配置RTC触发时间
  *
- * @param   time    - ����ʱ��.
+ * @param   time    - 触发时间.
  *
  * @return  None.
  */
@@ -109,7 +109,7 @@ void RTC_SetTignTime(uint32_t time)
 /*******************************************************************************
  * @fn      RTC_IRQHandler
  *
- * @brief   RTC�жϴ���
+ * @brief   RTC中断处理
  *
  * @param   None.
  *
@@ -126,7 +126,7 @@ void RTC_IRQHandler(void)
 /*******************************************************************************
  * @fn      SYS_GetClockValue
  *
- * @brief   ��ȡRTC��ǰ����ֵ
+ * @brief   获取RTC当前计数值
  *
  * @param   None.
  *
@@ -153,7 +153,7 @@ static void SYS_SetPendingIRQ(void)
 /*******************************************************************************
  * @fn      HAL_Time0Init
  *
- * @brief   ϵͳ��ʱ����ʼ��
+ * @brief   系统定时器初始化
  *
  * @param   None.
  *
@@ -163,7 +163,6 @@ void HAL_TimeInit(void)
 {
     bleClockConfig_t conf;
 #if(CLK_OSC32K)
-    GPIOA_ModeCfg(GPIO_Pin_11|GPIO_Pin_10,GPIO_ModeIN_Floating);
     sys_safe_access_enable();
     R8_CK32K_CONFIG &= ~(RB_CLK_OSC32K_XT | RB_CLK_XT32K_PON);
     sys_safe_access_disable();
@@ -171,9 +170,10 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_INT32K_PON;
     sys_safe_access_disable();
     LSECFG_Current(LSE_RCur_100);
-    LSECFG_Capacitance(LSECap_18p);
     Lib_Calibration_LSI();
 #else
+	GPIOA_ModeCfg(GPIO_Pin_11|GPIO_Pin_10,GPIO_ModeIN_Floating);
+	LSECFG_Capacitance(LSECap_16p);
     sys_safe_access_enable();
     R8_CK32K_CONFIG &= ~RB_CLK_INT32K_PON;
     sys_safe_access_disable();
@@ -181,7 +181,7 @@ void HAL_TimeInit(void)
     R8_CK32K_CONFIG |= RB_CLK_OSC32K_XT | RB_CLK_XT32K_PON;
     sys_safe_access_disable();
 #endif
-    RTC_InitTime(2020, 1, 1, 0, 0, 0); //RTCʱ�ӳ�ʼ����ǰʱ��
+    RTC_InitTime(2020, 1, 1, 0, 0, 0); //RTC时钟初始化当前时间
 
     tmos_memset( &conf, 0, sizeof(bleClockConfig_t) );
     conf.ClockAccuracy = CLK_OSC32K ? 1000 : 50;
@@ -191,12 +191,12 @@ void HAL_TimeInit(void)
     conf.SetPendingIRQ = SYS_SetPendingIRQ;
 
 #if RF_8K
-    // rf-8k ͨ��ʱ���������
+    // rf-8k 通信时间相关配置
     conf.Clock1Frequency = GetSysClock( )/1000;
     conf.getClock1Value = SYS_GetClock1Value;
     conf.SetClock1PendingIRQ = SYS_SetClock1PendingIRQ;
     conf.SetTign = SYS_SetTignOffest;
-    TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // �����ж�
+    TMR3_ITCfg(ENABLE, TMR0_3_IT_CYC_END); // 开启中断
     PFIC_EnableIRQ(TMR3_IRQn);
 #endif
 
