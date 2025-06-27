@@ -111,7 +111,7 @@ static uint8_t advertData[] = {
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
     0x0E, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'E', 'P', 'D', '_', 'C', 'H', '5', '8', '5', 'n', 'o', 'd', 'e', 
+    'E', 'P', 'D', '_', '2', 'I', 'N', '9', '_', 'n', 'o', 'd', 'e', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
@@ -125,7 +125,7 @@ static uint8_t advertData[] = {
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "EPD_CH585node";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "EPD_2IN9_node";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;

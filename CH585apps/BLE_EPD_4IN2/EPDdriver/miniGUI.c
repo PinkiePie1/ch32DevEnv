@@ -140,32 +140,32 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 	//覆盖对应的位置
     for( uint16_t i = yStart; i <= (yEnd); i++ )
     {	
-		index = (xStart>>3) + (i<<4);
+		index = (xStart>>3)*300 + i;
 		tmp = image[index];
 		image[index] = color ? ( tmp | mask2 ) : ( tmp & mask2 );
 
 		if( i==yStart || i==yEnd )
 		{
-			tmp = image[(xStart>>3)+(i<<4)];
-			image[(xStart>>3)+(i<<4)] = color ? 
+			tmp = image[(xStart>>3)*300+i];
+			image[(xStart>>3)*300+i<<4] = color ? 
 			                            (tmp | (0xFF>>(xStart&7))) :
 			                            (tmp & ~(0xFF>>(xStart&7)));
 			                            
-			tmp = image[(xEnd>>3)+(i<<4)];
+			tmp = image[(xEnd>>3)*300+i];
 			image[(xEnd>>3)+(i<<4)] = color ?
 			                          (tmp | ~(0xFF>>(xEnd&7))) :
 			                          (tmp & (0xFF>>(xEnd&7))); 
 			                          
 	    	for (uint16_t j = xStart+8; j < xEnd; j += 8 )
 	    	{
-	    		index = (j>>3) + (i<<4);
+	    		index = (j>>3)*300 + i;
 	    		image[index] = color;
 	    		
 			}
 			
 		}	
 					
-		index = (xEnd>>3) + (i<<4);
+		index = (xEnd>>3)*300 + i;
 		tmp = image[index];
 		image[index] = color ? ( tmp | mask1 ) : ( tmp & mask1 );
     }	
@@ -178,9 +178,11 @@ void fastRect(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd, ui
 void FastImg(uint16_t xStart, uint16_t xEnd, const char *imgDat)
 {
 	uint32_t length = ((xEnd-xStart)>>3) *300;
-	memcpy( (void *)( (uint32_t)image+ (xStart>>3)*300), 
-	imgDat, 
-	length);
+	memcpy( 
+			(void *)( (uint32_t)image+ (xStart>>3)*300), 
+			imgDat, 
+			length
+		  );
 }
 
 //快速画单个字,字节对齐的情况下
