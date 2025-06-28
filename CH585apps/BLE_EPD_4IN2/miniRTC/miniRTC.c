@@ -100,8 +100,8 @@ void miniRTC_GetTime(
 	//应用offset
     t+=secondsOffset;
     day+=dayOffset;
-    day = t > 86400 ? day + 1 : day; //如果t大于86400，说明已经过了一天
-    t = t > 86400 ? t-86400 : t; //确保t在0-86399之间
+    day = t > 86399 ? day + 1 : day; //如果t大于86400，说明已经过了一天
+    t = t > 86399 ? t-86400 : t; //确保t在0-86399之间
     
 
     *year = BEGYEAR;
