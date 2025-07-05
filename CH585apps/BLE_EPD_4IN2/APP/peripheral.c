@@ -40,7 +40,7 @@
 #define SBP_PHY_UPDATE_DELAY                 2400
 
 // What is the advertising interval when device is discoverable (units of 625us, 80=50ms)
-#define DEFAULT_ADVERTISING_INTERVAL         1600
+#define DEFAULT_ADVERTISING_INTERVAL         4800
 
 // Limited discoverable mode advertises for 30.72s, and then stops
 // General discoverable mode advertises indefinitely
@@ -93,7 +93,7 @@ static uint8_t advertData[] = {
     DEFAULT_DISCOVERABLE_MODE | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED,
     0x0E, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'E', 'P', 'D', '_', 'C', 'H', '5', '8', '5', 'n', 'o', 'd', 'e', 
+    'L', 'i', 't', 't', 'l', 'e', 'C', 'l', 'o', 'c', 'k', '4', '2', 
 
     // service UUID, to notify central devices what services are included
     // in this peripheral
