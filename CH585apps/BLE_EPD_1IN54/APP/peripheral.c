@@ -251,7 +251,7 @@ void Peripheral_Init()
 
     // Setup a delayed profile startup
     tmos_set_event(Peripheral_TaskID, SBP_START_DEVICE_EVT);
-    tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, 500);
+    //tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, 500);
 }
 
 /*********************************************************************
@@ -325,8 +325,8 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			uint16_t ps = 0;
 			miniRTC_GetTime(&py, &pmon, &pd, &ph, &pm, &ps);
 			
-			//取出时间信息并加上offset。
 			uint32_t nextInterval = (60-ps%60)*1000000/625;
+			nextInterval = nextInterval <= 50 ? 50 : nextInterval;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
 			
 			snprintf(msg+1,20,"%04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);

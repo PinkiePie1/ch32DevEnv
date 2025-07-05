@@ -98,12 +98,12 @@ static void EPD_Dat(uint8_t dat)
 //RES引脚发送复位命令
 static void EPD_HardReset(void)
 {
-	//RES_HIGH; //既然已经拉高了，那就没有必要再拉低一次。
-	//devDelay(10);
+	RES_HIGH; //既然已经拉高了，那就没有必要再拉低一次。
+	devDelay(10);
 	RES_LOW;
-	devDelay(2);
+	devDelay(3);
 	RES_HIGH;
-	//devDelay(10);
+	devDelay(10);
 }
 
 //写入波形控制的LUT，通过改变LUT数组可以控制波形
@@ -163,7 +163,6 @@ void EPD_Init(void)
 	//硬重置
 	EPD_HardReset();
 	WAIT_BUSY;
-	//devDelay( 100 );
 
 	//软重置
 
@@ -281,7 +280,7 @@ void EPD_PartialDisplay(uint8_t *image)
 {
 	//硬重置
 	EPD_HardReset();
-	devDelay( 100 );
+	WAIT_BUSY;
 
 	EPD_LUT(MyPartialLUT);
 	//可以不用指定WS，因为用的是内存里的LUT

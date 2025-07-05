@@ -11,9 +11,9 @@
 #include "CONFIG.h"
 
 //清空显存。低96k睡眠的时候是内容丢失的，以省电。每次唤醒都应清空再写东西，否则所有比特值均为随机
-#define INIT_CACHE tmos_memset(imageCache,0x00,3000)
+#define INIT_CACHE tmos_memset(imageCache,0x00,2888)
 
-__attribute__((aligned(4))) __attribute__((section(".lowram"))) uint8_t imageCache[3000];//显存，放在低96k
+__attribute__((aligned(4))) __attribute__((section(".lowram"))) uint8_t imageCache[2888];//显存，放在低96k
 uint8_t refreshTimes = 250;//刷新次数计数
 uint8_t EPD_taskID = INVALID_TASK_ID; //TMOS使用，任务处理的taskid
 uint8_t *MsgToDisplay; //指向传入消息的指针，tmos使用。
@@ -26,7 +26,7 @@ static inline void EPD_UpdateScreen(char *buffer)
 {
 	if(refreshTimes>=10)
 	{
-		refreshTimes = 0;
+		refreshTimes = 1;
 		EPD_Init();	
 		EPD_SendDisplay(buffer);
 		//EPD_PreparePartial(buffer);
