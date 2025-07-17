@@ -328,7 +328,7 @@ uint16_t Peripheral_ProcessEvent(uint8_t task_id, uint16_t events)
 			uint32_t nextInterval = (60-ps%60)*1000000/625;
 			tmos_start_task(Peripheral_TaskID, SBP_PERIODIC_EVT, nextInterval);
 			
-			snprintf(msg+1,20,"%04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);
+			snprintf(msg+1,20," %04d.%02d.%02d %02d:%02d",py,pmon,pd,ph,pm);
         	tmos_msg_send(EPD_taskID,msg);
         }
         

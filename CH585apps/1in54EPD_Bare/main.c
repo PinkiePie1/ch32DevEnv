@@ -35,12 +35,26 @@ void main(void)
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
 
+	DelayMs(50);
+	if(!(IS_BUSY)){
+	while(1)
+	{
+		GPIOB_SetBits(GPIO_Pin_3);
+		DelayMs(50);
+		GPIOB_ResetBits(GPIO_Pin_3);
+		DelayMs(50);
+	}
+
 	DelayMs(30000);
 	memset(imageCache,0,2888);
 
 	EPD_Init();	
 	EPD_SendDisplay(imageCache);
 	EPD_Sleep();
+
+
+		
+	}
 
 	while(1)
 	{
