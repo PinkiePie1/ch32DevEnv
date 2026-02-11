@@ -229,9 +229,9 @@ void OLED_16(uint8_t * data)
 {
 	for(uint8_t i = 0 ; i < 2 ; i++ )
 	{
-		OLED_CMD(0xB0+i);//set page to ith page
-		OLED_CMD(0x00); //set start position to be 0
-		OLED_CMD(0x10); //set start position to be 0
+		OLED_CMD(0xB0+i+2);//set page to ith page
+		OLED_CMD(0x0F); //set start position to be 0
+		OLED_CMD(0x12); //set start position to be 0
 		//burst write
 		I2CStart();
 		I2C_Write(0x78);//SSD1315 address
