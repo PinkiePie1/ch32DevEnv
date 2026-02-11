@@ -56,7 +56,7 @@ AS_DEFS =
 LDSCRIPT = $(SELF_DIR)SRC/Ld/Link.ld
 
 
-PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/'RISC-V Embedded GCC12'/bin/
+PATH_TO_TOOLCHAIN = /mnt/c/MRStoolChain/wchgcc12/bin/
 #######################################
 # Binaries
 #######################################
@@ -97,7 +97,7 @@ ASFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
 
 # libraries
-LIBS = -lprintf
+LIBS = -lprintf -lIQmath_RV32
 LIBDIR = 
 LDFLAGS = $(ARCH)  $(LIBDIR) $(PERIFLIB_SOURCES)
 
@@ -106,6 +106,7 @@ LDFLAGS += -msmall-data-limit=8 -msave-restore -fmax-errors=20\
 -fno-common -Wunused -Wuninitialized -g\
 -T $(LDSCRIPT)\
 -nostartfiles -Xlinker --gc-sections\
+-Xlinker --print-memory-usage\
 -Wl,-Map,$(BUILD_DIR)/$(TARGET).map\
 --specs=nano.specs --specs=nosys.specs\
 
